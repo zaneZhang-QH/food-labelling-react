@@ -169,7 +169,7 @@ export const TermsOfUse = ({ onBack, onAccept }: TermsOfUseProps) => {
       )}
 
       <div style={{ display: "flex", gap: "20px", marginTop: "20px" }}>
-        <a className="btn btn-primary" role="button" href="#" onClick={handleBackClick}>
+        <a className="btn btn-primary" role="button" onClick={handleBackClick}>
           <span className="btn-label-default">Back</span>
         </a>
 
@@ -181,6 +181,14 @@ export const TermsOfUse = ({ onBack, onAccept }: TermsOfUseProps) => {
           onClick={handleAcceptClick}
         >
           <span className="btn-label-default">Accept</span>
+        </a>
+
+        <a
+          className="btn btn-tertiary"
+          target="_blank"
+          data-progress-label="Loading"
+        >
+          <span className="btn-label-default">Cancel</span>
         </a>
       </div>
     </>
