@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { HelpGuide } from "../../components/helpGuides/HelpGuide";
 import { InitialPage } from "../helpGuide/InitialPage";
-import { SeekProAdvice } from "../../components/helpGuides/seekProAdvice";
 import { Limitation2 } from "./Limitation2";
+import { SeekProAdvice } from "../../components/SeekProAdvice";
 
 export const Limitations = () => {
   const [guideOpen, setGuideOpen] = useState(false);
@@ -125,7 +125,7 @@ export const Limitations = () => {
               name="serviceChoiceMain"
               id="serviceChoiceMainYes"
               value="1"
-              tabindex={0}
+              tabIndex={0}
               onChange={() => setServiceChoice("yes")}
             />
             <label className="form-check-label" htmlFor="serviceChoiceMainYes">
@@ -139,7 +139,7 @@ export const Limitations = () => {
               name="serviceChoiceMain"
               id="serviceChoiceMainNo"
               value="2"
-              tabindex={0}
+              tabIndex={0}
               onChange={() => setServiceChoice("no")}
             />
             <label className="form-check-label" htmlFor="serviceChoiceMainNo">
