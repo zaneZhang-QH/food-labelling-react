@@ -2,7 +2,8 @@ import React, { useCallback, useState } from "react";
 import { HelpGuide } from "../../components/helpGuides/HelpGuide";
 import { InitialPage } from "../helpGuide/InitialPage";
 import { Limitation2 } from "./Limitation2";
-import { SeekProAdvice } from "../../components/SeekProAdvice";
+import { SeekProAdvice } from "../../components/GlobalWarnings";
+import { createNavHandlers } from "../help";
 
 type LimitationsProps = {
   onBack?: () => void;
@@ -15,15 +16,7 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
   const [serviceChoice, setServiceChoice] = useState<"yes" | "no" | null>(null);
   const [claimChoice, setClaimChoice] = useState<"yes" | "no" | null>(null);
 
-  const handleNextClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    onNext?.();
-  };
-
-  const handleBackClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    onBack?.();
-  };
+  const { handleNextClick, handleBackClick } = createNavHandlers(onNext, onBack);
 
   const handlePrint = useCallback(
     (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -211,7 +204,6 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
       </div>
 
       <HelpGuide
-        heading="Help guide"
         content={guideContent}
         initialOpen={false}
         open={guideOpen}

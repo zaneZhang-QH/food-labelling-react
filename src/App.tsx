@@ -7,8 +7,9 @@ import { TermsOfUse } from "./pages/TermsOfUse";
 import { Home } from "./pages/Home";
 import { AboutFoodLabels } from "./pages/AboutFoodLabels";
 import { Limitations } from "./pages/limitations/Limitations";
+import { FoodName } from "./pages/FoodName";
 
-type Page = "home" | "terms" | "about" | "limitations";
+type Page = "home" | "terms" | "about" | "limitations" | "foodName";
 
 const App = () => {
   const [page, setPage] = useState<Page>("home");
@@ -31,7 +32,16 @@ const App = () => {
         />
       </div>
       <div style={{ display: page === "limitations" ? "block" : "none" }}>
-        <Limitations />
+        <Limitations
+          onBack={() => setPage("about")}
+          onNext={() => setPage("foodName")}
+        />
+      </div>
+      <div style={{ display: page === "foodName" ? "block" : "none" }}>
+        <FoodName
+          onBack={() => setPage("limitations")}
+          // onNext={() => setPage("home")}
+        />
       </div>
     </>
   );

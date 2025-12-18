@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SeekProAdvice } from "../../components/SeekProAdvice";
+import { SeekProAdvice } from "../../components/GlobalWarnings";
 
 type Limitation2Props = {
   isSelect: boolean;

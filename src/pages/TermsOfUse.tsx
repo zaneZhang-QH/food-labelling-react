@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createNavHandlers } from "./help";
 
 type TermsOfUseProps = {
   onBack?: () => void;
@@ -8,6 +9,7 @@ type TermsOfUseProps = {
 export const TermsOfUse = ({ onBack, onAccept }: TermsOfUseProps) => {
   const [accepted, setAccepted] = useState(false);
   const [touched, setTouched] = useState(false);
+  const { handleBackClick } = createNavHandlers(undefined, onBack);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAccepted(event.target.checked);
@@ -23,11 +25,6 @@ export const TermsOfUse = ({ onBack, onAccept }: TermsOfUseProps) => {
       return;
     }
     onAccept?.();
-  };
-
-  const handleBackClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    onBack?.();
   };
 
   return (

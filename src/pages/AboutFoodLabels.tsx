@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Collapse from "bootstrap/js/dist/collapse";
+import { createNavHandlers } from "./help";
 
 type AboutFoodLabelsProps = {
   onBack?: () => void;
@@ -7,15 +8,7 @@ type AboutFoodLabelsProps = {
 };
 
 export const AboutFoodLabels = ({ onBack, onNext }: AboutFoodLabelsProps) => {
-  const handleNextClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    onNext?.();
-  };
-
-  const handleBackClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    onBack?.();
-  };
+  const { handleNextClick, handleBackClick } = createNavHandlers(onNext, onBack);
 
   const sections = [
     {

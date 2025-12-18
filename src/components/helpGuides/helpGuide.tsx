@@ -4,18 +4,14 @@ import { faBook,faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type HelpGuideProps = {
-  heading?: string;
   content: React.ReactNode;
-  calloutLabel?: string;
   initialOpen?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 };
 
 export const HelpGuide: React.FC<HelpGuideProps> = ({
-  heading = "Help guide",
   content,
-  calloutLabel = "Help guide",
   initialOpen = false,
   open,
   onOpenChange,
@@ -40,7 +36,7 @@ export const HelpGuide: React.FC<HelpGuideProps> = ({
           onClick={() => setOpenState(true)}
         >
           <FontAwesomeIcon icon={faBook} inverse/>
-          <span>{calloutLabel}</span>
+          <span>Help guide</span>
         </button>
       )}
 
@@ -51,7 +47,7 @@ export const HelpGuide: React.FC<HelpGuideProps> = ({
             <div className="top-block">
               <div className="left-content">
                 <FontAwesomeIcon icon={faBook} size="xl" inverse/>
-                <h3>{heading}</h3>
+                <h3>Help guide</h3>
               </div>
               <button
                 type="button"

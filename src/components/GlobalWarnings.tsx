@@ -15,3 +15,23 @@ export const SeekProAdvice = () => {
     </div>
   );
 };
+
+type InfoAlertProps = {
+  alertHeading: string;
+  alertMessage: React.ReactNode;
+  alertLink?: boolean;
+};
+
+export const InfoAlert = ({ alertHeading, alertMessage, alertLink }: InfoAlertProps) => {
+  return (
+    <div className="alert alert-info " role="alert" aria-label="Success alert">
+      <h2 className="alert-heading">{alertHeading}</h2>
+      <p>
+        {alertMessage}
+        {alertLink && (
+          <a href= "#">Find out more</a>
+        )}
+      </p>
+    </div>
+  );
+};
