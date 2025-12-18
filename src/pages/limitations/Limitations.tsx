@@ -63,6 +63,8 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
         </p>
 
         <div>
+          <p style={{display:"flex", fontWeight:'bold'}}>
+
           Is your food:
           <abbr
             className="required"
@@ -71,6 +73,7 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
           >
             *
           </abbr>
+          </p>
           <ul>
             <li>
               <span style={{ display: "flex", gap: "4px" }}>

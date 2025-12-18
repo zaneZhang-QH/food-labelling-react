@@ -33,9 +33,12 @@ export const Limitation2 = ({
   const showIrradiatedBlock = isSelect && serviceChoiceGenetic === "no";
   const showClaimBlock = isSelect && serviceChoiceIrradiated === "no";
 
-  const handleNovelLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleHelpLinkClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    sectionId: string
+  ) => {
     event.preventDefault();
-    onOpenHelpGuide?.("novel-foods");
+    onOpenHelpGuide?.(sectionId);
   };
 
   return (
@@ -43,8 +46,16 @@ export const Limitation2 = ({
       {isSelect && (
         <div className="special-food">
           <div>
-            <div>
-              Is your food a special purpose food?
+            <p style={{ display: "flex", fontWeight: "bold" }}>
+              Is your food a{" "}
+              <a
+                className="link"
+                href="#special-food"
+                onClick={(e) => handleHelpLinkClick(e, "special-food")}
+              >
+                special purpose food
+              </a>
+              ?
               <abbr
                 className="required"
                 title="(required)"
@@ -52,88 +63,86 @@ export const Limitation2 = ({
               >
                 *
               </abbr>
-              <p>
-                <small className="hint">Special purpose foods include:</small>
-              </p>
-              <ul>
-                <li>
-                  <small>Infant formula products</small>
-                </li>
-                <li>
-                  <small>Foods for infants</small>
-                </li>
-                <li>
-                  <small>
-                    Formulated meal replacements and formulated supplementary
-                    foods
-                  </small>
-                </li>
-                <li>
-                  <small>Formulated supplementary sports foods</small>
-                </li>
-                <li>
-                  <small>Food for special medical purposes</small>
-                </li>
-              </ul>
+            </p>
+            <p>
+              <small className="hint">Special purpose foods include:</small>
+            </p>
+            <ul>
+              <li>
+                <small>Infant formula products</small>
+              </li>
+              <li>
+                <small>Foods for infants</small>
+              </li>
+              <li>
+                <small>
+                  Formulated meal replacements and formulated supplementary
+                  foods
+                </small>
+              </li>
+              <li>
+                <small>Formulated supplementary sports foods</small>
+              </li>
+              <li>
+                <small>Food for special medical purposes</small>
+              </li>
+            </ul>
+          </div>
+
+          <div style={{ display: "flex", gap: "40px" }}>
+            <div className="form-check ">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="serviceChoiceSpecial"
+                id="serviceChoiceSpecialYes"
+                value="1"
+                tabIndex={0}
+                onChange={() => {
+                  setServiceChoiceSpecial("yes");
+                }}
+              />
+              <label
+                className="form-check-label"
+                htmlFor="serviceChoiceSpecialYes"
+              >
+                Yes
+              </label>
+            </div>
+            <div className="form-check ">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="serviceChoiceSpecial"
+                id="serviceChoiceSpecialNo"
+                value="2"
+                tabIndex={0}
+                onChange={() => {
+                  setServiceChoiceSpecial("no");
+                }}
+              />
+              <label
+                className="form-check-label"
+                htmlFor="serviceChoiceSpecialNo"
+              >
+                No
+              </label>
             </div>
           </div>
 
-          <div>
-            <div style={{ display: "flex", gap: "40px" }}>
-              <div className="form-check ">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="serviceChoiceSpecial"
-                  id="serviceChoiceSpecialYes"
-                  value="1"
-                  tabIndex={0}
-                  onChange={() => {
-                    setServiceChoiceSpecial("yes");
-                  }}
-                />
-                <label
-                  className="form-check-label"
-                  htmlFor="serviceChoiceSpecialYes"
-                >
-                  Yes
-                </label>
-              </div>
-              <div className="form-check ">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="serviceChoiceSpecial"
-                  id="serviceChoiceSpecialNo"
-                  value="2"
-                  tabIndex={0}
-                  onChange={() => {
-                    setServiceChoiceSpecial("no");
-                  }}
-                />
-                <label
-                  className="form-check-label"
-                  htmlFor="serviceChoiceSpecialNo"
-                >
-                  No
-                </label>
-              </div>
-            </div>
-          </div>
+          {serviceChoiceSpecial === "yes" && <SeekProAdvice />}
         </div>
       )}
-
-      {serviceChoiceSpecial === "yes" && <SeekProAdvice />}
 
       {showNovelBlock && (
         <div className="novel-food">
           <div>
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", fontWeight: "bold" }}>
               Is your food a
               <a
                 className="link"
-                href="#novel-foods"
-                onClick={handleNovelLinkClick}
+                href="#novel-food"
+                onClick={(e) => handleHelpLinkClick(e, "novel-food")}
               >
                 novel food
               </a>
@@ -205,9 +214,24 @@ export const Limitation2 = ({
 
       {showGeneticBlock && (
         <div className="genetically-modified-food">
-          <p style={{ fontWeight: "bold" }}>
+          <p style={{ fontWeight: "bold", display: "flex" }}>
             Does your food contain ingredients that are produced from gene
-            technology, or is your food a genetically modified food? *
+            technology, or is your food a{" "}
+            <a
+              className="link"
+              href="#modified-food"
+              onClick={(e) => handleHelpLinkClick(e, "modified-food")}
+            >
+              genetically modified food
+            </a>
+            ?
+            <abbr
+              className="required"
+              title="(required)"
+              style={{ color: "red" }}
+            >
+              *
+            </abbr>{" "}
           </p>
           <div>
             <div style={{ display: "flex", gap: "40px" }}>
@@ -254,8 +278,23 @@ export const Limitation2 = ({
       {showIrradiatedBlock && (
         <div className="irradiated-food">
           <div>
-            <p style={{ fontWeight: "bold" }}>
-              Is your food an irradiated food? *
+            <p style={{ fontWeight: "bold", display: "flex" }}>
+              Is your food an{" "}
+              <a
+                className="link"
+                href="#irradiated-food"
+                onClick={(e) => handleHelpLinkClick(e, "irradiated-food")}
+              >
+                irradiated food
+              </a>
+              ?
+              <abbr
+                className="required"
+                title="(required)"
+                style={{ color: "red" }}
+              >
+                *
+              </abbr>
             </p>
             <p>
               <small>
@@ -312,8 +351,23 @@ export const Limitation2 = ({
       {showClaimBlock && (
         <div className="claim-food">
           <div>
-            <p style={{ fontWeight: "bold" }}>
-              Do you make a claim about your food? *
+            <p style={{ fontWeight: "bold", display: "flex" }}>
+              Do you make a{" "}
+              <a
+                className="link"
+                href="#nutrition-claims"
+                onClick={(e) => handleHelpLinkClick(e, "nutrition-claims")}
+              >
+                claim
+              </a>{" "}
+              about your food?
+              <abbr
+                className="required"
+                title="(required)"
+                style={{ color: "red" }}
+              >
+                *
+              </abbr>
             </p>
             <p>
               <small>
