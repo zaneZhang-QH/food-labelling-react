@@ -9,8 +9,9 @@ import { AboutFoodLabels } from "./pages/AboutFoodLabels";
 import { Limitations } from "./pages/limitations/Limitations";
 import { FoodName } from "./pages/FoodName";
 import { BusinessDetails } from "./pages/BusinessDetails";
+import { DateMarks } from "./pages/DateMarks";
 
-type Page = "home" | "terms" | "about" | "limitations" | "foodName" | "businessDetails";
+type Page = "home" | "terms" | "about" | "limitations" | "foodName" | "businessDetails" |"dateMarks";
 
 const App = () => {
   const [page, setPage] = useState<Page>("home");
@@ -47,6 +48,12 @@ const App = () => {
       <div style={{ display: page === "businessDetails" ? "block" : "none" }}>
         <BusinessDetails
           onBack={() => setPage("foodName")}
+          onNext={() => setPage("dateMarks")}
+        />
+      </div>
+      <div style={{ display: page === "dateMarks" ? "block" : "none" }}>
+        <DateMarks
+          onBack={() => setPage("businessDetails")}
           onNext={() => setPage("home")}
         />
       </div>
