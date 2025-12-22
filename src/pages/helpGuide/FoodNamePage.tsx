@@ -662,7 +662,6 @@ const renderAccordion = (sections: Section[], groupId: string) => (
                 aria-expanded={isFirst}
                 aria-controls={collapseId}
               >
-                {section.img && <img src={section.img} alt="" style={{ width: "40px", marginRight: "8px" }} />}
                 {section.heading}
               </button>
             </h2>
