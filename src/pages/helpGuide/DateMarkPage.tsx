@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Collapse from "bootstrap/js/dist/collapse";
+import { Accordion, type AccordionSection } from "../../components/Accordion";
 
 type Section = {
   id: string;
@@ -329,83 +329,23 @@ const extraRequirements: Section[] = [
   },
 ];
 
-const renderAccordion = (sections: Section[], groupId: string) => (
-  <div className="accordion-group">
-    <div className="accordion-toggle">
-      <button
-        className="accordion-toggle-btn accordion-toggle-btn--closed"
-        type="button"
-        onClick={(e) => {
-          const group = document.getElementById(groupId);
-          if (!group) return;
-          const collapses = Array.from(group.querySelectorAll<HTMLElement>(".accordion-collapse"));
-          const anyClosed = collapses.some((el) => !el.classList.contains("show"));
-          collapses.forEach((el) => {
-            const instance = Collapse.getOrCreateInstance(el, { toggle: false });
-            if (anyClosed) {
-              instance.show();
-            } else {
-              instance.hide();
-            }
-          });
-          const btn = e.currentTarget;
-          btn.classList.toggle("accordion-toggle-btn--open", anyClosed);
-          btn.classList.toggle("accordion-toggle-btn--closed", !anyClosed);
-          btn.textContent = anyClosed ? "Close all" : "Open all";
-        }}
-      >
-        Open all
-      </button>
-    </div>
-    <div className="accordion" id={groupId}>
-      {sections.map((section, index) => {
-        const headingId = `${section.id}-heading`;
-        const collapseId = section.id;
-        const isFirst = index === 0;
-        return (
-          <div className="accordion-item" key={section.id}>
-            <h3 className="accordion-header" id={headingId}>
-              <button
-                className={`accordion-button ${isFirst ? "" : "collapsed"}`}
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target={`#${collapseId}`}
-                aria-expanded={isFirst}
-                aria-controls={collapseId}
-              >
-                {section.img && <img src={section.img} alt="" style={{ width: "40px", marginRight: "8px" }} />}
-                {section.heading}
-              </button>
-            </h3>
-            <div
-              id={collapseId}
-              className={`accordion-collapse collapse ${isFirst ? "show" : ""}`}
-              aria-labelledby={headingId}
-              data-bs-parent={`#${groupId}`}
-              role="region"
-            >
-              <div className="accordion-body">{section.content}</div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  </div>
-);
-
 type DateMarkPageProps = {
   activeSectionId?: string | null;
 };
 
 export const DateMarkPage = ({ activeSectionId = null }: DateMarkPageProps) => {
-  useEffect(() => {
-    if (!activeSectionId) return;
-    const target = document.getElementById(activeSectionId);
-    if (!target) return;
-    const instance = Collapse.getOrCreateInstance(target, { toggle: false });
-    instance.show();
-    target.scrollIntoView({ behavior: "smooth" });
-  }, [activeSectionId]);
+  const toAccordionSections = (sections: Section[]): AccordionSection[] =>
+    sections.map((section, index) => ({
+      id: section.id,
+      heading: (
+        <>
+          {section.img && <img src={section.img} alt="" style={{ width: "40px", marginRight: "8px" }} />}
+          {section.heading}
+        </>
+      ),
+      content: section.content,
+      defaultOpen: index === 0,
+    }));
 
   return (
     <div className="side-padding vertical-padding">
@@ -415,10 +355,18 @@ export const DateMarkPage = ({ activeSectionId = null }: DateMarkPageProps) => {
       </a>
 
       <h2>General requirements</h2>
-      {renderAccordion(generalRequirements, "datemark-general")}
+      <Accordion
+        sections={toAccordionSections(generalRequirements)}
+        groupId="datemark-general"
+        activeSectionId={activeSectionId}
+      />
 
       <h2 style={{ marginTop: "32px" }}>Food with extra requirements</h2>
-      {renderAccordion(extraRequirements, "datemark-extra")}
+      <Accordion
+        sections={toAccordionSections(extraRequirements)}
+        groupId="datemark-extra"
+        activeSectionId={activeSectionId}
+      />
     </div>
   );
 };
