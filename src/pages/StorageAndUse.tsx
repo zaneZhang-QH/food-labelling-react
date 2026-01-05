@@ -6,14 +6,26 @@ import {
   CheckboxWithInput,
   type InputConfig,
 } from "../components/CheckboxGroup";
-import { Input } from "../components/Input";
 import { InfoAlert } from "../components/GlobalWarnings";
-import { Textarea } from "../components/Textarea";
+import { Input } from "../components/Input";
+import { StorageAndUsePage } from "./helpGuide/StorageAndUsePage";
 
 type StorageAndUseProps = {
   onBack?: () => void;
   onNext?: () => void;
 };
+
+type Rule<T> = {
+  when: (d: T) => boolean;
+  text: (d: T) => string;
+};
+
+const buildMessage = <T,>(data: T, rules: Rule<T>[]) =>
+  rules
+    .filter((r) => r.when(data))
+    .map((r) => r.text(data).trim())
+    .filter(Boolean)
+    .join(" ");
 
 interface CheckboxConfig {
   key: string;
@@ -25,58 +37,240 @@ interface CheckboxConfig {
   ) => React.ReactNode;
 }
 
+interface FormData {
+  // Storage conditions
+  coolDryConditions: boolean;
+  refrigerateAfterOpening: boolean;
+  refrigerateAfterPurchase: boolean;
+  keepRefrigeratedAt: boolean;
+  refrigeratedDegreeFrom: string;
+  refrigeratedDegreeTo: string;
+  refrigeratedDegreeBelow: string;
+  keepRefrigeratedAtBelow: boolean;
+  keepFrozenSolid: boolean;
+  keepFrozenSolidReady: boolean;
+  otherFrozen: boolean;
+  otherFrozenNote: string;
+
+  // Directions for use
+  washBeforeUse: boolean;
+  storeAirtight: boolean;
+  shakeWell: boolean;
+  drainFood: boolean;
+  keepRefrigerated: boolean;
+  consumeWithin: boolean;
+  thawBeforeCooking: boolean;
+  cookFromFrozen: boolean;
+  onceThawedDoNotRefreeze: boolean;
+  consumeDays: string;
+  onceThawedUseWithin: boolean;
+  onceThawedUseWithinDays: string;
+  notSuitableMicrowaveCooking: boolean;
+  rawProductMustBeCooked: boolean;
+  cookUntilSteamingHot: boolean;
+
+  microwaveOn: boolean;
+  microwavePower: string;
+  microwaveMinutes: string;
+  cautionContentsHot: boolean;
+  cookFor: boolean;
+  useMinutes: string;
+  cookForAt: string;
+  allowToStand: boolean;
+  standMinutes: string;
+  doNotRefrigerateOrReheat: boolean;
+  careTakenRemoveBones: boolean;
+  otherDirectionsForUse: boolean;
+  otherDirectionsForUseDetails: string;
+  cookingPreparationInstructions: boolean;
+  cookingPreparationInstructionsDetails: string;
+}
+
+const storageRules: Rule<FormData>[] = [
+  {
+    when: (d) => d.coolDryConditions,
+    text: () => "Store in cool dry conditions.",
+  },
+  {
+    when: (d) => d.refrigerateAfterPurchase,
+    text: () => "Refrigerate after purchase.",
+  },
+  {
+    when: (d) => d.refrigerateAfterOpening,
+    text: () => "Refrigerate after opening.",
+  },
+
+  {
+    when: (d) =>
+      d.keepRefrigeratedAt &&
+      !!d.refrigeratedDegreeFrom &&
+      !!d.refrigeratedDegreeTo,
+    text: (d) =>
+      `Keep refrigerated at ${d.refrigeratedDegreeFrom} °C to ${d.refrigeratedDegreeTo} °C.`,
+  },
+  {
+    when: (d) => d.keepRefrigeratedAtBelow && !!d.refrigeratedDegreeBelow,
+    text: (d) =>
+      `Keep refrigerated at or below ${d.refrigeratedDegreeBelow} °C.`,
+  },
+
+  { when: (d) => d.keepFrozenSolid, text: () => "Keep frozen solid." },
+  {
+    when: (d) => d.keepFrozenSolidReady,
+    text: () => "Keep frozen solid until ready to use.",
+  },
+
+  {
+    when: (d) => d.otherFrozen && !!d.otherFrozenNote,
+    text: (d) => d.otherFrozenNote,
+  },
+];
+
+const directionsRules: Rule<FormData>[] = [
+  { when: (d) => d.washBeforeUse, text: () => "Wash before use." },
+  {
+    when: (d) => d.storeAirtight,
+    text: () => "Once opened, store in an airtight container.",
+  },
+  { when: (d) => d.shakeWell, text: () => "Shake well before use." },
+  {
+    when: (d) => d.drainFood,
+    text: () => "Food should be drained before consumption.",
+  },
+  {
+    when: (d) => d.keepRefrigerated,
+    text: () => "Once opened, keep refrigerated.",
+  },
+  {
+    when: (d) => d.thawBeforeCooking,
+    text: () => "Thaw before cooking.",
+  },
+  {
+    when: (d) => d.cookFromFrozen,
+    text: () => "Cook from frozen.",
+  },
+  {
+    when: (d) => d.onceThawedDoNotRefreeze,
+    text: () => "Once thawed, do not refreeze.",
+  },
+  {
+    when: (d) => d.consumeWithin && !!d.consumeDays,
+    text: (d) => `Consume within ${d.consumeDays} days of opening.`,
+  },
+  {
+    when: (d) => d.onceThawedUseWithin && !!d.onceThawedUseWithinDays,
+    text: (d) => `Once thawed, use within ${d.onceThawedUseWithinDays} hours.`,
+  },
+  {
+    when: (d) => d.notSuitableMicrowaveCooking,
+    text: () => "Not suitable for microwave cooking.",
+  },
+  {
+    when: (d) => d.rawProductMustBeCooked,
+    text: () => "This is a raw product and must be cooked before eating.",
+  },
+  {
+    when: (d) => d.cookUntilSteamingHot,
+    text: () => "Cook until steaming hot in the middle.",
+  },
+  {
+    when: (d) => d.microwaveOn && !!d.microwavePower && !!d.microwaveMinutes,
+    text: (d) =>
+      `Microwave on ${d.microwavePower} for ${d.microwaveMinutes} minutes.`,
+  },
+  {
+    when: (d) => d.cautionContentsHot,
+    text: () => "Caution, contents may be hot after heating.",
+  },
+
+  {
+    when: (d) => d.cookFor && !!d.useMinutes && !!d.cookForAt,
+    text: (d) => `Cook for ${d.useMinutes} minutes at ${d.cookForAt} °C.`,
+  },
+  {
+    when: (d) => d.allowToStand && !!d.standMinutes,
+    text: (d) => `Allow to stand for ${d.standMinutes} minutes before serving.`,
+  },
+
+  {
+    when: (d) => d.doNotRefrigerateOrReheat,
+    text: () => "Do not refrigerate or reheat once heated.",
+  },
+  {
+    when: (d) => d.careTakenRemoveBones,
+    text: () =>
+      "Care has been taken to remove all bones from this product, however some bones may remain.",
+  },
+
+  {
+    when: (d) => d.otherDirectionsForUse && !!d.otherDirectionsForUseDetails,
+    text: (d) => d.otherDirectionsForUseDetails,
+  },
+  {
+    when: (d) =>
+      d.cookingPreparationInstructions &&
+      !!d.cookingPreparationInstructionsDetails,
+    text: (d) => d.cookingPreparationInstructionsDetails,
+  },
+];
+
 export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
-  const [degreeFrom, setDegreeFrom] = useState<string>("");
-  const [degreeTo, setDegreeTo] = useState<string>("");
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
-  const [storageChoices, setStorageChoices] = useState<string[]>([]);
-  const [frozenChoices, setFrozenChoices] = useState<string[]>([]);
-  const [refrigeratedDegree, setRefrigeratedDegree] = useState<string[]>([]);
-  const [otherFrozenNote, setOtherFrozenNote] = useState<string>("");
-  const [consumeWithin, setConsumeWithin] = useState<string>("");
-  const [microwaveOnLevel, setMicrowaveOnLevel] = useState<string>("");
-  const [microwaveOnTime, setMicrowaveOnTime] = useState<string>("");
-  const [thawedWithin, setThawedzWithin] = useState<string>("");
-  const [microwaveOn, setMicrowaveOn] = useState<string>("");
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
+    // Storage conditions
+    coolDryConditions: false,
+    refrigerateAfterOpening: false,
+    refrigerateAfterPurchase: false,
+    keepRefrigeratedAt: false,
+    refrigeratedDegreeFrom: "",
+    refrigeratedDegreeTo: "",
+    keepRefrigeratedAtBelow: false,
+    refrigeratedDegreeBelow: "",
+    keepFrozenSolid: false,
+    keepFrozenSolidReady: false,
+    otherFrozen: false,
+    otherFrozenNote: "",
+
+    // Directions for use
     washBeforeUse: false,
     storeAirtight: false,
-    shakeWell: true,
+    shakeWell: false,
     drainFood: false,
     keepRefrigerated: false,
     consumeWithin: false,
     consumeDays: "",
     thawBeforeCooking: false,
     cookFromFrozen: false,
-    doNotRefreeze: false,
-    useWithin: false,
-    useHours: "48",
-    notMicrowave: false,
-    rawProduct: false,
-    cookUntilSteaming: false,
+    onceThawedDoNotRefreeze: false,
+    onceThawedUseWithin: false,
+    onceThawedUseWithinDays: "",
+    notSuitableMicrowaveCooking: false,
+    rawProductMustBeCooked: false,
+    cookUntilSteamingHot: false,
     microwaveOn: false,
-    microwavePower: "highsd",
-    microwaveMinutes: "6 minutessds",
-    refrigeratedDegree: "",
+    microwavePower: "",
+    microwaveMinutes: "",
+    cautionContentsHot: false,
     cookFor: false,
-    useMinutes: "48",
+    useMinutes: "",
     cookForAt: "",
+    allowToStand: false,
+    standMinutes: "",
+    doNotRefrigerateOrReheat: false,
+    careTakenRemoveBones: false,
+    otherDirectionsForUse: false,
+    otherDirectionsForUseDetails: "",
+    cookingPreparationInstructions: false,
+    cookingPreparationInstructionsDetails: "",
   });
 
-  const frozenLabelMap: Record<string, string> = {
-    "frozen-solid": "Keep frozen solid.",
-    "frozen-solid-ready": "Keep frozen solid until ready to use.",
-  };
-  const frozenSummary = [
-    ...frozenChoices
-      .filter((val) => val in frozenLabelMap)
-      .map((val) => frozenLabelMap[val]),
-    ...(frozenChoices.includes("other") && otherFrozenNote
-      ? [otherFrozenNote]
-      : []),
-  ].join(", ");
+  const generateStorageConditionsMessage = () =>
+    buildMessage(formData, storageRules);
+
+  const generateDirectionsForUseMessage = () =>
+    buildMessage(formData, directionsRules);
 
   const { handleBackClick, handleNextClick } = createNavHandlers(
     onNext,
@@ -90,14 +284,6 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
     event.preventDefault();
     setActiveSectionId(sectionId);
     setGuideOpen(true);
-  };
-
-  const toggleInvalidState = (el: HTMLInputElement | HTMLTextAreaElement) => {
-    if (el.value.trim()) {
-      el.classList.remove("is-invalid");
-    } else {
-      el.classList.add("is-invalid");
-    }
   };
 
   const StorageConditionsCheckboxConfigs: CheckboxConfig[] = [
@@ -117,25 +303,25 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
       label: "Keep refrigerated at",
       key: "keepRefrigeratedAt",
       inputConfig: {
-        inputKey: "refrigeratedDegree",
+        inputKey: "refrigeratedDegreeFrom",
         type: "number",
-        //   placeholder: "5",
+        placeholder: "5",
         suffix: "°C",
-        //   width: "80px",
       },
       renderChildren: (data, handleChange) => (
-        <div className="flex items-center gap-2 mt-2">
-          <span className="text-sm text-gray-700">to</span>
-          <input
+        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+          <span>to</span>
+          <Input
             type="number"
-            value={data.refrigeratedDegree}
-            onChange={(e) => handleChange("refrigeratedDegree", e.target.value)}
-            //   placeholder="5"
-            className="form-control"
-            //   className="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            //   style={{ width: "80px" }}
+            id="refrigeratedDegreeTo"
+            value={data.refrigeratedDegreeTo}
+            onChange={(e) =>
+              handleChange("refrigeratedDegreeTo", e.target.value)
+            }
+            // placeholder="5"
+            width="420px"
+            suffix="°C"
           />
-          <span className="text-sm text-gray-700">°C</span>
         </div>
       ),
     },
@@ -143,7 +329,7 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
       label: "Keep refrigerated at or below",
       key: "keepRefrigeratedAtBelow",
       inputConfig: {
-        inputKey: "refrigeratedDegree",
+        inputKey: "refrigeratedDegreeBelow",
         type: "number",
         placeholder: "5",
         suffix: "°C",
@@ -157,7 +343,15 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
       label: "Keep frozen solid until ready to use.",
       key: "keepFrozenSolidReady",
     },
-    { label: "Other, please enter.", key: "otherFrozen" },
+    {
+      label: "Other, please enter.",
+      key: "otherFrozen",
+      inputConfig: {
+        inputKey: "otherFrozenNote",
+        textAreaInput: true,
+        width: "420px",
+      },
+    },
   ];
 
   const DirectionForUseConfigs: CheckboxConfig[] = [
@@ -174,21 +368,54 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
       key: "shakeWell",
     },
     {
-      key: "drainFood",
       label: "Food should be drained before consumption.",
+      key: "drainFood",
     },
     {
-      key: "keepRefrigerated",
       label: "Once opened, keep refrigerated.",
+      key: "keepRefrigerated",
     },
     {
-      key: "consumeWithin",
       label: "Consume within",
+      key: "consumeWithin",
       inputConfig: {
         inputKey: "consumeDays",
         suffix: "days of opening.",
-        width: "100px",
+        type: "number",
       },
+    },
+    {
+      label: "Thaw before cooking.",
+      key: "thawBeforeCooking",
+    },
+    {
+      label: "Cook from frozen.",
+      key: "cookFromFrozen",
+    },
+    {
+      label: "Once thawed, do not refreeze.",
+      key: "onceThawedDoNotRefreeze",
+    },
+    {
+      label: "Once thawed, use within",
+      key: "onceThawedUseWithin",
+      inputConfig: {
+        inputKey: "onceThawedUseWithinDays",
+        suffix: "hours.",
+        type: "number",
+      },
+    },
+    {
+      label: "Not suitable for microwave cooking.",
+      key: "notSuitableMicrowaveCooking",
+    },
+    {
+      label: "This is a raw product and must be cooked before eating.",
+      key: "rawProductMustBeCooked",
+    },
+    {
+      label: "Cook until steaming hot in the middle.",
+      key: "cookUntilSteamingHot",
     },
     {
       key: "microwaveOn",
@@ -196,18 +423,16 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
       inputConfig: {
         inputKey: "microwavePower",
         placeholder: "high",
-        width: "100px",
       },
       renderChildren: (data, handleChange) => (
-        <div className="flex items-center gap-2 mt-2">
-          <span className="text-sm text-gray-700">for</span>
-          <input
-            type="text"
+        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+          <span>for</span>
+          <Input
+            type="number"
+            id="microwaveMinutes"
             value={data.microwaveMinutes}
             onChange={(e) => handleChange("microwaveMinutes", e.target.value)}
-            placeholder="6 minutes"
-            className="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            style={{ width: "140px" }}
+            suffix="minutes"
           />
         </div>
       ),
@@ -223,18 +448,18 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
         inputKey: "useMinutes",
         placeholder: "48",
         suffix: "minutes",
-        width: "100px",
+        type: "number",
       },
       renderChildren: (data, handleChange) => (
-        <div className="flex items-center gap-2 mt-2">
-          <span className="text-sm text-gray-700">at</span>
-
-          <input
+        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+          <span>at</span>
+          <Input
             type="number"
+            id="cookForAt"
             value={data.cookForAt}
             onChange={(e) => handleChange("cookForAt", e.target.value)}
+            suffix="°C"
           />
-          <span className="text-sm text-gray-700">°C.</span>
         </div>
       ),
     },
@@ -245,7 +470,6 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
         inputKey: "standMinutes",
         placeholder: "5",
         suffix: "minutes before serving.",
-        width: "100px",
       },
     },
     {
@@ -311,8 +535,8 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
               <b>
                 Select the
                 <a
-                  href="#use-by-date"
-                  onClick={(e) => handleGuideLink("use-by-date", e)}
+                  href="#storage-conditions"
+                  onClick={(e) => handleGuideLink("storage-conditions", e)}
                 >
                   {" "}
                   storage conditions{" "}
@@ -330,6 +554,7 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
               </small>
             </article>
           </section>
+
           <div>
             {StorageConditionsCheckboxConfigs.map((config) => (
               <CheckboxWithInput
@@ -346,7 +571,7 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
                 onInputChange={
                   config.inputConfig
                     ? (val) =>
-                        handleInputChange(config.inputConfig.inputKey, val)
+                        handleInputChange(config.inputConfig?.inputKey, val)
                     : null
                 }
               >
@@ -354,15 +579,16 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
                   config.renderChildren(formData, handleInputChange)}
               </CheckboxWithInput>
             ))}
+            <InfoAlert
+              alertHeading="The storage conditions should be shown on the food label as:"
+              alertMessage={
+                <>
+                  Storage conditions:{" "}
+                  <span>{generateStorageConditionsMessage()}</span>
+                </>
+              }
+            />
           </div>
-          <InfoAlert
-            alertHeading="The storage conditions should be shown on the food label as:"
-            alertMessage={
-              <>
-                Storage conditions: <span>{frozenSummary}</span>
-              </>
-            }
-          />
         </div>
 
         <div className="direction-for-use-block">
@@ -373,8 +599,8 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
                 <b>
                   Select the
                   <a
-                    href="#use-by-date"
-                    onClick={(e) => handleGuideLink("use-by-date", e)}
+                    href="#directions-for-use"
+                    onClick={(e) => handleGuideLink("directions-for-use", e)}
                   >
                     {" "}
                     directions for use{" "}
@@ -421,7 +647,7 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
             alertMessage={
               <>
                 Directions for use: Allow to stand for
-                <span>{frozenSummary}</span>
+                <span>{generateDirectionsForUseMessage()}</span>
               </>
             }
           />
@@ -452,7 +678,8 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
       <HelpGuide
         initialOpen={guideOpen}
         onOpenChange={setGuideOpen}
-        content={null}
+        open={guideOpen}
+        content={<StorageAndUsePage activeSectionId={activeSectionId} />}
       />
     </>
   );

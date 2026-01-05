@@ -1,3 +1,4 @@
+import { Input } from "./Input";
 import { Textarea } from "./Textarea";
 
 export interface InputConfig {
@@ -46,40 +47,32 @@ export const CheckboxWithInput: React.FC<CheckboxWithInputProps> = ({
       </div>
 
       {inputConfig && checked && (
-          <div style={{ display: "flex" }}>
-            {!inputConfig.textAreaInput ? (
-              <>
-                <input
-                  type={inputConfig.type || "text"}
-                  value={inputValue}
-                  onChange={(e) =>
-                    onInputChange && onInputChange(e.target.value)
-                  }
-                  placeholder={inputConfig.placeholder}
-                  className="form-control"
-                  style={{ width: inputConfig.width || "120px" }}
-                />
-                {inputConfig.suffix && (
-                  <span>{inputConfig.suffix}</span>
-                )}
-              </>
-            ) : (
-              <>
-                <Textarea
-                  id=""
-                  label={undefined}
-                  value={inputValue}
-                  onChange={(e) =>
-                    onInputChange && onInputChange(e.target.value)
-                  }
-                  placeholder={inputConfig.placeholder}
-                  width={inputConfig.width || "300px"}
-                />
-              </>
-            )}
+        <div style={{ display: "flex", gap: "20px" }}>
+          {!inputConfig.textAreaInput ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+              <Input
+                id={inputConfig.inputKey}
+                type={inputConfig.type || "text"}
+                value={inputValue}
+                onChange={(e) => onInputChange && onInputChange(e.target.value)}
+                // placeholder={inputConfig.placeholder}
+                width={inputConfig.width || "420px"}
+                suffix={inputConfig.suffix}
+              />
+            </div>
+          ) : (
+              <Textarea
+                id=""
+                label={undefined}
+                value={inputValue}
+                onChange={(e) => onInputChange && onInputChange(e.target.value)}
+                placeholder={inputConfig.placeholder}
+                width={inputConfig.width || "420px"}
+              />
+          )}
 
-            {children && checked && <div>{children}</div>}
-          </div>
+          {children && checked && <div>{children}</div>}
+        </div>
       )}
     </div>
   );

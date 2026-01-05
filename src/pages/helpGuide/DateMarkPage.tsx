@@ -3,7 +3,7 @@ import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Accordion, type AccordionSection } from "../../components/Accordion";
 
-type Section = {
+export type Section = {
   id: string;
   heading: string;
   content: React.ReactNode;
