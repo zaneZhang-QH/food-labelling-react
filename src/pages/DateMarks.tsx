@@ -124,7 +124,6 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
             type="text"
             id="food-date"
             label="Food date"
-            displayLabel={false}
             hint="Leave this question blank if the food is not packaged or does not need a date mark."
             value={dateValue}
             onChange={(e) => setDateValue(e.target.value)}
@@ -153,7 +152,6 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
               </p>
             }
             value={lotIdentification}
-            displayLabel={true}
             required={false}
             onChange={(e) => setLotIdentification(e.target.value)}
           />

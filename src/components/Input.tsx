@@ -1,14 +1,9 @@
 import React from "react";
-import type {
-  ChangeEvent,
-  FormEvent,
-  FocusEvent,
-  ReactNode
-} from "react";
+import type { ChangeEvent, FormEvent, FocusEvent, ReactNode } from "react";
 
 type TextInputProps = {
   id: string;
-  label: string;
+  label?: string;
   value: string;
   hint?: ReactNode;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -24,6 +19,7 @@ type TextInputProps = {
   displayLabel?: boolean;
   width?: string | number;
   inputClassName?: string;
+  suffix?: ReactNode;
 };
 
 export const Input: React.FC<TextInputProps> = ({
@@ -32,6 +28,7 @@ export const Input: React.FC<TextInputProps> = ({
   value,
   onChange,
   onInput,
+  onBlur,
   hint,
   optional = false,
   required = false,
@@ -42,12 +39,31 @@ export const Input: React.FC<TextInputProps> = ({
   placeholder = "",
   displayLabel = true,
   inputClassName = "",
+  width,
+  suffix,
 }) => {
   const describedBy = hint ? `${id}-hint` : undefined;
+  const inputMaxWidth = width ?? "640px";
+
+  const inputControl = (
+    <input
+      id={id}
+      className={`form-control ${inputClassName}`.trim()}
+      type={type}
+      placeholder={placeholder}
+      tabIndex={tabIndex}
+      required={required}
+      aria-describedby={describedBy}
+      value={value}
+      onChange={onChange}
+      onInput={onInput}
+      onBlur={onBlur}
+    />
+  );
 
   return (
-    <div>
-      {displayLabel && (
+    <div style={{ maxWidth: inputMaxWidth }}>
+      {displayLabel && label && (
         <label
           className={`qld-text-input-label ${required ? "field-required" : ""}`}
           htmlFor={id}
@@ -63,18 +79,14 @@ export const Input: React.FC<TextInputProps> = ({
         </span>
       )}
 
-      <input
-        id={id}
-        className={`form-control ${inputClassName}`.trim()}
-        type={type}
-        placeholder={placeholder}
-        tabIndex={tabIndex}
-        required={required}
-        aria-describedby={describedBy}
-        value={value}
-        onChange={onChange}
-        onInput={onInput}
-      />
+      {suffix ? (
+        <div className="input-group">
+          {inputControl}
+          <span className="input-group-text">{suffix}</span>
+        </div>
+      ) : (
+        inputControl
+      )}
 
       <div className="valid-feedback">{validMessage}</div>
       <div className="invalid-feedback">{invalidMessage}</div>

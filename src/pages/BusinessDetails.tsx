@@ -103,7 +103,6 @@ export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
             <input
               className="form-control"
               type="text"
-              placeholder=""
               tabIndex={0}
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
@@ -127,7 +126,6 @@ export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
             <input
               className="form-control"
               type="text"
-              placeholder=""
               tabIndex={0}
               value={businessAddress}
               onChange={(e) => setBusinessAddress(e.target.value)}
@@ -176,7 +174,6 @@ export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
             <input
               className="form-control"
               type="text"
-              placeholder=""
               tabIndex={0}
               value={suburb}
               onChange={(e) => setSuburb(e.target.value)}

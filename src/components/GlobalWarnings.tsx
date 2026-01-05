@@ -24,7 +24,7 @@ type InfoAlertProps = {
 
 export const InfoAlert = ({ alertHeading, alertMessage, alertLink }: InfoAlertProps) => {
   return (
-    <div className="alert alert-info " role="alert" aria-label="Success alert">
+    <div className="alert alert-info" style={{maxWidth:"700px"}} role="alert" aria-label="Success alert">
       <h2 className="alert-heading">{alertHeading}</h2>
       <p>
         {alertMessage}

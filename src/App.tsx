@@ -10,8 +10,17 @@ import { Limitations } from "./pages/limitations/Limitations";
 import { FoodName } from "./pages/FoodName";
 import { BusinessDetails } from "./pages/BusinessDetails";
 import { DateMarks } from "./pages/DateMarks";
+import { StorageAndUse } from "./pages/StorageAndUse";
 
-type Page = "home" | "terms" | "about" | "limitations" | "foodName" | "businessDetails" |"dateMarks";
+type Page =
+  | "home"
+  | "terms"
+  | "about"
+  | "limitations"
+  | "foodName"
+  | "businessDetails"
+  | "dateMarks"
+  | "storageUse";
 
 const App = () => {
   const [page, setPage] = useState<Page>("home");
@@ -54,6 +63,12 @@ const App = () => {
       <div style={{ display: page === "dateMarks" ? "block" : "none" }}>
         <DateMarks
           onBack={() => setPage("businessDetails")}
+          onNext={() => setPage("storageUse")}
+        />
+      </div>
+      <div style={{ display: page === "storageUse" ? "block" : "none" }}>
+        <StorageAndUse
+          onBack={() => setPage("dateMarks")}
           onNext={() => setPage("home")}
         />
       </div>
