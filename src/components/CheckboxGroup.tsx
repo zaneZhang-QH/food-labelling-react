@@ -56,9 +56,9 @@ export const CheckboxWithInput: React.FC<CheckboxWithInputProps> = ({
         </label>
       </div>
 
-      {inputConfig && checked && (
+      {checked && (inputConfig || children) && (
         <div style={{ display: "flex", gap: "20px" }}>
-          {!inputConfig.textAreaInput ? (
+          {inputConfig && !inputConfig.textAreaInput && (
             <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
               <Input
                 id={inputConfig.inputKey}
@@ -67,29 +67,31 @@ export const CheckboxWithInput: React.FC<CheckboxWithInputProps> = ({
                 onChange={(e) => onInputChange && onInputChange(e.target.value)}
                 onInput={(e) => toggleInvalidState(e.currentTarget)}
                 onBlur={(e) => toggleInvalidState(e.currentTarget)}
-                // placeholder={inputConfig.placeholder}
+                placeholder={inputConfig.placeholder}
                 width={inputConfig.width || "420px"}
                 suffix={inputConfig.suffix}
                 required
                 invalidMessage={invalidMessage}
               />
             </div>
-          ) : (
-              <Textarea
-                id={inputConfig.inputKey}
-                label={undefined}
-                value={inputValue}
-                onChange={(e) => onInputChange && onInputChange(e.target.value)}
-                onInput={(e) => toggleInvalidState(e.currentTarget)}
-                onBlur={(e) => toggleInvalidState(e.currentTarget)}
-                placeholder={inputConfig.placeholder}
-                width={inputConfig.width || "420px"}
-                required
-                invalidMessage={invalidMessage}
-              />
           )}
 
-          {children && checked && <div>{children}</div>}
+          {inputConfig && inputConfig.textAreaInput && (
+            <Textarea
+              id={inputConfig.inputKey}
+              label={undefined}
+              value={inputValue}
+              onChange={(e) => onInputChange && onInputChange(e.target.value)}
+              onInput={(e) => toggleInvalidState(e.currentTarget)}
+              onBlur={(e) => toggleInvalidState(e.currentTarget)}
+              placeholder={inputConfig.placeholder}
+              width={inputConfig.width || "420px"}
+              required
+              invalidMessage={invalidMessage}
+            />
+          )}
+
+          {children && <div>{children}</div>}
         </div>
       )}
     </div>

@@ -32,8 +32,8 @@ export const Input: React.FC<TextInputProps> = ({
   hint,
   optional = false,
   required = false,
-  invalidMessage = "This field is required",
-  validMessage = "Success",
+  invalidMessage,
+  validMessage,
   type = "text",
   tabIndex = 0,
   placeholder = "",
@@ -83,13 +83,20 @@ export const Input: React.FC<TextInputProps> = ({
         <div className="input-group">
           {inputControl}
           <span className="input-group-text">{suffix}</span>
+          {validMessage && <div className="valid-feedback">{validMessage}</div>}
+          {invalidMessage && (
+            <div className="invalid-feedback">{invalidMessage}</div>
+          )}
         </div>
       ) : (
-        inputControl
+        <>
+          {inputControl}
+          {validMessage && <div className="valid-feedback">{validMessage}</div>}
+          {invalidMessage && (
+            <div className="invalid-feedback">{invalidMessage}</div>
+          )}
+        </>
       )}
-
-      <div className="valid-feedback">{validMessage}</div>
-      <div className="invalid-feedback">{invalidMessage}</div>
     </div>
   );
 };

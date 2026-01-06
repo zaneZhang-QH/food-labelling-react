@@ -4,6 +4,8 @@ export const SeekProAdvice = () => {
       className="alert alert-warning"
       role="alert"
       aria-label="Warning alert"
+      style={{ maxWidth: "1000px" }}
+
     >
       <h2 className="alert-heading">Seek professional advice</h2>
       <p>

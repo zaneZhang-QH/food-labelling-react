@@ -68,7 +68,6 @@ interface FormData {
   notSuitableMicrowaveCooking: boolean;
   rawProductMustBeCooked: boolean;
   cookUntilSteamingHot: boolean;
-
   microwaveOn: boolean;
   microwavePower: string;
   microwaveMinutes: string;
@@ -99,7 +98,6 @@ const storageRules: Rule<FormData>[] = [
     when: (d) => d.refrigerateAfterOpening,
     text: () => "Refrigerate after opening.",
   },
-
   {
     when: (d) =>
       d.keepRefrigeratedAt &&
@@ -113,13 +111,11 @@ const storageRules: Rule<FormData>[] = [
     text: (d) =>
       `Keep refrigerated at or below ${d.refrigeratedDegreeBelow} °C.`,
   },
-
   { when: (d) => d.keepFrozenSolid, text: () => "Keep frozen solid." },
   {
     when: (d) => d.keepFrozenSolidReady,
     text: () => "Keep frozen solid until ready to use.",
   },
-
   {
     when: (d) => d.otherFrozen && !!d.otherFrozenNote,
     text: (d) => d.otherFrozenNote,
@@ -182,7 +178,6 @@ const directionsRules: Rule<FormData>[] = [
     when: (d) => d.cautionContentsHot,
     text: () => "Caution, contents may be hot after heating.",
   },
-
   {
     when: (d) => d.cookFor && !!d.useMinutes && !!d.cookForAt,
     text: (d) => `Cook for ${d.useMinutes} minutes at ${d.cookForAt} °C.`,
@@ -191,7 +186,6 @@ const directionsRules: Rule<FormData>[] = [
     when: (d) => d.allowToStand && !!d.standMinutes,
     text: (d) => `Allow to stand for ${d.standMinutes} minutes before serving.`,
   },
-
   {
     when: (d) => d.doNotRefrigerateOrReheat,
     text: () => "Do not refrigerate or reheat once heated.",
@@ -201,7 +195,6 @@ const directionsRules: Rule<FormData>[] = [
     text: () =>
       "Care has been taken to remove all bones from this product, however some bones may remain.",
   },
-
   {
     when: (d) => d.otherDirectionsForUse && !!d.otherDirectionsForUseDetails,
     text: (d) => d.otherDirectionsForUseDetails,
@@ -294,6 +287,17 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
     }
   };
 
+  const toggleMaxValueInvalid = (el: HTMLInputElement, max: number) => {
+    const value = el.value.trim();
+    const numericValue = Number(value);
+
+    if (!value || Number.isNaN(numericValue) || numericValue > max) {
+      el.classList.add("is-invalid");
+    } else {
+      el.classList.remove("is-invalid");
+    }
+  };
+
   const StorageConditionsCheckboxConfigs: CheckboxConfig[] = [
     {
       key: "coolDryConditions",
@@ -328,7 +332,6 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
             }
             onInput={(e) => toggleInvalidState(e.currentTarget)}
             onBlur={(e) => toggleInvalidState(e.currentTarget)}
-            // placeholder="5"
             width="420px"
             suffix="°C"
             required
@@ -339,13 +342,34 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
     {
       label: "Keep refrigerated at or below",
       key: "keepRefrigeratedAtBelow",
-      inputConfig: {
-        inputKey: "refrigeratedDegreeBelow",
-        type: "number",
-        placeholder: "5",
-        suffix: "°C",
-      },
+      renderChildren: (data, handleChange) => (
+        <Input
+          type="number"
+          id="refrigeratedDegreeBelow"
+          value={data.refrigeratedDegreeBelow}
+          onChange={(e) => {
+            const nextValue = e.target.value;
+            if (!nextValue) {
+              handleChange("refrigeratedDegreeBelow", "");
+              return;
+            }
+            const numericValue = Number(nextValue);
+            if (Number.isNaN(numericValue)) {
+              handleChange("refrigeratedDegreeBelow", nextValue);
+              return;
+            }
+            handleChange("refrigeratedDegreeBelow", numericValue.toString());
+          }}
+          onInput={(e) => toggleMaxValueInvalid(e.currentTarget, 30)}
+          onBlur={(e) => toggleMaxValueInvalid(e.currentTarget, 30)}
+          width="420px"
+          suffix="°C"
+          required
+          invalidMessage="Keep refrigerated at or below temperature cannot be greater than 30."
+        />
+      ),
     },
+
     {
       label: "Keep frozen solid.",
       key: "keepFrozenSolid",
@@ -410,11 +434,32 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
     {
       label: "Once thawed, use within",
       key: "onceThawedUseWithin",
-      inputConfig: {
-        inputKey: "onceThawedUseWithinDays",
-        suffix: "hours.",
-        type: "number",
-      },
+      renderChildren: (data, handleChange) => (
+        <Input
+          type="number"
+          id="onceThawedUseWithinDays"
+          value={data.onceThawedUseWithinDays}
+          onChange={(e) => {
+            const nextValue = e.target.value;
+            if (!nextValue) {
+              handleChange("onceThawedUseWithinDays", "");
+              return;
+            }
+            const numericValue = Number(nextValue);
+            if (Number.isNaN(numericValue)) {
+              handleChange("onceThawedUseWithinDays", nextValue);
+              return;
+            }
+            handleChange("onceThawedUseWithinDays", numericValue.toString());
+          }}
+          onInput={(e) => toggleMaxValueInvalid(e.currentTarget, 100)}
+          onBlur={(e) => toggleMaxValueInvalid(e.currentTarget, 100)}
+          width="420px"
+          suffix="hours."
+          required
+          invalidMessage="Once thawed, use within hours cannot be greater than 100."
+        />
+      ),
     },
     {
       label: "Not suitable for microwave cooking.",
@@ -485,7 +530,6 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
       key: "allowToStand",
       inputConfig: {
         inputKey: "standMinutes",
-        placeholder: "5",
         suffix: "minutes before serving.",
       },
     },
@@ -525,12 +569,16 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
   };
 
   const hasValue = (value: string) => value.trim().length > 0;
+  const belowTempValue = Number(formData.refrigeratedDegreeBelow);
+  const belowTempInvalid =
+    !hasValue(formData.refrigeratedDegreeBelow) ||
+    Number.isNaN(belowTempValue) ||
+    belowTempValue > 30;
   const missingRequiredInputs =
     (formData.keepRefrigeratedAt &&
       (!hasValue(formData.refrigeratedDegreeFrom) ||
         !hasValue(formData.refrigeratedDegreeTo))) ||
-    (formData.keepRefrigeratedAtBelow &&
-      !hasValue(formData.refrigeratedDegreeBelow)) ||
+    (formData.keepRefrigeratedAtBelow && belowTempInvalid) ||
     (formData.otherFrozen && !hasValue(formData.otherFrozenNote)) ||
     (formData.consumeWithin && !hasValue(formData.consumeDays)) ||
     (formData.onceThawedUseWithin &&
@@ -674,7 +722,8 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
               }
               onInputChange={
                 config.inputConfig
-                  ? (val) => handleInputChange(config.inputConfig.inputKey, val)
+                  ? (val) =>
+                      handleInputChange(config.inputConfig?.inputKey, val)
                   : null
               }
             >
@@ -735,5 +784,3 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
     </>
   );
 };
-
-

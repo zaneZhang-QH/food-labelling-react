@@ -2,13 +2,7 @@ import React, { useEffect } from "react";
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Collapse from "bootstrap/js/dist/collapse";
-
-type Section = {
-  id: string;
-  heading: string;
-  content: React.ReactNode;
-  img?: string;
-};
+import type { Section } from "./DateMarkPage";
 
 const generalRequirements: Section[] = [
   {
