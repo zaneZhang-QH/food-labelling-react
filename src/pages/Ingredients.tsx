@@ -56,6 +56,10 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
     .map((row) => row[0]?.trim())
     .filter((value): value is string => !!value)
     .join(", ");
+  const hasIngredientRows = ingredientRows.some(
+    (row) => row[0]?.trim().length
+  );
+  const nextDisabled = !form.exemptIngredients || !hasIngredientRows;
 
   return (
     <>
@@ -629,7 +633,18 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
           <span className="btn-label-default">Back</span>
         </a>
 
-        <a className="btn btn-primary" role="button" onClick={handleNextClick}>
+        <a
+          className={`btn btn-primary${nextDisabled ? " disabled" : ""}`}
+          aria-disabled={nextDisabled}
+          role="button"
+          onClick={(event) => {
+            if (nextDisabled) {
+              event.preventDefault();
+              return;
+            }
+            handleNextClick(event);
+          }}
+        >
           <span className="btn-label-default">Next</span>
         </a>
 
