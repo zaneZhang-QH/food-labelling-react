@@ -14,10 +14,8 @@ type TextInputProps = {
   invalidMessage?: string;
   validMessage?: string;
   type?: string;
-  tabIndex?: number;
   placeholder?: string;
   displayLabel?: boolean;
-  width?: string | number;
   inputClassName?: string;
   suffix?: ReactNode;
 };
@@ -35,15 +33,12 @@ export const Input: React.FC<TextInputProps> = ({
   invalidMessage,
   validMessage,
   type = "text",
-  tabIndex = 0,
   placeholder = "",
   displayLabel = true,
   inputClassName = "",
-  width,
   suffix,
 }) => {
   const describedBy = hint ? `${id}-hint` : undefined;
-  const inputMaxWidth = width ?? "640px";
 
   const inputControl = (
     <input
@@ -51,7 +46,6 @@ export const Input: React.FC<TextInputProps> = ({
       className={`form-control ${inputClassName}`.trim()}
       type={type}
       placeholder={placeholder}
-      tabIndex={tabIndex}
       required={required}
       aria-describedby={describedBy}
       value={value}
@@ -62,7 +56,7 @@ export const Input: React.FC<TextInputProps> = ({
   );
 
   return (
-    <div style={{ maxWidth: inputMaxWidth }}>
+    <div>
       {displayLabel && label && (
         <label
           className={`qld-text-input-label ${required ? "field-required" : ""}`}

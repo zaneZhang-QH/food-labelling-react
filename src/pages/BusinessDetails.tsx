@@ -87,7 +87,6 @@ export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
             display: "flex",
             flexDirection: "column",
             gap: "2rem",
-            maxWidth: "640px",
           }}
         >
           <div className="business-name">

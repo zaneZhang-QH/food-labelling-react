@@ -80,16 +80,18 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
         <div className="">
           <div className="">
             <div>
-              <p style={{ fontWeight: "bold", display: "flex" }}>
+              <p style={{ fontWeight: "bold" }}>
                 Do you mention an ingredient, category of ingredients or a part
-                of the food in the name on the label (
+                of the food in the name on the label
                 <a
+                  className="text-decoration-none"
                   href="#char-ingredient"
                   onClick={handleGuideLink("char-ingredient")}
                 >
-                  characterising ingredients
+                  {" "}
+                  characterising ingredients{" "}
                 </a>
-                )?
+                ?
                 <abbr
                   className="required"
                   title="(required)"
@@ -147,9 +149,10 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
 
             {form.ingredientInName && (
               <div>
-                <p style={{ fontWeight: "bold", display: "flex" }}>
+                <p style={{ fontWeight: "bold" }}>
                   Do you use any
                   <a
+                    className="text-decoration-none"
                     href="#comp-ingredient"
                     onClick={handleGuideLink("comp-ingredient")}
                   >
@@ -221,9 +224,10 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
 
             {form.ingredientMakeFood && (
               <div>
-                <p style={{ fontWeight: "bold", display: "flex" }}>
+                <p style={{ fontWeight: "bold" }}>
                   Do you sometimes replace an ingredient with an
                   <a
+                    className="text-decoration-none"
                     href="#alt-ingredient"
                     onClick={handleGuideLink("alt-ingredient")}
                   >
@@ -286,9 +290,10 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
 
             {form.ingredientAlternative && (
               <>
-                <p style={{ fontWeight: "bold", display: "flex" }}>
+                <p style={{ fontWeight: "bold" }}>
                   Do you want to list an ingredient with a{" "}
                   <a
+                    className="text-decoration-none"
                     href="#generic-name"
                     onClick={handleGuideLink("generic-name")}
                   >
@@ -414,9 +419,10 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
 
             {form.ingredientGenericName && (
               <>
-                <p style={{ fontWeight: "bold", display: "flex" }}>
+                <p style={{ fontWeight: "bold" }}>
                   Does your food contain any{" "}
                   <a
+                    className="text-decoration-none"
                     href="#food-additive"
                     onClick={handleGuideLink("food-additive")}
                   >
@@ -488,9 +494,10 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
 
             {form.foodAdditives && (
               <>
-                <p style={{ fontWeight: "bold", display: "flex" }}>
+                <p style={{ fontWeight: "bold" }}>
                   Does your food contain any{" "}
                   <a
+                    className="text-decoration-none"
                     href="#exempt-ingredient"
                     onClick={handleGuideLink("exempt-ingredient")}
                   >

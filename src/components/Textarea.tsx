@@ -15,7 +15,6 @@ type TextareaProps = {
   validMessage?: string;
   placeholder?: string;
   rows?: number;
-  width?: string | number;
   inputClassName?: string;
 };
 
@@ -33,13 +32,11 @@ export const Textarea: React.FC<TextareaProps> = ({
   validMessage = "Success",
   placeholder,
   rows = 3,
-  width = "50vw",
 }) => {
   const describedBy = hint ? `${id}-hint` : undefined;
-  const containerStyle = width ? { maxWidth: width } : undefined;
 
   return (
-    <div style={containerStyle}>
+    <div>
       {label && (
         <label
           className={`qld-text-input-label ${required ? "field-required" : ""}`}

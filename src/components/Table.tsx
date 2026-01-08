@@ -69,7 +69,7 @@ export const Table: React.FC<TableProps> = ({
   };
 
   return (
-    <div className="table-responsive qld-table" style={{ width: "1000px" }}>
+    <div className="table-responsive qld-table">
       <table className={`table ${tableClassName}`.trim()}>
         {(caption || subCaption) && (
           <caption className="caption">
@@ -81,7 +81,10 @@ export const Table: React.FC<TableProps> = ({
         <thead>
           <tr>
             {isEditable && allowReorder && (
-              <th scope="col" style={{ width: "1%", whiteSpace: "nowrap" }}></th>
+              <th
+                scope="col"
+                style={{ width: "1%", whiteSpace: "nowrap" }}
+              ></th>
             )}
             {headers.map((header, index) => (
               <th scope="col" key={index}>
@@ -136,8 +139,7 @@ export const Table: React.FC<TableProps> = ({
                     </td>
                   )}
                   {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} 
-                    >
+                    <td key={cellIndex}>
                       <input
                         className="form-control"
                         aria-label={`Row ${rowIndex + 1}, Column ${

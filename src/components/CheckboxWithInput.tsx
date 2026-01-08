@@ -6,7 +6,6 @@ export interface InputConfig {
   type?: "text" | "number" | "email" | "tel" | "url";
   placeholder?: string;
   suffix?: string;
-  width?: string;
   textAreaInput?: boolean;
   invalidMessage?: string;
 }
@@ -26,7 +25,7 @@ export interface CheckboxConfig {
 interface CheckboxWithInputProps {
   label: string;
   checked: boolean;
-  hint?:React.ReactNode;
+  hint?: React.ReactNode;
   onChange: (checked: boolean) => void;
   inputConfig?: InputConfig | null;
   inputValue?: string;
@@ -45,7 +44,8 @@ export const CheckboxWithInput: React.FC<CheckboxWithInputProps> = ({
   children = null,
 }) => {
   const id = label.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
-  const invalidMessage = inputConfig?.invalidMessage ?? "This field is required";
+  const invalidMessage =
+    inputConfig?.invalidMessage ?? "This field is required";
 
   const toggleInvalidState = (el: HTMLInputElement | HTMLTextAreaElement) => {
     if (el.value.trim()) {
@@ -70,10 +70,10 @@ export const CheckboxWithInput: React.FC<CheckboxWithInputProps> = ({
         </label>
       </div>
 
-      {hint && <small style={{color:"#6f777b"}}>{hint}</small>}
+      {hint && <small style={{ color: "#6f777b" }}>{hint}</small>}
 
       {checked && (inputConfig || children) && (
-        <div style={{ display: "flex", gap: "20px", marginTop:"5px" }}>
+        <div style={{ display: "flex", gap: "20px", marginTop: "5px" }}>
           {inputConfig && !inputConfig.textAreaInput && (
             <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
               <Input
@@ -84,7 +84,6 @@ export const CheckboxWithInput: React.FC<CheckboxWithInputProps> = ({
                 onInput={(e) => toggleInvalidState(e.currentTarget)}
                 onBlur={(e) => toggleInvalidState(e.currentTarget)}
                 placeholder={inputConfig.placeholder}
-                width={inputConfig.width || "420px"}
                 suffix={inputConfig.suffix}
                 required
                 invalidMessage={invalidMessage}
@@ -93,18 +92,19 @@ export const CheckboxWithInput: React.FC<CheckboxWithInputProps> = ({
           )}
 
           {inputConfig && inputConfig.textAreaInput && (
-            <Textarea
-              id={inputConfig.inputKey}
-              label={undefined}
-              value={inputValue}
-              onChange={(e) => onInputChange && onInputChange(e.target.value)}
-              onInput={(e) => toggleInvalidState(e.currentTarget)}
-              onBlur={(e) => toggleInvalidState(e.currentTarget)}
-              placeholder={inputConfig.placeholder}
-              width={inputConfig.width || "420px"}
-              required
-              invalidMessage={invalidMessage}
-            />
+            <div style={{ flex: 1 }}>
+              <Textarea
+                id={inputConfig.inputKey}
+                label={undefined}
+                value={inputValue}
+                onChange={(e) => onInputChange && onInputChange(e.target.value)}
+                onInput={(e) => toggleInvalidState(e.currentTarget)}
+                onBlur={(e) => toggleInvalidState(e.currentTarget)}
+                placeholder={inputConfig.placeholder}
+                required
+                invalidMessage={invalidMessage}
+              />
+            </div>
           )}
 
           {children && <div>{children}</div>}

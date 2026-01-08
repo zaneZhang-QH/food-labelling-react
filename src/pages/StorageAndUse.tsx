@@ -322,7 +322,6 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
             }
             onInput={(e) => toggleInvalidState(e.currentTarget)}
             onBlur={(e) => toggleInvalidState(e.currentTarget)}
-            width="420px"
             suffix="°C"
             required
           />
@@ -353,7 +352,6 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
           }}
           onInput={(e) => toggleMaxValueInvalid(e.currentTarget, 30)}
           onBlur={(e) => toggleMaxValueInvalid(e.currentTarget, 30)}
-          width="420px"
           suffix="°C"
           required
           invalidMessage="Keep refrigerated at or below temperature cannot be greater than 30."
@@ -375,7 +373,6 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
       inputConfig: {
         inputKey: "otherFrozenNote",
         textAreaInput: true,
-        width: "420px",
       },
       requiredFields: ["otherFrozenNote"],
     },
@@ -448,7 +445,6 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
           }}
           onInput={(e) => toggleMaxValueInvalid(e.currentTarget, 100)}
           onBlur={(e) => toggleMaxValueInvalid(e.currentTarget, 100)}
-          width="420px"
           suffix="hours."
           required
           invalidMessage="Once thawed, use within hours cannot be greater than 100."

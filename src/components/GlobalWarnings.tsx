@@ -13,7 +13,6 @@ export const SeekProAdvice = () => {
       className="alert alert-warning"
       role="alert"
       aria-label="Warning alert"
-      style={{ maxWidth: "50vw" }}
     >
       <h2 className="alert-heading">Seek professional advice</h2>
       <p>
@@ -37,7 +36,6 @@ export const Alert = ({
       className={`alert alert-${variant}`}
       role="alert"
       aria-label={`${variant} alert`}
-      style={{ maxWidth: "50vw" }}
     >
       <h2 className="alert-heading">{alertHeading}</h2>
       <p>
