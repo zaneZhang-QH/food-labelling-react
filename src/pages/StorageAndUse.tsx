@@ -6,7 +6,7 @@ import {
   CheckboxWithInput,
   type CheckboxConfig,
 } from "../components/CheckboxWithInput";
-import { InfoAlert } from "../components/GlobalWarnings";
+import { Alert } from "../components/GlobalWarnings";
 import { Input } from "../components/Input";
 import { StorageAndUsePage } from "./helpGuide/StorageAndUsePage";
 
@@ -19,8 +19,6 @@ type Rule<T> = {
   when: (d: T) => boolean;
   text: (d: T) => string;
 };
-
-
 
 interface FormData {
   // Storage conditions
@@ -678,7 +676,7 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
                   config.renderChildren(formData, handleInputChange)}
               </CheckboxWithInput>
             ))}
-            <InfoAlert
+            <Alert
               alertHeading="The storage conditions should be shown on the food label as:"
               alertMessage={
                 <>
@@ -742,7 +740,7 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
             </CheckboxWithInput>
           ))}
 
-          <InfoAlert
+          <Alert
             alertHeading="The directions for use should be shown on the food label as:"
             alertMessage={
               <>

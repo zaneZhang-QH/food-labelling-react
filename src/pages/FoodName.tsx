@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { InfoAlert } from "../components/GlobalWarnings";
+import { Alert } from "../components/GlobalWarnings";
 import { HelpGuide } from "../components/helpGuides/HelpGuide";
 import { createNavHandlers } from "./help";
 import { FoodNamePage } from "./helpGuide/FoodNamePage";
@@ -138,10 +138,10 @@ export const FoodName = ({ onBack, onNext }: FoodNameProps) => {
       </div>
 
       {ingredientHighlightChoice === "yes" && (
-        <InfoAlert
+        <Alert
+          variant="info"
           alertHeading=" Characterising ingredients"
           alertMessage="Ingredients which are mentioned in the food name are called characterising ingredients. The Food Standards Code requires the amount of characterising ingredients to be shown in the ingredients list."
-          alertLink={false}
         />
       )}
 
@@ -218,7 +218,8 @@ export const FoodName = ({ onBack, onNext }: FoodNameProps) => {
           </div>
 
           {followChoice === "yes" && (
-            <InfoAlert
+            <Alert
+              variant="info"
               alertHeading=" Prescribed names"
               alertMessage={
                 <p>
@@ -232,12 +233,12 @@ export const FoodName = ({ onBack, onNext }: FoodNameProps) => {
                   ).
                 </p>
               }
-              alertLink={false}
             />
           )}
 
           {followChoice !== null && (
-            <InfoAlert
+            <Alert
+              variant="info"
               alertHeading=" Food with extra requirements"
               alertMessage={
                 <>
@@ -260,7 +261,6 @@ export const FoodName = ({ onBack, onNext }: FoodNameProps) => {
                   </p>
                 </>
               }
-              alertLink={false}
             />
           )}
 

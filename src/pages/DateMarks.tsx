@@ -1,11 +1,11 @@
 import { useState } from "react";
 import type { MouseEvent } from "react";
-import { InfoAlert } from "../components/GlobalWarnings";
 import { RadioGroup } from "../components/RadioGroup";
 import { Input } from "../components/Input";
 import { HelpGuide } from "../components/helpGuides/HelpGuide";
 import { DateMarkPage } from "./helpGuide/DateMarkPage";
 import { createNavHandlers } from "./help";
+import { Alert } from "../components/GlobalWarnings";
 
 type DateMarksProps = {
   onBack?: () => void;
@@ -257,7 +257,8 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
 
           {shelfLife2DaysChoice === "1" && (
             <>
-              <InfoAlert
+              <Alert
+                variant="info"
                 alertHeading=" No date mark is required"
                 alertMessage={
                   <p>
@@ -306,7 +307,8 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
 
             {shelfLife7DaysChoice === "1" && (
               <>
-                <InfoAlert
+                <Alert
+                  variant="info"
                   alertHeading="Best-before, baked-on or baked-for date"
                   alertMessage={
                     <p>
@@ -398,7 +400,8 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
 
             {shelfLifeCertainDaysChoice === "1" && (
               <>
-                <InfoAlert
+                <Alert
+                  variant="info"
                   alertHeading=" Use-by date"
                   alertMessage={
                     <p>
@@ -407,7 +410,8 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
                         href="#use-by-date"
                         onClick={(e) => handleGuideLink("use-by-date", e)}
                       >
-                        {" "}use-by date{" "}
+                        {" "}
+                        use-by date{" "}
                       </a>
                       because they may become unsafe to eat after the use-by
                       date has passed. A food may look, smell and taste ok but
@@ -421,7 +425,8 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
 
             {shelfLifeCertainDaysChoice === "2" && (
               <>
-                <InfoAlert
+                <Alert
+                  variant="info"
                   alertHeading="Best-before date"
                   alertMessage={
                     <p>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { HelpGuide } from "../components/helpGuides/HelpGuide";
 import { createNavHandlers, useGuideNavigation } from "./help";
 import { RadioGroup } from "../components/RadioGroup";
-import { InfoAlert } from "../components/GlobalWarnings";
+import { Alert } from "../components/GlobalWarnings";
 import { Table } from "../components/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -56,9 +56,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
     .map((row) => row[0]?.trim())
     .filter((value): value is string => !!value)
     .join(", ");
-  const hasIngredientRows = ingredientRows.some(
-    (row) => row[0]?.trim().length
-  );
+  const hasIngredientRows = ingredientRows.some((row) => row[0]?.trim().length);
   const nextDisabled = !form.exemptIngredients || !hasIngredientRows;
 
   return (
@@ -119,7 +117,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
             </div>
 
             {form.ingredientInName === "1" && (
-              <InfoAlert
+              <Alert
                 alertHeading="Characterising ingredients"
                 alertMessage={
                   <>
@@ -189,7 +187,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
             )}
 
             {form.ingredientMakeFood === "1" && (
-              <InfoAlert
+              <Alert
                 alertHeading=" Compound ingredients"
                 alertMessage={
                   <>
@@ -263,7 +261,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
             )}
 
             {form.ingredientAlternative === "1" && (
-              <InfoAlert
+              <Alert
                 alertHeading=" Alternative ingredients"
                 alertMessage={
                   <>
@@ -388,7 +386,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
             )}
 
             {form.ingredientGenericName === "1" && (
-              <InfoAlert
+              <Alert
                 alertHeading="Generic names"
                 alertMessage={
                   <>
@@ -455,7 +453,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
             )}
 
             {form.foodAdditives === "1" && (
-              <InfoAlert
+              <Alert
                 alertHeading="Food additives"
                 alertMessage={
                   <>
@@ -539,7 +537,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
             )}
 
             {form.exemptIngredients === "1" && (
-              <InfoAlert
+              <Alert
                 alertHeading="Exempt ingredients"
                 alertMessage={
                   <p>
@@ -610,7 +608,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
                   }
                 />
 
-                <InfoAlert
+                <Alert
                   alertHeading="The ingredients should be shown on a food label as:"
                   alertMessage={
                     <p>

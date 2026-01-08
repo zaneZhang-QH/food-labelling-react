@@ -6,7 +6,7 @@ import {
   CheckboxWithInput,
   type CheckboxConfig,
 } from "../components/CheckboxWithInput";
-import { InfoAlert } from "../components/GlobalWarnings";
+import { Alert } from "../components/GlobalWarnings";
 import { Checkbox } from "../components/Checkbox";
 import { Textarea } from "../components/Textarea";
 
@@ -636,6 +636,9 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
     statementSelections["bottled-water-with-fluoride"]
       ? "The product contains added fluoride."
       : null,
+    sodiumPotassiumContent.trim() !== ""
+      ? `Sodium and potassium content: ${sodiumPotassiumContent.trim()}.`
+      : null,
   ].filter(Boolean) as string[];
 
   return (
@@ -780,7 +783,7 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
             ))}
           </div>
 
-          <InfoAlert
+          <Alert
             alertHeading="The allergens should be shown on the food label as:"
             alertMessage={
               <>
@@ -808,10 +811,7 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
                 warning{" "}
               </a>
               and
-              <a
-                href="#ad-statement"
-                onClick={handleGuideLink("ad-statement")}
-              >
+              <a href="#ad-statement" onClick={handleGuideLink("ad-statement")}>
                 {" "}
                 advisory{" "}
               </a>
@@ -849,13 +849,15 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
                 required={true}
                 id="sodium-potassim-content"
                 value={sodiumPotassiumContent}
-                onChange={(event) => setSodiumPotassiumContent(event.target.value)}
+                onChange={(event) =>
+                  setSodiumPotassiumContent(event.target.value)
+                }
                 onInput={(event) => toggleInvalidState(event.currentTarget)}
                 onBlur={(event) => toggleInvalidState(event.currentTarget)}
                 invalidMessage="The sodium and potassium content must be entered for reduced sodium salt mixtures and salt substitutes."
               />
 
-              <InfoAlert
+              <Alert
                 alertHeading="The statements should be shown on the food label as:"
                 alertMessage={
                   <p className="wrap">
@@ -884,7 +886,11 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
           onClick={(event) => {
             handleNextClick(event);
           }}
-          style={sodiumPotassiumContent.trim() === "" ? {pointerEvents: 'none', opacity: 0.5, color: "white"} : {}}
+          style={
+            sodiumPotassiumContent.trim() === ""
+              ? { pointerEvents: "none", opacity: 0.5, color: "white" }
+              : {}
+          }
         >
           <span className="btn-label-default">Next</span>
         </a>

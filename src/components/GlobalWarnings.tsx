@@ -1,3 +1,12 @@
+type AlertVariant = "info" | "warning" | "success";
+
+type AlertProps = {
+  alertHeading: string;
+  alertMessage: React.ReactNode;
+  alertLink?: string;
+  variant?: AlertVariant;
+};
+
 export const SeekProAdvice = () => {
   return (
     <div
@@ -5,7 +14,6 @@ export const SeekProAdvice = () => {
       role="alert"
       aria-label="Warning alert"
       style={{ maxWidth: "50vw" }}
-
     >
       <h2 className="alert-heading">Seek professional advice</h2>
       <p>
@@ -18,56 +26,23 @@ export const SeekProAdvice = () => {
   );
 };
 
-type InfoAlertProps = {
-  alertHeading: string;
-  alertMessage: React.ReactNode;
-  alertLink?: boolean;
-};
-
-export const InfoAlert = ({
+export const Alert = ({
   alertHeading,
   alertMessage,
   alertLink,
-}: InfoAlertProps) => {
+  variant = "info",
+}: AlertProps) => {
   return (
     <div
-      className="alert alert-info"
-      style={{ maxWidth: "50vw" }}
+      className={`alert alert-${variant}`}
       role="alert"
-      aria-label="Success alert"
+      aria-label={`${variant} alert`}
+      style={{ maxWidth: "50vw" }}
     >
       <h2 className="alert-heading">{alertHeading}</h2>
       <p>
         {alertMessage}
-        {alertLink && <a href="#">Find out more</a>}
-      </p>
-    </div>
-  );
-};
-
-type WarningAlertProps = {
-  alertHeading: string;
-  alertMessage: React.ReactNode;
-  alertLink?: boolean;
-};
-
-export const WarningAlert = ({
-  alertHeading,
-  alertMessage,
-  alertLink,
-}: WarningAlertProps) => {
-  return (
-    <div
-      className="alert alert-warning "
-      role="alert"
-      aria-label="Success alert"
-      style={{ maxWidth: "50vw" }}
-
-    >
-      <h2 className="alert-heading">{alertHeading}</h2>
-      <p>
-        {alertMessage}
-        {alertLink && <a href="#">Find out more</a>}
+        {alertLink && <a href={alertLink}>Find out more</a>}
       </p>
     </div>
   );

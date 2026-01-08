@@ -1,4 +1,4 @@
-import { InfoAlert } from "../components/GlobalWarnings";
+import { Alert } from "../components/GlobalWarnings";
 import { faCircleInfo, faClock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -45,7 +45,8 @@ export const Home = ({ onStart }: HomeProps) => {
           <i>Food Act 2006</i> (the Act), for non-compliance with the Food
           Standards Code.
         </p>
-        <InfoAlert
+        <Alert
+          variant="info"
           alertHeading="Did you know"
           alertMessage={
             <p>
@@ -64,7 +65,8 @@ export const Home = ({ onStart }: HomeProps) => {
           legal advice from a food labelling consultant.
         </p>
 
-        <InfoAlert
+        <Alert
+          variant="info"
           alertHeading="Before you start"
           alertMessage={
             <>
@@ -145,7 +147,8 @@ export const Home = ({ onStart }: HomeProps) => {
           or phone (07) 3328 9310.
         </p>
 
-        <InfoAlert
+        <Alert
+          variant="info"
           alertHeading="Did you know"
           alertMessage={
             <p>

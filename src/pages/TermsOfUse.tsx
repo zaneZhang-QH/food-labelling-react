@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createNavHandlers } from "./help";
-import { WarningAlert } from "../components/GlobalWarnings";
+import { Alert } from "../components/GlobalWarnings";
 
 type TermsOfUseProps = {
   onBack?: () => void;
@@ -75,7 +75,8 @@ export const TermsOfUse = ({ onBack, onAccept }: TermsOfUseProps) => {
           </li>
         </ul>
 
-        <WarningAlert
+        <Alert
+          variant="warning"
           alertHeading="Warning"
           alertMessage={
             <>
