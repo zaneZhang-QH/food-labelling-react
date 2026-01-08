@@ -664,8 +664,8 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
               <b>
                 Select any food or ingredient in your food from the{" "}
                 <a
-                  href="#char-ingredient"
-                  onClick={handleGuideLink("char-ingredient")}
+                  href="#alt-declaration"
+                  onClick={handleGuideLink("alt-declaration")}
                 >
                   {" "}
                   allergen declaration{" "}
@@ -801,16 +801,16 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
             <p>
               Select the food and ingredients from the list below to create{" "}
               <a
-                href="#storage-conditions"
-                onClick={handleGuideLink("storage-conditions")}
+                href="#warn-statement"
+                onClick={handleGuideLink("warn-statement")}
               >
                 {" "}
                 warning{" "}
               </a>
               and
               <a
-                href="#storage-conditions"
-                onClick={handleGuideLink("storage-conditions")}
+                href="#ad-statement"
+                onClick={handleGuideLink("ad-statement")}
               >
                 {" "}
                 advisory{" "}
@@ -884,6 +884,7 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
           onClick={(event) => {
             handleNextClick(event);
           }}
+          style={sodiumPotassiumContent.trim() === "" ? {pointerEvents: 'none', opacity: 0.5, color: "white"} : {}}
         >
           <span className="btn-label-default">Next</span>
         </a>
