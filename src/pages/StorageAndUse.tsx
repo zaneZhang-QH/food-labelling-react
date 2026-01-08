@@ -4,8 +4,8 @@ import { createNavHandlers } from "./help";
 import { HelpGuide } from "../components/helpGuides/HelpGuide";
 import {
   CheckboxWithInput,
-  type InputConfig,
-} from "../components/CheckboxGroup";
+  type CheckboxConfig,
+} from "../components/CheckboxWithInput";
 import { InfoAlert } from "../components/GlobalWarnings";
 import { Input } from "../components/Input";
 import { StorageAndUsePage } from "./helpGuide/StorageAndUsePage";
@@ -20,16 +20,7 @@ type Rule<T> = {
   text: (d: T) => string;
 };
 
-interface CheckboxConfig {
-  key: string;
-  label: string;
-  inputConfig?: InputConfig;
-  renderChildren?: (
-    data: FormData,
-    handleChange: (field: keyof FormData, value: string) => void
-  ) => React.ReactNode;
-  requiredFields?: (keyof FormData)[];
-}
+
 
 interface FormData {
   // Storage conditions
@@ -211,7 +202,6 @@ const buildMessage = <T,>(data: T, rules: Rule<T>[]) =>
 export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
-
   const [formData, setFormData] = useState<FormData>({
     // Storage conditions
     coolDryConditions: false,

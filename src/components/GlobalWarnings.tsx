@@ -4,7 +4,7 @@ export const SeekProAdvice = () => {
       className="alert alert-warning"
       role="alert"
       aria-label="Warning alert"
-      style={{ maxWidth: "1000px" }}
+      style={{ maxWidth: "50vw" }}
 
     >
       <h2 className="alert-heading">Seek professional advice</h2>
@@ -32,7 +32,7 @@ export const InfoAlert = ({
   return (
     <div
       className="alert alert-info"
-      style={{ maxWidth: "1000px" }}
+      style={{ maxWidth: "50vw" }}
       role="alert"
       aria-label="Success alert"
     >
@@ -61,7 +61,7 @@ export const WarningAlert = ({
       className="alert alert-warning "
       role="alert"
       aria-label="Success alert"
-      style={{ maxWidth: "1000px" }}
+      style={{ maxWidth: "50vw" }}
 
     >
       <h2 className="alert-heading">{alertHeading}</h2>

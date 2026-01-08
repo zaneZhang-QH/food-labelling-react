@@ -33,7 +33,7 @@ export const Textarea: React.FC<TextareaProps> = ({
   validMessage = "Success",
   placeholder,
   rows = 3,
-  width,
+  width = "50vw",
 }) => {
   const describedBy = hint ? `${id}-hint` : undefined;
   const containerStyle = width ? { maxWidth: width } : undefined;

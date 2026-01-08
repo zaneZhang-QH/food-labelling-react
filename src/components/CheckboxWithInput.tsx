@@ -11,9 +11,22 @@ export interface InputConfig {
   invalidMessage?: string;
 }
 
+export interface CheckboxConfig {
+  key: string;
+  label: string;
+  hint?: React.ReactNode;
+  inputConfig?: InputConfig;
+  renderChildren?: (
+    data: FormData,
+    handleChange: (field: keyof FormData, value: string) => void
+  ) => React.ReactNode;
+  requiredFields?: (keyof FormData)[];
+}
+
 interface CheckboxWithInputProps {
   label: string;
   checked: boolean;
+  hint?:React.ReactNode;
   onChange: (checked: boolean) => void;
   inputConfig?: InputConfig | null;
   inputValue?: string;
@@ -25,6 +38,7 @@ export const CheckboxWithInput: React.FC<CheckboxWithInputProps> = ({
   label,
   checked,
   onChange,
+  hint = null,
   inputConfig = null,
   inputValue = "",
   onInputChange = null,
@@ -56,8 +70,10 @@ export const CheckboxWithInput: React.FC<CheckboxWithInputProps> = ({
         </label>
       </div>
 
+      {hint && <small style={{color:"#6f777b"}}>{hint}</small>}
+
       {checked && (inputConfig || children) && (
-        <div style={{ display: "flex", gap: "20px" }}>
+        <div style={{ display: "flex", gap: "20px", marginTop:"5px" }}>
           {inputConfig && !inputConfig.textAreaInput && (
             <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
               <Input
