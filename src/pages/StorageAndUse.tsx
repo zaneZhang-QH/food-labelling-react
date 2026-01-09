@@ -264,6 +264,7 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
     event: MouseEvent<HTMLAnchorElement>
   ) => {
     event.preventDefault();
+    
     setActiveSectionId(sectionId);
     setGuideOpen(true);
   };

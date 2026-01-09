@@ -1,19 +1,19 @@
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect } from "react";
-import Collapse from "bootstrap/js/dist/collapse";
+import React from "react";
+import {
+  TestAccordion,
+  type AccordionItemConfig,
+} from "../../components/QGDSAccordion";
 
 type HelpGuideHandlers = {
-  onPrint?: (event: React.MouseEvent<HTMLAnchorElement>) => void;
   activeSectionId?: string | null;
 };
 
-const noop = () => {};
-
-const sections = [
+const sections: AccordionItemConfig[] = [
   {
     id: "alcoholic-drinks",
-    heading: "Alcoholic drinks",
+    title: "Alcoholic drinks",
     content: (
       <>
         <p>
@@ -90,7 +90,7 @@ const sections = [
   },
   {
     id: "nutrition-claims",
-    heading: "Claims: Nutrition, health and related claims",
+    title: "Claims: Nutrition, health and related claims",
     content: (
       <>
         <p>
@@ -228,7 +228,7 @@ const sections = [
   },
   {
     id: "drinks-made",
-    heading: "Drinks made from cereals, nuts, and/or seeds",
+    title: "Drinks made from cereals, nuts, and/or seeds",
     content: (
       <>
         <p>
@@ -269,7 +269,7 @@ const sections = [
   },
   {
     id: "drinks-electrolyte",
-    heading: "Electrolyte drinks",
+    title: "Electrolyte drinks",
     content: (
       <>
         <p>
@@ -299,7 +299,7 @@ const sections = [
   },
   {
     id: "caffeinated-drinks",
-    heading: "Formulated caffeinated drinks",
+    title: "Formulated caffeinated drinks",
     content: (
       <>
         <p>
@@ -327,7 +327,7 @@ const sections = [
   },
   {
     id: "modified-food",
-    heading: "Genetically modified food",
+    title: "Genetically modified food",
     content: (
       <>
         <p>
@@ -376,7 +376,7 @@ const sections = [
   },
   {
     id: "irradiated-food",
-    heading: "Irradiated food",
+    title: "Irradiated food",
     content: (
       <>
         <p>
@@ -406,7 +406,7 @@ const sections = [
   },
   {
     id: "novel-food",
-    heading: "Novel foods",
+    title: "Novel foods",
     content: (
       <>
         <p>
@@ -464,7 +464,7 @@ const sections = [
   },
   {
     id: "special-food",
-    heading: "Special purpose foods",
+    title: "Special purpose foods",
     content: (
       <>
         <p>
@@ -543,7 +543,7 @@ const sections = [
   },
   {
     id: "required-name",
-    heading: "Required names",
+    title: "Required names",
     content: (
       <>
         <p>
@@ -582,88 +582,17 @@ const sections = [
 ];
 
 export const InitialPage: React.FC<HelpGuideHandlers> = ({
-  onPrint = noop,
   activeSectionId = null,
 }) => {
-  
-  useEffect(() => {
-    if (!activeSectionId) return;
-    const group = document.getElementById("help-accordion-group");
-    if (!group) return;
-    const idx = sections.findIndex((s) => s.id === activeSectionId);
-    if (idx === -1) return;
-    const collapseEl = group.querySelector<HTMLDivElement>(
-      `#collapse-${idx + 1}`
-    );
-    const buttonEl = group.querySelector<HTMLButtonElement>(
-      `[data-bs-target="#collapse-${idx + 1}"]`
-    );
-    if (collapseEl) {
-      const instance = Collapse.getOrCreateInstance(collapseEl, {
-        toggle: false,
-      });
-      instance.show();
-    }
-    if (buttonEl) {
-      buttonEl.classList.remove("collapsed");
-      buttonEl.setAttribute("aria-expanded", "true");
-    }
-  }, [activeSectionId]);
-
   return (
     <div className="side-padding vertical-padding">
-      <a className="controls btn-print" onClick={onPrint} role="button">
+      <a className="controls btn-print" role="button">
         <FontAwesomeIcon icon={faPrint} />
         Print
       </a>
       <h3>Complex requirements</h3>
 
-      <div className="accordion-group">
-        <div className="accordion-toggle">
-          <button
-            className="accordion-toggle-btn accordion-toggle-btn--closed"
-            type="button"
-          >
-            Open all
-          </button>
-        </div>
-
-        <div className="accordion" id="help-accordion-group">
-          {sections.map((section, index) => {
-            const headingId = `heading-${index + 1}`;
-            const collapseId = `collapse-${index + 1}`;
-            const isFirst = index === 0;
-            return (
-              <div className="accordion-item" key={section.id}>
-                <h2 className="accordion-header" id={headingId}>
-                  <button
-                    className={`accordion-button ${isFirst ? "" : "collapsed"}`}
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target={`#${collapseId}`}
-                    aria-expanded={isFirst}
-                    aria-controls={collapseId}
-                  >
-                    {section.heading}
-                  </button>
-                </h2>
-
-                <div
-                  id={collapseId}
-                  className={`accordion-collapse collapse ${
-                    isFirst ? "show" : ""
-                  }`}
-                  aria-labelledby={headingId}
-                  data-bs-parent="#help-accordion-group"
-                  role="region"
-                >
-                  <div className="accordion-body">{section.content}</div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <TestAccordion items={sections} activeItemId={activeSectionId} />
     </div>
   );
 };

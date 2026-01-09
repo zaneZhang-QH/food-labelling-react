@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { HelpGuide } from "../components/helpGuides/HelpGuide";
 import { createNavHandlers, useGuideNavigation } from "./help";
-import { RadioGroup } from "../components/RadioGroup";
+import { RadioGroup, type Option } from "../components/RadioGroup";
 import { Alert } from "../components/GlobalWarnings";
 import { Table } from "../components/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,6 +23,11 @@ type IngredientsFormState = {
   foodAdditives: YesNo;
   exemptIngredients: YesNo;
 };
+
+const options: Option[] = [
+  { label: "Yes", value: "1" },
+  { label: "No", value: "2" },
+];
 
 export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
@@ -108,10 +113,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
               </p>
               <RadioGroup
                 name="ingredientInName"
-                options={[
-                  { label: "Yes", value: "1" },
-                  { label: "No", value: "2" },
-                ]}
+                options={options}
                 value={form.ingredientInName}
                 onChange={setField("ingredientInName")}
                 inline
@@ -178,10 +180,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
 
                 <RadioGroup
                   name="ingredientMakeFood"
-                  options={[
-                    { label: "Yes", value: "1" },
-                    { label: "No", value: "2" },
-                  ]}
+                  options={options}
                   value={form.ingredientMakeFood}
                   onChange={setField("ingredientMakeFood")}
                   inline
@@ -253,10 +252,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
 
                 <RadioGroup
                   name="ingredientAlternative"
-                  options={[
-                    { label: "Yes", value: "1" },
-                    { label: "No", value: "2" },
-                  ]}
+                  options={options}
                   value={form.ingredientAlternative}
                   onChange={setField("ingredientAlternative")}
                   inline
@@ -379,10 +375,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
 
                 <RadioGroup
                   name="ingredientGenericName"
-                  options={[
-                    { label: "Yes", value: "1" },
-                    { label: "No", value: "2" },
-                  ]}
+                  options={options}
                   value={form.ingredientGenericName}
                   onChange={setField("ingredientGenericName")}
                   inline
@@ -447,10 +440,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
 
                 <RadioGroup
                   name="foodAdditives"
-                  options={[
-                    { label: "Yes", value: "1" },
-                    { label: "No", value: "2" },
-                  ]}
+                  options={options}
                   value={form.foodAdditives}
                   onChange={setField("foodAdditives")}
                   inline
@@ -532,10 +522,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
 
                 <RadioGroup
                   name="exemptIngredients"
-                  options={[
-                    { label: "Yes", value: "1" },
-                    { label: "No", value: "2" },
-                  ]}
+                  options={options}
                   value={form.exemptIngredients}
                   onChange={setField("exemptIngredients")}
                   inline

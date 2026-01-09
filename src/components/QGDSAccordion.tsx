@@ -1,32 +1,55 @@
-import React, { useState } from "react";
+import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from "react";
 
 export type AccordionItemConfig = {
   title: React.ReactNode;
   content: React.ReactNode;
-  id?:string;
+  id: string;
   defaultOpen?: boolean;
 };
 
 type AccordionProps = {
   items: AccordionItemConfig[];
   flush?: boolean;
+  activeItemId?: string | null;
 };
 
 export const TestAccordion: React.FC<AccordionProps> = ({
   items,
   flush = false,
+  activeItemId = null,
 }) => {
-  const [openItems, setOpenItems] = useState<Set<number>>(() => {
-    const initialOpen = new Set<number>();
-    items.forEach((item, index) => {
+  const [openItems, setOpenItems] = useState<Set<string>>(() => {
+    const initialOpen = new Set<string>();
+    items.forEach((item) => {
       if (item.defaultOpen) {
-        initialOpen.add(index);
+        initialOpen.add(item.id);
       }
     });
+    if (activeItemId) {
+      initialOpen.add(activeItemId);
+    }
     return initialOpen;
   });
 
-  const handleToggle = (key: number): void => {
+  useEffect(() => {
+    if (!activeItemId) return;
+    setOpenItems((prev) => {
+      if (prev.has(activeItemId)) {
+        return prev;
+      }
+      const next = new Set(prev);
+      next.add(activeItemId);
+      return next;
+    });
+    const target = document.getElementById(`accordion-item-${activeItemId}`);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [activeItemId]);
+
+  const handleToggle = (key: string): void => {
     setOpenItems((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(key)) {
@@ -39,8 +62,8 @@ export const TestAccordion: React.FC<AccordionProps> = ({
   };
 
   const expandAll = (): void => {
-    const allItems = new Set<number>();
-    items.forEach((_, index) => allItems.add(index));
+    const allItems = new Set<string>();
+    items.forEach((item) => allItems.add(item.id));
     setOpenItems(allItems);
   };
 
@@ -56,29 +79,39 @@ export const TestAccordion: React.FC<AccordionProps> = ({
 
   return (
     <div>
-        <div className="d-flex justify-content-end mb-2">
-          <button
-            type="button"
-            className="btn btn-link text-decoration-none p-0"
-            onClick={allExpanded ? collapseAll : expandAll}
-            style={{ fontSize: "0.95rem" }}
-          >
-            {allExpanded ? "Collapse all" : "Expand all"}
-          </button>
-        </div>
+      <div className="d-flex justify-content-end mb-2">
+        <button
+          type="button"
+          className="btn btn-link text-decoration-none p-0"
+          onClick={allExpanded ? collapseAll : expandAll}
+          style={{ fontSize: "0.95rem" }}
+        >
+          {allExpanded ? (
+            <>
+              Collapse all
+              <FontAwesomeIcon icon={faAngleUp} />
+            </>
+          ) : (
+            <>
+              Expand All
+              <FontAwesomeIcon icon={faAngleDown} />
+            </>
+          )}
+        </button>
+      </div>
 
       <div className={accordionClass}>
-        {items.map((item, index) => {
-          const isActive = openItems.has(index);
+        {items.map((item) => {
+          const isActive = openItems.has(item.id);
 
           return (
             <AccordionItem
-              key={index}
-              id={`item-${index}`}
+              key={item.id}
+              id={item.id}
               title={item.title}
               content={item.content}
               isActive={isActive}
-              onToggle={() => handleToggle(index)}
+              onToggle={() => handleToggle(item.id)}
             />
           );
         })}
@@ -102,19 +135,22 @@ const AccordionItem = ({
   isActive,
   onToggle,
 }: AccordionItemProps) => {
+  const itemId = `accordion-item-${id}`;
   return (
-    <div className="accordion-item">
+    <div className="accordion-item" id={itemId}>
       <h2 className="accordion-header" id={`heading-${id}`}>
         <button
           className={`accordion-button ${!isActive ? "collapsed" : ""}`}
           type="button"
           onClick={onToggle}
           aria-expanded={isActive}
+          aria-controls={`collapse-${id}`}
         >
           {title}
         </button>
       </h2>
       <div
+        id={`collapse-${id}`}
         className={`accordion-collapse collapse ${isActive ? "show" : ""}`}
         aria-labelledby={`heading-${id}`}
       >

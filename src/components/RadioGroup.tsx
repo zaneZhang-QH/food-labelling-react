@@ -1,4 +1,4 @@
-type Option = { label: string; value: string; id?: string };
+export type Option = { label: string; value: string; id?: string };
 
 type RadioGroupProps = {
   name: string;

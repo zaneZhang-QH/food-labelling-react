@@ -3,12 +3,17 @@ import { HelpGuide } from "../components/helpGuides/HelpGuide";
 import { InitialPage } from "./helpGuide/InitialPage";
 import { SeekProAdvice } from "../components/GlobalWarnings";
 import { createNavHandlers } from "./help";
-import { RadioGroup } from "../components/RadioGroup";
+import { RadioGroup, type Option } from "../components/RadioGroup";
 
 type LimitationsProps = {
   onBack?: () => void;
   onNext?: () => void;
 };
+
+const options: Option[] = [
+  { label: "Yes", value: "1" },
+  { label: "No", value: "2" },
+];
 
 export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
@@ -56,13 +61,10 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
     sectionId: string
   ) => {
     event.preventDefault();
+
     setActiveSectionId(sectionId);
     setGuideOpen(true);
   };
-
-  const guideContent = (
-    <InitialPage onPrint={handlePrint} activeSectionId={activeSectionId} />
-  );
 
   return (
     <>
@@ -149,10 +151,7 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
 
       <RadioGroup
         name="alcoholicDrink"
-        options={[
-          { label: "Yes", value: "1" },
-          { label: "No", value: "2" },
-        ]}
+        options={options}
         value={serviceChoice}
         onChange={setServiceChoice}
       />
@@ -207,10 +206,7 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
 
           <RadioGroup
             name="serviceChoiceSpecial"
-            options={[
-              { label: "Yes", value: "1" },
-              { label: "No", value: "2" },
-            ]}
+            options={options}
             value={serviceChoiceSpecial}
             onChange={setServiceChoiceSpecial}
           />
@@ -251,10 +247,7 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
 
           <RadioGroup
             name="serviceChoiceNovel"
-            options={[
-              { label: "Yes", value: "1" },
-              { label: "No", value: "2" },
-            ]}
+            options={options}
             value={serviceChoiceNovel}
             onChange={setServiceChoiceNovel}
           />
@@ -285,10 +278,7 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
           </p>
           <RadioGroup
             name="serviceChoiceGenetic"
-            options={[
-              { label: "Yes", value: "1" },
-              { label: "No", value: "2" },
-            ]}
+            options={options}
             value={serviceChoiceGenetic}
             onChange={setServiceChoiceGenetic}
           />
@@ -328,10 +318,7 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
 
           <RadioGroup
             name="serviceChoiceIrradiated"
-            options={[
-              { label: "Yes", value: "1" },
-              { label: "No", value: "2" },
-            ]}
+            options={options}
             value={serviceChoiceIrradiated}
             onChange={setServiceChoiceIrradiated}
           />
@@ -369,13 +356,9 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
               </small>
             </p>
           </div>
-
           <RadioGroup
             name="serviceChoiceClaim"
-            options={[
-              { label: "Yes", value: "1" },
-              { label: "No", value: "2" },
-            ]}
+            options={options}
             value={serviceChoiceClaim}
             onChange={setServiceChoiceClaim}
           />
@@ -412,7 +395,7 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
       </div>
 
       <HelpGuide
-        content={guideContent}
+        content={<InitialPage activeSectionId={activeSectionId} />}
         initialOpen={false}
         open={guideOpen}
         onOpenChange={setGuideOpen}
