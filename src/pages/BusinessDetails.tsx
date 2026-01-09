@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { createNavHandlers } from "./help";
 import { HelpGuide } from "../components/helpGuides/HelpGuide";
 import { BusinessDetailsPage } from "./helpGuide/BusinessDetailsPage";
+import { useFormData } from "../context/FormDataContext";
 
 type BusinessDetailsProps = {
   onBack?: () => void;
@@ -9,14 +10,18 @@ type BusinessDetailsProps = {
 };
 
 export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
-  const [businessName, setBusinessName] = useState("");
-  const [businessAddress, setBusinessAddress] = useState("");
-  const [addressLine1, setAddressLine1] = useState("");
-  const [suburb, setSuburb] = useState("");
-  const [stateValue, setStateValue] = useState("");
-  const [postcode, setPostcode] = useState("");
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
+  const { formData, updateBusinessDetails } = useFormData();
+  const {
+    businessName,
+    businessAddress,
+    addressLine1,
+    addressLine2,
+    suburb,
+    stateValue,
+    postcode,
+  } = formData.businessDetails;
   const formRef = useRef<HTMLFormElement>(null);
 
   const isValid =
@@ -102,7 +107,9 @@ export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
               type="text"
               tabIndex={0}
               value={businessName}
-              onChange={(e) => setBusinessName(e.target.value)}
+              onChange={(e) =>
+                updateBusinessDetails({ businessName: e.target.value })
+              }
               onInput={(e) => toggleInvalidState(e.currentTarget)}
               onBlur={(e) => toggleInvalidState(e.currentTarget)}
               required
@@ -125,7 +132,9 @@ export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
               type="text"
               tabIndex={0}
               value={businessAddress}
-              onChange={(e) => setBusinessAddress(e.target.value)}
+              onChange={(e) =>
+                updateBusinessDetails({ businessAddress: e.target.value })
+              }
               onInput={(e) => toggleInvalidState(e.currentTarget)}
               onBlur={(e) => toggleInvalidState(e.currentTarget)}
               required
@@ -143,7 +152,9 @@ export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
               placeholder=""
               tabIndex={0}
               value={addressLine1}
-              onChange={(e) => setAddressLine1(e.target.value)}
+              onChange={(e) =>
+                updateBusinessDetails({ addressLine1: e.target.value })
+              }
               onInput={(e) => toggleInvalidState(e.currentTarget)}
               onBlur={(e) => toggleInvalidState(e.currentTarget)}
               required
@@ -164,6 +175,10 @@ export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
               type="text"
               placeholder=""
               tabIndex={0}
+              value={addressLine2}
+              onChange={(e) =>
+                updateBusinessDetails({ addressLine2: e.target.value })
+              }
             />
           </div>
 
@@ -177,7 +192,9 @@ export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
               type="text"
               tabIndex={0}
               value={suburb}
-              onChange={(e) => setSuburb(e.target.value)}
+              onChange={(e) =>
+                updateBusinessDetails({ suburb: e.target.value })
+              }
               onInput={(e) => toggleInvalidState(e.currentTarget)}
               onBlur={(e) => toggleInvalidState(e.currentTarget)}
               required
@@ -198,7 +215,7 @@ export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
               tabIndex={0}
               value={stateValue}
               onChange={(e) => {
-                setStateValue(e.target.value);
+                updateBusinessDetails({ stateValue: e.target.value });
                 toggleInvalidState(e.currentTarget);
               }}
               onBlur={(e) => toggleInvalidState(e.currentTarget)}
@@ -235,7 +252,9 @@ export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
                 toggleInvalidState(target);
               }}
               value={postcode}
-              onChange={(e) => setPostcode(e.target.value)}
+              onChange={(e) =>
+                updateBusinessDetails({ postcode: e.target.value })
+              }
               onBlur={(e) => toggleInvalidState(e.currentTarget)}
               required
             />

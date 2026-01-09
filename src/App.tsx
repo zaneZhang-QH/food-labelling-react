@@ -15,6 +15,7 @@ import { Ingredients } from "./pages/Ingredients";
 import { Statements } from "./pages/Statements";
 import { YourLabel } from "./pages/YourLabel";
 import { LabelBusterSideNav } from "./components/LabelBusterSideNav";
+import { FormDataProvider } from "./context/FormDataContext";
 
 type Page =
   | "home"
@@ -32,7 +33,7 @@ type Page =
 const App = () => {
   const [page, setPage] = useState<Page>("home");
   return (
-    <>
+    <FormDataProvider>
       <div className="app-layout">
         <aside className="app-sidenav">
           <LabelBusterSideNav page={page} onNavigate={setPage} />
@@ -102,7 +103,7 @@ const App = () => {
           </div>
         </main>
       </div>
-    </>
+    </FormDataProvider>
   );
 };
 

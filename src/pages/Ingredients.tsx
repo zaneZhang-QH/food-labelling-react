@@ -7,21 +7,14 @@ import { Table } from "../components/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { IngredientsPage } from "./helpGuide/IngredientsPage";
+import {
+  useFormData,
+  type IngredientsFormState,
+} from "../context/FormDataContext";
 
 type IngredientsProps = {
   onBack?: () => void;
   onNext?: () => void;
-};
-
-type YesNo = "1" | "2" | null;
-
-type IngredientsFormState = {
-  ingredientInName: YesNo;
-  ingredientMakeFood: YesNo;
-  ingredientAlternative: YesNo;
-  ingredientGenericName: YesNo;
-  foodAdditives: YesNo;
-  exemptIngredients: YesNo;
 };
 
 const options: Option[] = [
@@ -32,20 +25,15 @@ const options: Option[] = [
 export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
-  const [ingredientRows, setIngredientRows] = useState<string[][]>([[""]]);
-  const [form, setForm] = useState<IngredientsFormState>({
-    ingredientInName: null,
-    ingredientMakeFood: null,
-    ingredientAlternative: null,
-    ingredientGenericName: null,
-    foodAdditives: null,
-    exemptIngredients: null,
-  });
+  const { formData, updateIngredients } = useFormData();
+  const { ingredientRows, form } = formData.ingredients;
 
   const setField =
     <K extends keyof IngredientsFormState>(key: K) =>
     (value: string) =>
-      setForm((prev) => ({ ...prev, [key]: value as IngredientsFormState[K] }));
+      updateIngredients({
+        form: { ...form, [key]: value as IngredientsFormState[K] },
+      });
 
   const { handleBackClick, handleNextClick } = createNavHandlers(
     onNext,
@@ -570,7 +558,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
                   headers={["Ingredients"]}
                   rows={[]}
                   editableRows={ingredientRows}
-                  onRowsChange={setIngredientRows}
+                  onRowsChange={(rows) => updateIngredients({ ingredientRows: rows })}
                   allowReorder
                   addRowLabel={
                     <div

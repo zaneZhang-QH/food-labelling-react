@@ -9,6 +9,8 @@ import {
 import { Alert } from "../components/GlobalWarnings";
 import { Input } from "../components/Input";
 import { StorageAndUsePage } from "./helpGuide/StorageAndUsePage";
+import { useFormData } from "../context/FormDataContext";
+import type { StorageAndUseData } from "../context/FormDataContext";
 
 type StorageAndUseProps = {
   onBack?: () => void;
@@ -20,55 +22,7 @@ type Rule<T> = {
   text: (d: T) => string;
 };
 
-interface FormData {
-  // Storage conditions
-  coolDryConditions: boolean;
-  refrigerateAfterOpening: boolean;
-  refrigerateAfterPurchase: boolean;
-  keepRefrigeratedAt: boolean;
-  refrigeratedDegreeFrom: string;
-  refrigeratedDegreeTo: string;
-  refrigeratedDegreeBelow: string;
-  keepRefrigeratedAtBelow: boolean;
-  keepFrozenSolid: boolean;
-  keepFrozenSolidReady: boolean;
-  otherFrozen: boolean;
-  otherFrozenNote: string;
-
-  // Directions for use
-  washBeforeUse: boolean;
-  storeAirtight: boolean;
-  shakeWell: boolean;
-  drainFood: boolean;
-  keepRefrigerated: boolean;
-  consumeWithin: boolean;
-  thawBeforeCooking: boolean;
-  cookFromFrozen: boolean;
-  onceThawedDoNotRefreeze: boolean;
-  consumeDays: string;
-  onceThawedUseWithin: boolean;
-  onceThawedUseWithinDays: string;
-  notSuitableMicrowaveCooking: boolean;
-  rawProductMustBeCooked: boolean;
-  cookUntilSteamingHot: boolean;
-  microwaveOn: boolean;
-  microwavePower: string;
-  microwaveMinutes: string;
-  cautionContentsHot: boolean;
-  cookFor: boolean;
-  useMinutes: string;
-  cookForAt: string;
-  allowToStand: boolean;
-  standMinutes: string;
-  doNotRefrigerateOrReheat: boolean;
-  careTakenRemoveBones: boolean;
-  otherDirectionsForUse: boolean;
-  otherDirectionsForUseDetails: string;
-  cookingPreparationInstructions: boolean;
-  cookingPreparationInstructionsDetails: string;
-}
-
-const storageRules: Rule<FormData>[] = [
+const storageRules: Rule<StorageAndUseData>[] = [
   {
     when: (d) => d.coolDryConditions,
     text: () => "Store in cool dry conditions.",
@@ -105,7 +59,7 @@ const storageRules: Rule<FormData>[] = [
   },
 ];
 
-const directionsRules: Rule<FormData>[] = [
+const directionsRules: Rule<StorageAndUseData>[] = [
   { when: (d) => d.washBeforeUse, text: () => "Wash before use." },
   {
     when: (d) => d.storeAirtight,
@@ -200,59 +154,14 @@ const buildMessage = <T,>(data: T, rules: Rule<T>[]) =>
 export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
-  const [formData, setFormData] = useState<FormData>({
-    // Storage conditions
-    coolDryConditions: false,
-    refrigerateAfterOpening: false,
-    refrigerateAfterPurchase: false,
-    keepRefrigeratedAt: false,
-    refrigeratedDegreeFrom: "",
-    refrigeratedDegreeTo: "",
-    keepRefrigeratedAtBelow: false,
-    refrigeratedDegreeBelow: "",
-    keepFrozenSolid: false,
-    keepFrozenSolidReady: false,
-    otherFrozen: false,
-    otherFrozenNote: "",
-
-    // Directions for use
-    washBeforeUse: false,
-    storeAirtight: false,
-    shakeWell: false,
-    drainFood: false,
-    keepRefrigerated: false,
-    consumeWithin: false,
-    consumeDays: "",
-    thawBeforeCooking: false,
-    cookFromFrozen: false,
-    onceThawedDoNotRefreeze: false,
-    onceThawedUseWithin: false,
-    onceThawedUseWithinDays: "",
-    notSuitableMicrowaveCooking: false,
-    rawProductMustBeCooked: false,
-    cookUntilSteamingHot: false,
-    microwaveOn: false,
-    microwavePower: "",
-    microwaveMinutes: "",
-    cautionContentsHot: false,
-    cookFor: false,
-    useMinutes: "",
-    cookForAt: "",
-    allowToStand: false,
-    standMinutes: "",
-    doNotRefrigerateOrReheat: false,
-    careTakenRemoveBones: false,
-    otherDirectionsForUse: false,
-    otherDirectionsForUseDetails: "",
-    cookingPreparationInstructions: false,
-    cookingPreparationInstructionsDetails: "",
-  });
+  const { formData, updateStorageAndUse } = useFormData();
+  const storageData = formData.storageAndUse;
 
   const generateStorageConditionsMessage = () =>
-    buildMessage(formData, storageRules);
+    buildMessage(storageData, storageRules);
 
   const generateDirectionsForUseMessage = () =>
-    buildMessage(formData, directionsRules);
+    buildMessage(storageData, directionsRules);
 
   const { handleBackClick, handleNextClick } = createNavHandlers(
     onNext,
@@ -556,19 +465,25 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
     },
   ];
 
-  const handleCheckboxChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const handleCheckboxChange = (
+    field: keyof StorageAndUseData,
+    value: boolean
+  ) => {
+    updateStorageAndUse({ [field]: value });
   };
 
-  const handleInputChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const handleInputChange = (
+    field: keyof StorageAndUseData,
+    value: string
+  ) => {
+    updateStorageAndUse({ [field]: value });
   };
 
   const hasValue = (value: string | number | null | undefined) =>
     String(value ?? "").trim().length > 0;
 
-  const validateField = (key: keyof FormData) => {
-    const rawValue = formData[key];
+  const validateField = (key: keyof StorageAndUseData) => {
+    const rawValue = storageData[key];
     if (!hasValue(rawValue as string)) {
       return false;
     }
@@ -587,11 +502,13 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
     ...StorageConditionsCheckboxConfigs,
     ...DirectionForUseConfigs,
   ].some((config) => {
-    const isChecked = Boolean(formData[config.key]);
+    const isChecked = Boolean(storageData[config.key]);
     if (!isChecked) return false;
-    const requiredFields: (keyof FormData)[] = [];
+    const requiredFields: (keyof StorageAndUseData)[] = [];
     if (config.inputConfig) {
-      requiredFields.push(config.inputConfig.inputKey as keyof FormData);
+      requiredFields.push(
+        config.inputConfig.inputKey as keyof StorageAndUseData
+      );
     }
     if (config.requiredFields) {
       requiredFields.push(...config.requiredFields);
@@ -654,12 +571,12 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
               <CheckboxWithInput
                 key={config.key}
                 label={config.label}
-                checked={formData[config.key]}
+                checked={storageData[config.key]}
                 onChange={(val) => handleCheckboxChange(config.key, val)}
                 inputConfig={config.inputConfig}
                 inputValue={
                   config.inputConfig
-                    ? formData[config.inputConfig.inputKey]
+                    ? storageData[config.inputConfig.inputKey]
                     : ""
                 }
                 onInputChange={
@@ -670,7 +587,7 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
                 }
               >
                 {config.renderChildren &&
-                  config.renderChildren(formData, handleInputChange)}
+                  config.renderChildren(storageData, handleInputChange)}
               </CheckboxWithInput>
             ))}
             <Alert
@@ -719,11 +636,13 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
             <CheckboxWithInput
               key={config.key}
               label={config.label}
-              checked={formData[config.key]}
+              checked={storageData[config.key]}
               onChange={(val) => handleCheckboxChange(config.key, val)}
               inputConfig={config.inputConfig}
               inputValue={
-                config.inputConfig ? formData[config.inputConfig.inputKey] : ""
+                config.inputConfig
+                  ? storageData[config.inputConfig.inputKey]
+                  : ""
               }
               onInputChange={
                 config.inputConfig
@@ -733,7 +652,7 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
               }
             >
               {config.renderChildren &&
-                config.renderChildren(formData, handleInputChange)}
+                config.renderChildren(storageData, handleInputChange)}
             </CheckboxWithInput>
           ))}
 

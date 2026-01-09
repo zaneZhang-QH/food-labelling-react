@@ -9,90 +9,22 @@ import {
 import { Alert } from "../components/GlobalWarnings";
 import { Checkbox } from "../components/Checkbox";
 import { Textarea } from "../components/Textarea";
+import {
+  useFormData,
+  type StatementsFormData,
+} from "../context/FormDataContext";
 
 type StatementsProps = {
   onBack?: () => void;
   onNext?: () => void;
 };
 
-interface FormData {
-  cerealsContainingGluten: string;
-  wheat: string;
-  egg: string;
-  crustaceaCereals: string;
-  fish: string;
-  mollusc: string;
-  addedSulphites: string;
-  lupin: string;
-  soybeans: string;
-  milk: string;
-  almond: string;
-  brazilNut: string;
-  cashew: string;
-  hazelnut: string;
-  macadamia: string;
-  peanuts: string;
-  pecan: string;
-  pineNut: string;
-  pistachio: string;
-  sesameSeed: string;
-  walnut: string;
-  eggAndEggProducts: string;
-  fishCrustaceaSeafood: string;
-  foodAdditivesAndFlavours: string;
-  foodContainingAlcohol: string;
-  honeyAndBeeProducts: string;
-  kavaAndKavaRoot: string;
-  legumesAndPulses: string;
-  meatAndMeatProducts: string;
-  milkDairyAndDairyAlternatives: string;
-  nonAlcoholicDrinks: string;
-  oilsAndMargarine: string;
-  saltAndSaltSubstitutes: string;
-}
-
 export const Statements = ({ onBack, onNext }: StatementsProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
-  const [formData, setFormData] = useState<FormData>({
-    cerealsContainingGluten: "",
-    wheat: "",
-    egg: "",
-    crustaceaCereals: "",
-    fish: "",
-    mollusc: "",
-    addedSulphites: "",
-    lupin: "",
-    soybeans: "",
-    milk: "",
-    almond: "",
-    brazilNut: "",
-    cashew: "",
-    hazelnut: "",
-    macadamia: "",
-    peanuts: "",
-    pecan: "",
-    pineNut: "",
-    pistachio: "",
-    sesameSeed: "",
-    walnut: "",
-    eggAndEggProducts: "",
-    fishCrustaceaSeafood: "",
-    foodAdditivesAndFlavours: "",
-    foodContainingAlcohol: "",
-    honeyAndBeeProducts: "",
-    kavaAndKavaRoot: "",
-    legumesAndPulses: "",
-    meatAndMeatProducts: "",
-    milkDairyAndDairyAlternatives: "",
-    nonAlcoholicDrinks: "",
-    oilsAndMargarine: "",
-    saltAndSaltSubstitutes: "",
-  });
-  const [sodiumPotassiumContent, setSodiumPotassiumContent] = useState("");
-  const [statementSelections, setStatementSelections] = useState<
-    Record<string, boolean>
-  >({});
+  const { formData, updateStatements } = useFormData();
+  const statementData = formData.statements;
+  const form = statementData.form;
 
   const { handleBackClick, handleNextClick } = createNavHandlers(
     onNext,
@@ -105,10 +37,12 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
   });
 
   const handleStatementCheckboxChange = (id: string, checked: boolean) => {
-    setStatementSelections((prev) => ({
-      ...prev,
-      [id]: checked,
-    }));
+    updateStatements({
+      statementSelections: {
+        ...statementData.statementSelections,
+        [id]: checked,
+      },
+    });
   };
 
   const renderStatementCheckbox = (
@@ -120,7 +54,7 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
       id={id}
       label={label}
       hint={hint}
-      checked={!!statementSelections[id]}
+      checked={!!statementData.statementSelections[id]}
       onChange={(checked) => handleStatementCheckboxChange(id, checked)}
     />
   );
@@ -576,68 +510,78 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
   ];
 
   const selectedLabels = allCheckboxConfigs
-    .filter((config) => formData[config.key as keyof FormData])
+    .filter((config) => form[config.key as keyof StatementsFormData])
     .map((config) => config.label);
 
-  const handleCheckboxChange = (key: keyof FormData, checked: boolean) => {
-    setFormData((prev) => ({
-      ...prev,
-      [key]: checked ? "1" : "",
-    }));
+  const handleCheckboxChange = (
+    key: keyof StatementsFormData,
+    checked: boolean
+  ) => {
+    updateStatements({
+      form: {
+        ...form,
+        [key]: checked ? "1" : "",
+      },
+    });
   };
 
   const statementMessages = [
-    statementSelections["unpasteurised-egg-products"]
+    statementData.statementSelections["unpasteurised-egg-products"]
       ? "The product is unpasteurised."
       : null,
-    statementSelections["substances-excess-10g"] ||
-    statementSelections["substances-excess-25g"] ||
-    statementSelections["substances-combination-10g"]
+    statementData.statementSelections["substances-excess-10g"] ||
+    statementData.statementSelections["substances-excess-25g"] ||
+    statementData.statementSelections["substances-combination-10g"]
       ? "Excess consumption may have a laxative effect."
       : null,
-    statementSelections["aspartame-acesulphame"]
+    statementData.statementSelections["aspartame-acesulphame"]
       ? "This product contains phenylalanine."
       : null,
-    statementSelections["phytosterols-phytostanols"]
+    statementData.statementSelections["phytosterols-phytostanols"]
       ? "This product should be consumed as part of a healthy diet. This product may not be suitable for children under 5 years and pregnant or lactating women. Plant sterols do not provide additional benefits when consumed in excess of 3 grams per day."
       : null,
-    statementSelections["quinine"] ? "This product contains quinine." : null,
-    statementSelections["guarana-extracts"] ||
-    statementSelections["cola-beverage-with-caffeine"] ||
-    statementSelections["food-with-cola-beverage-containing-caffeine"]
+    statementData.statementSelections["quinine"]
+      ? "This product contains quinine."
+      : null,
+    statementData.statementSelections["guarana-extracts"] ||
+    statementData.statementSelections["cola-beverage-with-caffeine"] ||
+    statementData.statementSelections["food-with-cola-beverage-containing-caffeine"]
       ? "The product contains caffeine."
       : null,
-    statementSelections["bee-pollen"]
+    statementData.statementSelections["bee-pollen"]
       ? "The product contains bee pollen which can cause severe allergic reactions."
       : null,
-    statementSelections["propolis"]
+    statementData.statementSelections["propolis"]
       ? "The product contains propolis which can cause severe allergic reactions."
       : null,
-    statementSelections["royal-jelly"]
+    statementData.statementSelections["royal-jelly"]
       ? "This product contains royal jelly which has been reported to cause severe allergic reactions and in rare cases, fatalities, especially in asthma and allergy sufferers."
       : null,
-    statementSelections["milk-soy-beverage"] ||
-    statementSelections["evaporated-dried-soy-beverage"] ||
-    statementSelections["evaporated-dried-soy-beverage-2.5%"]
+    statementData.statementSelections["milk-soy-beverage"] ||
+    statementData.statementSelections["evaporated-dried-soy-beverage"] ||
+    statementData.statementSelections["evaporated-dried-soy-beverage-2.5%"]
       ? "The product is not suitable as a complete milk replacement for children under 2 years."
       : null,
-    statementSelections["unpasteurised-milk"] ||
-    statementSelections["unpasteurised-liquid-milk-products"]
+    statementData.statementSelections["unpasteurised-milk"] ||
+    statementData.statementSelections["unpasteurised-liquid-milk-products"]
       ? "The product has not been pasteurised."
       : null,
-    statementSelections["raw-meat-formed"] ? "This food is formed." : null,
-    statementSelections["raw-meat-joined"] ||
-    statementSelections["raw-fish-binding-system"]
+    statementData.statementSelections["raw-meat-formed"]
+      ? "This food is formed."
+      : null,
+    statementData.statementSelections["raw-meat-joined"] ||
+    statementData.statementSelections["raw-fish-binding-system"]
       ? "This food is joined."
       : null,
-    statementSelections["kava-root"] || statementSelections["kava-beverage"]
+    statementData.statementSelections["kava-root"] ||
+    statementData.statementSelections["kava-beverage"]
       ? "Use in moderation. May cause drowsiness."
       : null,
-    statementSelections["bottled-water-with-fluoride"]
+    statementData.statementSelections["bottled-water-with-fluoride"]
       ? "The product contains added fluoride."
       : null,
-    sodiumPotassiumContent.trim() !== ""
-      ? `Sodium and potassium content: ${sodiumPotassiumContent.trim()}.`
+    statementData.sodiumPotassiumContent.trim() !== ""
+      ? `Sodium and potassium content: ${statementData.sodiumPotassiumContent.trim()}.`
       : null,
   ].filter(Boolean) as string[];
 
@@ -687,9 +631,12 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
                 label={config.label}
                 key={config.key}
                 hint={config.hint}
-                checked={!!formData[config.key as keyof FormData]}
+                checked={!!form[config.key as keyof StatementsFormData]}
                 onChange={(checked) =>
-                  handleCheckboxChange(config.key as keyof FormData, checked)
+                  handleCheckboxChange(
+                    config.key as keyof StatementsFormData,
+                    checked
+                  )
                 }
               />
             ))}
@@ -701,9 +648,12 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
               <CheckboxWithInput
                 label={config.label}
                 key={config.key}
-                checked={!!formData[config.key as keyof FormData]}
+                checked={!!form[config.key as keyof StatementsFormData]}
                 onChange={(checked) =>
-                  handleCheckboxChange(config.key as keyof FormData, checked)
+                  handleCheckboxChange(
+                    config.key as keyof StatementsFormData,
+                    checked
+                  )
                 }
               />
             ))}
@@ -716,9 +666,12 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
                 label={config.label}
                 key={config.key}
                 hint={config.hint}
-                checked={!!formData[config.key as keyof FormData]}
+                checked={!!form[config.key as keyof StatementsFormData]}
                 onChange={(checked) =>
-                  handleCheckboxChange(config.key as keyof FormData, checked)
+                  handleCheckboxChange(
+                    config.key as keyof StatementsFormData,
+                    checked
+                  )
                 }
               />
             ))}
@@ -730,9 +683,12 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
               <CheckboxWithInput
                 label={config.label}
                 key={config.key}
-                checked={!!formData[config.key as keyof FormData]}
+                checked={!!form[config.key as keyof StatementsFormData]}
                 onChange={(checked) =>
-                  handleCheckboxChange(config.key as keyof FormData, checked)
+                  handleCheckboxChange(
+                    config.key as keyof StatementsFormData,
+                    checked
+                  )
                 }
               />
             ))}
@@ -745,9 +701,12 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
                 label={config.label}
                 key={config.key}
                 hint={config.hint}
-                checked={!!formData[config.key as keyof FormData]}
+                checked={!!form[config.key as keyof StatementsFormData]}
                 onChange={(checked) =>
-                  handleCheckboxChange(config.key as keyof FormData, checked)
+                  handleCheckboxChange(
+                    config.key as keyof StatementsFormData,
+                    checked
+                  )
                 }
               />
             ))}
@@ -760,9 +719,12 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
                 label={config.label}
                 key={config.key}
                 hint={config.hint}
-                checked={!!formData[config.key as keyof FormData]}
+                checked={!!form[config.key as keyof StatementsFormData]}
                 onChange={(checked) =>
-                  handleCheckboxChange(config.key as keyof FormData, checked)
+                  handleCheckboxChange(
+                    config.key as keyof StatementsFormData,
+                    checked
+                  )
                 }
               />
             ))}
@@ -775,9 +737,12 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
                 label={config.label}
                 key={config.key}
                 hint={config.hint}
-                checked={!!formData[config.key as keyof FormData]}
+                checked={!!form[config.key as keyof StatementsFormData]}
                 onChange={(checked) =>
-                  handleCheckboxChange(config.key as keyof FormData, checked)
+                  handleCheckboxChange(
+                    config.key as keyof StatementsFormData,
+                    checked
+                  )
                 }
               />
             ))}
@@ -824,12 +789,15 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
               <CheckboxWithInput
                 label={config.label}
                 key={config.key}
-                checked={!!formData[config.key as keyof FormData]}
+                checked={!!form[config.key as keyof StatementsFormData]}
                 hint={
-                  formData[config.key as keyof FormData] ? config.hint : null
+                  form[config.key as keyof StatementsFormData] ? config.hint : null
                 }
                 onChange={(checked) =>
-                  handleCheckboxChange(config.key as keyof FormData, checked)
+                  handleCheckboxChange(
+                    config.key as keyof StatementsFormData,
+                    checked
+                  )
                 }
                 children={
                   config.renderChildren ? (
@@ -848,9 +816,11 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
                 label="Enter the sodium and potassium content expressed per 100g. You may also include a declaration of the percentage reduction of sodium in the food, relative to salt."
                 required={true}
                 id="sodium-potassim-content"
-                value={sodiumPotassiumContent}
+                value={statementData.sodiumPotassiumContent}
                 onChange={(event) =>
-                  setSodiumPotassiumContent(event.target.value)
+                  updateStatements({
+                    sodiumPotassiumContent: event.target.value,
+                  })
                 }
                 onInput={(event) => toggleInvalidState(event.currentTarget)}
                 onBlur={(event) => toggleInvalidState(event.currentTarget)}
@@ -887,7 +857,7 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
             handleNextClick(event);
           }}
           style={
-            sodiumPotassiumContent.trim() === ""
+            statementData.sodiumPotassiumContent.trim() === ""
               ? { pointerEvents: "none", opacity: 0.5, color: "white" }
               : {}
           }

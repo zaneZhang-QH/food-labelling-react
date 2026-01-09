@@ -1,11 +1,281 @@
 import { Alert } from "../components/GlobalWarnings";
 import { createNavHandlers } from "./help";
+import {
+  useFormData,
+  type StatementsFormData,
+  type StorageAndUseData,
+} from "../context/FormDataContext";
 
 type YourLabelProps = {
   onBack?: () => void;
 };
 export const YourLabel = ({ onBack }: YourLabelProps) => {
   const { handleBackClick } = createNavHandlers(undefined, onBack);
+  const { formData } = useFormData();
+  const {
+    foodName,
+    businessDetails,
+    ingredients,
+    dateMarks,
+    storageAndUse,
+    statements,
+  } = formData;
+
+  type Rule<T> = {
+    when: (d: T) => boolean;
+    text: (d: T) => string;
+  };
+
+  const withPeriod = (value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed) return "";
+    return trimmed.endsWith(".") ? trimmed : `${trimmed}.`;
+  };
+
+  const storageRules: Rule<StorageAndUseData>[] = [
+    {
+      when: (d) => d.coolDryConditions,
+      text: () => "Store in cool dry conditions.",
+    },
+    {
+      when: (d) => d.refrigerateAfterPurchase,
+      text: () => "Refrigerate after purchase.",
+    },
+    {
+      when: (d) => d.refrigerateAfterOpening,
+      text: () => "Refrigerate after opening.",
+    },
+    {
+      when: (d) =>
+        d.keepRefrigeratedAt &&
+        !!d.refrigeratedDegreeFrom &&
+        !!d.refrigeratedDegreeTo,
+      text: (d) =>
+        `Keep refrigerated at ${d.refrigeratedDegreeFrom} °C to ${d.refrigeratedDegreeTo} °C.`,
+    },
+    {
+      when: (d) => d.keepRefrigeratedAtBelow && !!d.refrigeratedDegreeBelow,
+      text: (d) =>
+        `Keep refrigerated at or below ${d.refrigeratedDegreeBelow} °C.`,
+    },
+    { when: (d) => d.keepFrozenSolid, text: () => "Keep frozen solid." },
+    {
+      when: (d) => d.keepFrozenSolidReady,
+      text: () => "Keep frozen solid until ready to use.",
+    },
+    {
+      when: (d) => d.otherFrozen && !!d.otherFrozenNote,
+      text: (d) => withPeriod(d.otherFrozenNote),
+    },
+  ];
+
+  const directionsRules: Rule<StorageAndUseData>[] = [
+    { when: (d) => d.washBeforeUse, text: () => "Wash before use." },
+    {
+      when: (d) => d.storeAirtight,
+      text: () => "Once opened, store in an airtight container.",
+    },
+    { when: (d) => d.shakeWell, text: () => "Shake well before use." },
+    {
+      when: (d) => d.drainFood,
+      text: () => "Food should be drained before consumption.",
+    },
+    {
+      when: (d) => d.keepRefrigerated,
+      text: () => "Once opened, keep refrigerated.",
+    },
+    {
+      when: (d) => d.consumeWithin && !!d.consumeDays,
+      text: (d) => `Consume within ${d.consumeDays} days of opening.`,
+    },
+    {
+      when: (d) => d.thawBeforeCooking,
+      text: () => "Thaw before cooking.",
+    },
+    { when: (d) => d.cookFromFrozen, text: () => "Cook from frozen." },
+    {
+      when: (d) => d.onceThawedDoNotRefreeze,
+      text: () => "Once thawed, do not refreeze.",
+    },
+    {
+      when: (d) => d.onceThawedUseWithin && !!d.onceThawedUseWithinDays,
+      text: (d) =>
+        `Once thawed, use within ${d.onceThawedUseWithinDays} hours.`,
+    },
+    {
+      when: (d) => d.notSuitableMicrowaveCooking,
+      text: () => "Not suitable for microwave cooking.",
+    },
+    {
+      when: (d) => d.rawProductMustBeCooked,
+      text: () => "This is a raw product and must be cooked before eating.",
+    },
+    {
+      when: (d) => d.cookUntilSteamingHot,
+      text: () => "Cook until steaming hot in the middle.",
+    },
+    {
+      when: (d) => d.microwaveOn && !!d.microwavePower && !!d.microwaveMinutes,
+      text: (d) =>
+        `Microwave on ${d.microwavePower} for ${d.microwaveMinutes} minutes.`,
+    },
+    {
+      when: (d) => d.cookFor && !!d.useMinutes && !!d.cookForAt,
+      text: (d) => `Cook for ${d.useMinutes} minutes at ${d.cookForAt} °C.`,
+    },
+    {
+      when: (d) => d.allowToStand && !!d.standMinutes,
+      text: (d) =>
+        `Allow to stand for ${d.standMinutes} minutes before serving.`,
+    },
+    {
+      when: (d) => d.doNotRefrigerateOrReheat,
+      text: () => "Do not refrigerate or reheat once heated.",
+    },
+    {
+      when: (d) => d.careTakenRemoveBones,
+      text: () =>
+        "Care has been taken to remove all bones from this product, however some bones may remain.",
+    },
+    {
+      when: (d) => d.otherDirectionsForUse && !!d.otherDirectionsForUseDetails,
+      text: (d) => withPeriod(d.otherDirectionsForUseDetails),
+    },
+    {
+      when: (d) =>
+        d.cookingPreparationInstructions &&
+        !!d.cookingPreparationInstructionsDetails,
+      text: (d) => withPeriod(d.cookingPreparationInstructionsDetails),
+    },
+  ];
+
+  const buildMessage = <T,>(data: T, rules: Rule<T>[]) =>
+    rules
+      .filter((r) => r.when(data))
+      .map((r) => r.text(data).trim())
+      .filter(Boolean)
+      .join(" ");
+
+  const storageConditionsText = buildMessage(storageAndUse, storageRules);
+  const directionsText = buildMessage(storageAndUse, directionsRules);
+  const hasStorageConditions = storageConditionsText.length > 0;
+  const hasDirections = directionsText.length > 0;
+
+  const ingredientList = ingredients.ingredientRows
+    .map((row) => row[0]?.trim())
+    .filter((value): value is string => !!value)
+    .join(", ");
+
+  const allergenLabels: { key: keyof StatementsFormData; label: string }[] = [
+    { key: "cerealsContainingGluten", label: "Cereals containing gluten" },
+    { key: "wheat", label: "Wheat" },
+    { key: "egg", label: "Egg" },
+    { key: "crustaceaCereals", label: "Crustacea" },
+    { key: "fish", label: "Fish" },
+    { key: "mollusc", label: "Mollusc" },
+    { key: "addedSulphites", label: "Sulphites" },
+    { key: "lupin", label: "Lupin" },
+    { key: "soybeans", label: "Soybeans" },
+    { key: "milk", label: "Milk" },
+    { key: "almond", label: "Almond" },
+    { key: "brazilNut", label: "Brazil nut" },
+    { key: "cashew", label: "Cashew" },
+    { key: "hazelnut", label: "Hazelnut" },
+    { key: "macadamia", label: "Macadamia" },
+    { key: "peanuts", label: "Peanuts" },
+    { key: "pecan", label: "Pecan" },
+    { key: "pineNut", label: "Pine nut" },
+    { key: "pistachio", label: "Pistachio" },
+    { key: "sesameSeed", label: "Sesame seed" },
+    { key: "walnut", label: "Walnut" },
+  ];
+
+  const containsList = allergenLabels
+    .filter(({ key }) => statements.form[key])
+    .map(({ label }) => label);
+
+  const statementMessages = [
+    statements.statementSelections["unpasteurised-egg-products"]
+      ? "The product is unpasteurised."
+      : null,
+    statements.statementSelections["substances-excess-10g"] ||
+    statements.statementSelections["substances-excess-25g"] ||
+    statements.statementSelections["substances-combination-10g"]
+      ? "Excess consumption may have a laxative effect."
+      : null,
+    statements.statementSelections["aspartame-acesulphame"]
+      ? "This product contains phenylalanine."
+      : null,
+    statements.statementSelections["phytosterols-phytostanols"]
+      ? "This product should be consumed as part of a healthy diet. This product may not be suitable for children under 5 years and pregnant or lactating women. Plant sterols do not provide additional benefits when consumed in excess of 3 grams per day."
+      : null,
+    statements.statementSelections["quinine"]
+      ? "This product contains quinine."
+      : null,
+    statements.statementSelections["guarana-extracts"] ||
+    statements.statementSelections["cola-beverage-with-caffeine"] ||
+    statements.statementSelections["food-with-cola-beverage-containing-caffeine"]
+      ? "The product contains caffeine."
+      : null,
+    statements.statementSelections["bee-pollen"]
+      ? "The product contains bee pollen which can cause severe allergic reactions."
+      : null,
+    statements.statementSelections["propolis"]
+      ? "The product contains propolis which can cause severe allergic reactions."
+      : null,
+    statements.statementSelections["royal-jelly"]
+      ? "This product contains royal jelly which has been reported to cause severe allergic reactions and in rare cases, fatalities, especially in asthma and allergy sufferers."
+      : null,
+    statements.statementSelections["milk-soy-beverage"] ||
+    statements.statementSelections["evaporated-dried-soy-beverage"] ||
+    statements.statementSelections["evaporated-dried-soy-beverage-2.5%"]
+      ? "The product is not suitable as a complete milk replacement for children under 2 years."
+      : null,
+    statements.statementSelections["unpasteurised-milk"] ||
+    statements.statementSelections["unpasteurised-liquid-milk-products"]
+      ? "The product has not been pasteurised."
+      : null,
+    statements.statementSelections["raw-meat-formed"]
+      ? "This food is formed."
+      : null,
+    statements.statementSelections["raw-meat-joined"] ||
+    statements.statementSelections["raw-fish-binding-system"]
+      ? "This food is joined."
+      : null,
+    statements.statementSelections["kava-root"] ||
+    statements.statementSelections["kava-beverage"]
+      ? "Use in moderation. May cause drowsiness."
+      : null,
+    statements.statementSelections["bottled-water-with-fluoride"]
+      ? "The product contains added fluoride."
+      : null,
+    statements.sodiumPotassiumContent.trim()
+      ? `Sodium and potassium content: ${statements.sodiumPotassiumContent.trim()}.`
+      : null,
+  ].filter(Boolean) as string[];
+
+  const dateMarkLabels: Record<string, string> = {
+    "use-by": "Use-by date",
+    "best-before": "Best-before date",
+    "baked-on": "Baked-on date",
+    "baked-for": "Baked-for date",
+    "none-mark": "No date field required",
+  };
+
+  const dateMarkLabel = dateMarks.dateMarkType
+    ? dateMarkLabels[dateMarks.dateMarkType] || "Date mark"
+    : "No data provided";
+  const hasDateMark = Boolean(dateMarks.dateMarkType);
+  const dateMarkValue =
+    dateMarks.dateMarkType && dateMarks.dateMarkType !== "none-mark"
+      ? dateMarks.dateValue
+      : "";
+  const lotIdentification = dateMarks.lotIdentification.trim();
+
+  const businessAddressLine2 = businessDetails.addressLine2.trim();
+  const businessSuburb = businessDetails.suburb.trim();
+  const businessState = businessDetails.stateValue.trim();
+  const businessPostcode = businessDetails.postcode.trim();
   return (
     <>
       <div className="main-content">
@@ -88,22 +358,36 @@ export const YourLabel = ({ onBack }: YourLabelProps) => {
               <tr>
                 <td>Food name and description</td>
                 <td>
-                  2 <br />
-                  no description provided
+                  {foodName.foodName || "no name provided"}
+                  <br />
+                  {foodName.productDescription || "no description provided"}
                 </td>
               </tr>
               <tr>
                 <td>Business details</td>
                 <td>
-                  <b>z</b> <br />z <br />z <br />
-                  <span className="suburb">z</span>
+                  <b>{businessDetails.businessName || "no name provided"}</b>
                   <br />
-                  VIC,1111
+                  {businessDetails.addressLine1 || "no address provided"}
+                  {businessAddressLine2 ? <br /> : null}
+                  {businessAddressLine2 || null}
+                  {businessSuburb ? (
+                    <>
+                      <br />
+                      <span className="suburb">{businessSuburb}</span>
+                    </>
+                  ) : null}
+                  {(businessState || businessPostcode) && (
+                    <>
+                      <br />
+                      {[businessState, businessPostcode].filter(Boolean).join(", ")}
+                    </>
+                  )}
                 </td>
               </tr>
               <tr>
                 <td>Ingredients</td>
-                <td>8</td>
+                <td>{ingredientList || "no data provided"}</td>
               </tr>
               <tr>
                 <td>Weight</td>
@@ -146,29 +430,42 @@ export const YourLabel = ({ onBack }: YourLabelProps) => {
                 <td>Statements and declarations</td>
                 <td>
                   <p>
-                    <b> </b> <br />
+                    <b>{containsList.length ? "Contains:" : ""}</b>
+                    {containsList.length ? ` ${containsList.join(", ")}.` : ""}
+                    <br />
                   </p>
-                  <p className="wrap">s.</p>
-                  <p>No data provided</p>
+                  <p className="wrap">
+                    {statementMessages.length ? statementMessages.join(" ") : ""}
+                  </p>
+                  <p>
+                    {containsList.length
+                      ? "Note: Warning statements must be a minimum size of type of 3 mm. In the case of small packages, a minimum size of type of 1.5 mm is required."
+                      : "No data provided"}
+                  </p>
                 </td>
               </tr>
               <tr>
                 <td>Date marks</td>
                 <td>
-                  <strong>No date field required</strong>
+                  <strong>{dateMarkLabel}</strong>
+                  {dateMarkValue ? `: ${dateMarkValue}` : ""}
                 </td>
               </tr>
               <tr>
                 <td>Lot identification</td>
-                <td>3</td>
+                <td>{lotIdentification || "no data provided"}</td>
               </tr>
               <tr>
                 <td>Storage conditions and directions for use</td>
                 <td>
-                  <b> </b> <br />
-                  <b> </b>
-                  <p></p>
-                  no data provided
+                  <b>{hasStorageConditions ? "Storage conditions:" : ""}</b>
+                  {hasStorageConditions ? ` ${storageConditionsText}` : ""}
+                  <br />
+                  <b>{hasDirections ? "Directions for use:" : ""}</b>
+                  <p>{hasDirections ? directionsText : ""}</p>
+                  {!hasStorageConditions && !hasDirections
+                    ? "no data provided"
+                    : ""}
                 </td>
               </tr>
               <tr>
@@ -229,33 +526,72 @@ export const YourLabel = ({ onBack }: YourLabelProps) => {
           <div className="example-label-wrapper">
             <div className="example-label">
               <div className="eg-col">
-                <h3>2</h3>
-                <p></p>
-                <br />
+                <h3>{foodName.foodName || "no name provided"}</h3>
+                <p>{foodName.productDescription}</p>
+                {hasStorageConditions && (
+                  <>
+                    <strong>Storage conditions:</strong>{" "}
+                    {storageConditionsText}
+                  </>
+                )}
+                {hasStorageConditions && hasDirections && <br />}
+                {hasDirections && (
+                  <>
+                    <strong>Directions for use:</strong> {directionsText}
+                  </>
+                )}
                 <div>
-                  <p>
-                    <strong>Lot identification:</strong> 3
-                  </p>
+                  {hasDateMark && (
+                    <p>
+                      <strong>{dateMarkLabel}</strong>
+                      {dateMarkValue ? `: ${dateMarkValue}` : ""}
+                    </p>
+                  )}
+                  {lotIdentification && (
+                    <p>
+                      <strong>Lot identification:</strong> {lotIdentification}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="eg-col">
                 <div>
                   <p>
-                    <strong>Ingredients:</strong> 8
+                    <strong>Ingredients:</strong>{" "}
+                    {ingredientList || "no data provided"}
                   </p>
                   <div>
                     <p>
-                      <b> </b> <br />
+                      <b>{containsList.length ? "Contains:" : ""}</b>
+                      {containsList.length ? ` ${containsList.join(", ")}.` : ""}
+                      <br />
                     </p>
-                    <p className="wrap">s.</p>
+                    <p className="wrap">
+                      {statementMessages.length
+                        ? statementMessages.join(" ")
+                        : ""}
+                    </p>
                   </div>
                   <br />
                 </div>
                 <div className="address-block">
-                  <b>z</b> <br />z <br />z <br />
-                  <span className="suburb">z</span>
+                  <b>{businessDetails.businessName || "no name provided"}</b>
                   <br />
-                  VIC,1111
+                  {businessDetails.addressLine1 || "no address provided"}
+                  {businessAddressLine2 ? <br /> : null}
+                  {businessAddressLine2 || null}
+                  {businessSuburb ? (
+                    <>
+                      <br />
+                      <span className="suburb">{businessSuburb}</span>
+                    </>
+                  ) : null}
+                  {(businessState || businessPostcode) && (
+                    <>
+                      <br />
+                      {[businessState, businessPostcode].filter(Boolean).join(", ")}
+                    </>
+                  )}
                 </div>
               </div>
               <div className="eg-col">

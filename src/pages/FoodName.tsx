@@ -4,6 +4,7 @@ import { HelpGuide } from "../components/helpGuides/HelpGuide";
 import { createNavHandlers } from "./help";
 import { FoodNamePage } from "./helpGuide/FoodNamePage";
 import { RadioGroup } from "../components/RadioGroup";
+import { useFormData } from "../context/FormDataContext";
 
 type FoodNameProps = {
   onBack?: () => void;
@@ -13,11 +14,13 @@ type FoodNameProps = {
 export const FoodName = ({ onBack, onNext }: FoodNameProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
-  const [ingredientHighlightChoice, setIngredientHighlightChoice] = useState<
-    string | null
-  >(null);
-  const [followChoice, setFollowChoice] = useState<string | null>(null);
-  const [foodName, setFoodName] = useState("");
+  const { formData, updateFoodName } = useFormData();
+  const {
+    ingredientHighlightChoice,
+    followChoice,
+    foodName,
+    productDescription,
+  } = formData.foodName;
   const [touched, setTouched] = useState(false);
 
   const { handleBackClick } = createNavHandlers(undefined, onBack);
@@ -106,7 +109,9 @@ export const FoodName = ({ onBack, onNext }: FoodNameProps) => {
               { label: "No", value: "2" },
             ]}
             value={ingredientHighlightChoice}
-            onChange={setIngredientHighlightChoice}
+            onChange={(value) =>
+              updateFoodName({ ingredientHighlightChoice: value })
+            }
             inline={true}
           />
         </div>
@@ -165,7 +170,7 @@ export const FoodName = ({ onBack, onNext }: FoodNameProps) => {
               { label: "No", value: "2" },
             ]}
             value={followChoice}
-            onChange={setFollowChoice}
+            onChange={(value) => updateFoodName({ followChoice: value })}
             inline={true}
           />
 
@@ -227,7 +232,7 @@ export const FoodName = ({ onBack, onNext }: FoodNameProps) => {
                 className={`form-control ${showError ? "is-invalid" : ""}`}
                 type="text"
                 value={foodName}
-                onChange={(e) => setFoodName(e.target.value)}
+                onChange={(e) => updateFoodName({ foodName: e.target.value })}
                 onBlur={() => setTouched(true)}
                 aria-required="true"
               />
@@ -249,6 +254,10 @@ export const FoodName = ({ onBack, onNext }: FoodNameProps) => {
                 type="text"
                 placeholder=""
                 tabIndex={0}
+                value={productDescription}
+                onChange={(e) =>
+                  updateFoodName({ productDescription: e.target.value })
+                }
               />
             </div>
           )}

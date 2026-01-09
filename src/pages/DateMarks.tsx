@@ -6,6 +6,7 @@ import { HelpGuide } from "../components/helpGuides/HelpGuide";
 import { DateMarkPage } from "./helpGuide/DateMarkPage";
 import { createNavHandlers } from "./help";
 import { Alert } from "../components/GlobalWarnings";
+import { useFormData } from "../context/FormDataContext";
 
 type DateMarksProps = {
   onBack?: () => void;
@@ -13,20 +14,17 @@ type DateMarksProps = {
 };
 
 export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
-  const [shelfLife2DaysChoice, setShelfLife2DaysChoice] = useState<
-    string | null
-  >(null);
-  const [shelfLife7DaysChoice, setShelfLife7DaysChoice] = useState<
-    string | null
-  >(null);
-  const [shelfLifeCertainDaysChoice, setShelfLifeCertainDaysChoice] = useState<
-    string | null
-  >(null);
-  const [dateMarkType, setDateMarkType] = useState<string | null>(null);
-  const [dateValue, setDateValue] = useState("");
-  const [lotIdentification, setLotIdentification] = useState("");
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
+  const { formData, updateDateMarks } = useFormData();
+  const {
+    shelfLife2DaysChoice,
+    shelfLife7DaysChoice,
+    shelfLifeCertainDaysChoice,
+    dateMarkType,
+    dateValue,
+    lotIdentification,
+  } = formData.dateMarks;
 
   const { handleBackClick, handleNextClick } = createNavHandlers(
     onNext,
@@ -83,7 +81,7 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
           { label: "Do not need a date mark", value: "none-mark" },
         ]}
         value={dateMarkType || ""}
-        onChange={(val) => setDateMarkType(val)}
+        onChange={(val) => updateDateMarks({ dateMarkType: val })}
       />
 
       {dateMarkType && dateMarkType !== "none-mark" && (
@@ -129,7 +127,7 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
             label="Food date"
             hint="Leave this question blank if the food is not packaged or does not need a date mark."
             value={dateValue}
-            onChange={(e) => setDateValue(e.target.value)}
+            onChange={(e) => updateDateMarks({ dateValue: e.target.value })}
             onInput={(e) => toggleInvalidState(e.currentTarget)}
             onBlur={(e) => toggleInvalidState(e.currentTarget)}
             invalidMessage="Date must be entered when type of date mark is selected"
@@ -156,7 +154,9 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
             }
             value={lotIdentification}
             required={false}
-            onChange={(e) => setLotIdentification(e.target.value)}
+            onChange={(e) =>
+              updateDateMarks({ lotIdentification: e.target.value })
+            }
           />
         </div>
       )}
@@ -183,7 +183,9 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
           value={lotIdentification}
           required
           invalidMessage="The lot identification is mandatory"
-          onChange={(e) => setLotIdentification(e.target.value)}
+          onChange={(e) =>
+            updateDateMarks({ lotIdentification: e.target.value })
+          }
           onInput={(e) => toggleInvalidState(e.currentTarget)}
           onBlur={(e) => toggleInvalidState(e.currentTarget)}
         />
@@ -251,7 +253,7 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
               { label: "No", value: "2" },
             ]}
             value={shelfLife2DaysChoice}
-            onChange={setShelfLife2DaysChoice}
+            onChange={(val) => updateDateMarks({ shelfLife2DaysChoice: val })}
             inline
           />
 
@@ -301,7 +303,9 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
                 { label: "No", value: "2" },
               ]}
               value={shelfLife7DaysChoice}
-              onChange={setShelfLife7DaysChoice}
+              onChange={(val) =>
+                updateDateMarks({ shelfLife7DaysChoice: val })
+              }
               inline
             />
 
@@ -393,10 +397,12 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
                 { label: "Yes", value: "1" },
                 { label: "No", value: "2" },
               ]}
-              value={shelfLifeCertainDaysChoice}
-              onChange={setShelfLifeCertainDaysChoice}
-              inline
-            />
+            value={shelfLifeCertainDaysChoice}
+            onChange={(val) =>
+              updateDateMarks({ shelfLifeCertainDaysChoice: val })
+            }
+            inline
+          />
 
             {shelfLifeCertainDaysChoice === "1" && (
               <>
