@@ -1,16 +1,18 @@
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Accordion, type AccordionSection } from "../../components/Accordion";
-import type { Section } from "./DateMarkPage";
+import {
+  TestAccordion,
+  type AccordionItemConfig,
+} from "../../components/QGDSAccordion";
 
 type StorageAndUsePageProps = {
   activeSectionId?: string | null;
 };
 
-const generalRequirements: Section[] = [
+const generalRequirements: AccordionItemConfig[] = [
   {
     id: "directions-for-use",
-    heading: "Directions for use",
+    title: "Directions for use",
     content: (
       <>
         <p>
@@ -44,7 +46,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "storage-conditions",
-    heading: "Storage conditions",
+    title: "Storage conditions",
     content: (
       <>
         <p>
@@ -75,10 +77,10 @@ const generalRequirements: Section[] = [
   },
 ];
 
-const extraRequirements: Section[] = [
+const extraRequirements: AccordionItemConfig[] = [
   {
     id: "bamboo-shoot",
-    heading: "Bamboo shoots",
+    title: "Bamboo shoots",
     content: (
       <>
         <p>
@@ -110,7 +112,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "cassava-food",
-    heading: "Cassava",
+    title: "Cassava",
     content: (
       <>
         <p>
@@ -142,7 +144,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "fish-seafood",
-    heading: "Fish, crustacea and seafood",
+    title: "Fish, crustacea and seafood",
     content: (
       <>
         <p>
@@ -190,7 +192,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "meat-food",
-    heading: "Meat and meat products",
+    title: "Meat and meat products",
     content: (
       <>
         <p>
@@ -241,14 +243,6 @@ const extraRequirements: Section[] = [
   },
 ];
 
-const toAccordionSections = (sections: Section[]): AccordionSection[] =>
-  sections.map((section, index) => ({
-    id: section.id,
-    heading: <>{section.heading}</>,
-    content: section.content,
-    defaultOpen: index === 0,
-  }));
-
 export const StorageAndUsePage = ({
   activeSectionId = null,
 }: StorageAndUsePageProps) => {
@@ -260,18 +254,13 @@ export const StorageAndUsePage = ({
       </a>
 
       <h2>General requirements</h2>
-      <Accordion
-        sections={toAccordionSections(generalRequirements)}
-        groupId="storage-general"
-        activeSectionId={activeSectionId}
+      <TestAccordion
+        items={generalRequirements}
+        activeItemId={activeSectionId}
       />
 
       <h2 style={{ marginTop: "32px" }}>Food with extra requirements</h2>
-      <Accordion
-        sections={toAccordionSections(extraRequirements)}
-        groupId="storage-extra"
-        activeSectionId={activeSectionId}
-      />
+      <TestAccordion items={extraRequirements} activeItemId={activeSectionId} />
     </div>
   );
 };

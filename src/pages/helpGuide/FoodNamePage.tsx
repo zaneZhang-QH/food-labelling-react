@@ -1,13 +1,18 @@
-import React, { useEffect } from "react";
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Collapse from "bootstrap/js/dist/collapse";
-import type { Section } from "./DateMarkPage";
+import {
+  TestAccordion,
+  type AccordionItemConfig,
+} from "../../components/QGDSAccordion";
 
-const generalRequirements: Section[] = [
+type FoodNamePageProps = {
+  activeSectionId?: string | null;
+};
+
+const generalRequirements: AccordionItemConfig[] = [
   {
     id: "about-food-names",
-    heading: "About food names",
+    title: "About food names",
     content: (
       <>
         <p>
@@ -24,7 +29,8 @@ const generalRequirements: Section[] = [
           <a data-accordion-item="prescribed-names" className="accordion-btn">
             prescribed names
           </a>
-          ). For example, 'fermented processed meat - cooked' or 'infant formula'.
+          ). For example, 'fermented processed meat - cooked' or 'infant
+          formula'.
         </p>
         <p>
           The name of the food must not include words, statements, claims, pictures or graphics that represent a food in a
@@ -53,7 +59,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "characterising-ingredients",
-    heading: "Characterising ingredients",
+    title: "Characterising ingredients",
     content: (
       <>
         <p>A characterising ingredient or component of a food is:</p>
@@ -104,12 +110,12 @@ const generalRequirements: Section[] = [
   },
   {
     id: "prescribed-names",
-    heading: "Prescribed names",
+    title: "Prescribed names",
     content: (
       <>
         <p>
-          The following are considered prescribed names under the Food Standards Code and must be used when naming these
-          foods.
+          The following are considered prescribed names under the Food Standards
+          Code and must be used when naming these foods.
         </p>
         <ul>
           <li>fermented manufactured meat - cooked</li>
@@ -144,10 +150,10 @@ const generalRequirements: Section[] = [
   },
 ];
 
-const extraRequirements: Section[] = [
+const extraRequirements: AccordionItemConfig[] = [
   {
     id: "breads-cereals-grains",
-    heading: "Breads, cereals and grains",
+    title: "Breads, cereals and grains",
     content: (
       <>
         <p>There are rules for the use of wholegrain and wholemeal in the food name.</p>
@@ -175,7 +181,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "chocolate",
-    heading: "Chocolate and cocoa",
+    title: "Chocolate and cocoa",
     content: (
       <>
         <p>When naming a food chocolate, it must be:</p>
@@ -203,7 +209,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "food-containing-alcohol",
-    heading: "Food containing alcohol",
+    title: "Food containing alcohol",
     content: (
       <>
         <p>
@@ -229,7 +235,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "fruit-and-vegetables",
-    heading: "Fruit and vegetables",
+    title: "Fruit and vegetables",
     content: (
       <>
         <p>
@@ -261,12 +267,14 @@ const extraRequirements: Section[] = [
   },
   {
     id: "hemp",
-    heading: "Hemp food products",
+    title: "Hemp food products",
     content: (
       <>
         <p>
-          <b>If the food is, or contains, allowed low THC hemp:</b> The label must not include the words ‘cannabis’,
-          ‘marijuana’ or similar. The label cannot have pictures of any part of a cannabis plant other than the seed.
+          <b>If the food is, or contains, allowed low THC hemp:</b> The label
+          must not include the words ‘cannabis’, ‘marijuana’ or similar. The
+          label cannot have pictures of any part of a cannabis plant other than
+          the seed.
         </p>
         <h4>Further reading</h4>
         <i>Australia New Zealand Food Standards Code</i>
@@ -283,7 +291,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "honey-products",
-    heading: "Honey and honey products",
+    title: "Honey and honey products",
     content: (
       <>
         <p>Honey means the natural sweet substance produced by honey bees.</p>
@@ -314,7 +322,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "jams",
-    heading: "Jams",
+    title: "Jams",
     content: (
       <>
         <p>If you name a food jam, it must be made from no less than 400 g/kg of fruit.</p>
@@ -334,7 +342,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "kava",
-    heading: "Kava and kava root",
+    title: "Kava and kava root",
     content: (
       <>
         <p>Kava and kava root are allowed to be sold in Australia only if the food is:</p>
@@ -357,7 +365,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "meat-products",
-    heading: "Meat and meat products",
+    title: "Meat and meat products",
     content: (
       <>
         <p>There are naming rules for meat, including jerky, meat pies and sausages.</p>
@@ -383,13 +391,14 @@ const extraRequirements: Section[] = [
   },
   {
     id: "milk-dairy",
-    heading: "Milk, dairy and dairy alternatives",
+    title: "Milk, dairy and dairy alternatives",
     content: (
       <>
         <p>
-          If your food is milk, dairy or dairy alternative, you need to read the Food Standards Code to identify the
-          necessary naming format. For example, the ingredient name ‘soy’ in soy milk or soy ice cream indicates that these
-          foods are not dairy products.
+          If your food is milk, dairy or dairy alternative, you need to read the
+          Food Standards Code to identify the necessary naming format. For
+          example, the ingredient name ‘soy’ in soy milk or soy ice cream
+          indicates that these foods are not dairy products.
         </p>
         <h4>Further reading</h4>
         <i>Australia New Zealand Food Standards Code</i>
@@ -451,14 +460,15 @@ const extraRequirements: Section[] = [
   },
   {
     id: "non-alcoholic-drinks",
-    heading: "Non-alcoholic drinks",
+    title: "Non-alcoholic drinks",
     content: (
       <>
         <p>
           <b>If the food is drink made from fruit or vegetables:</b>
           <br />
-          There are naming rules for juice, juice blends and juice drinks. Please read the Food Standards Code to determine
-          which one applies to your food.
+          There are naming rules for juice, juice blends and juice drinks.
+          Please read the Food Standards Code to determine which one applies to
+          your food.
         </p>
         <p>
           <b>If the food is non-alcoholic or brewed soft drink:</b>
@@ -505,7 +515,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "nuts-seeds",
-    heading: "Nuts and seeds",
+    title: "Nuts and seeds",
     content: (
       <>
         <p>Food that is sold as peanut butter must be a peanut based spread that has no less than 850 g/kg of peanuts.</p>
@@ -524,7 +534,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "oils-margarine",
-    heading: "Oils and margarine",
+    title: "Oils and margarine",
     content: (
       <>
         <p>Margarine means an edible oil spread containing no less than 800 g/kg of edible oils.</p>
@@ -544,14 +554,19 @@ const extraRequirements: Section[] = [
   },
   {
     id: "salt-products",
-    heading: "Salt and salt products",
+    title: "Salt and salt products",
     content: (
       <>
         <p>
-          Foods that are labelled salt or a salt product have special requirements. These products cannot make nutrition or
-          health claim, must have extra information in the nutrition information panel and must be made from certain elements.
+          Foods that are labelled salt or a salt product have special
+          requirements. These products cannot make nutrition or health claim,
+          must have extra information in the nutrition information panel and
+          must be made from certain elements.
         </p>
-        <p>You need to read the Food Standards Code to ensure your label is correct.</p>
+        <p>
+          You need to read the Food Standards Code to ensure your label is
+          correct.
+        </p>
         <h4>Further reading</h4>
         <i>Australia New Zealand Food Standards Code</i>
         <ul>
@@ -573,7 +588,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "sugar",
-    heading: "Sugar and sugar alternatives",
+    title: "Sugar and sugar alternatives",
     content: (
       <>
         <p>Food that is sold as white sugar or a sugar must be purified crystallised sucrose and have no less than 99.7% sucrose when dry.</p>
@@ -593,7 +608,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "vinegar",
-    heading: "Vinegar",
+    title: "Vinegar",
     content: (
       <>
         <p>A food that is sold as imitation vinegar or vinegar must contain no less than 40 g/kg of acetic acid.</p>
@@ -612,84 +627,7 @@ const extraRequirements: Section[] = [
   },
 ];
 
-const renderAccordion = (sections: Section[], groupId: string) => (
-  <div className="accordion-group">
-    <div className="accordion-toggle">
-      <button
-        className="accordion-toggle-btn accordion-toggle-btn--closed"
-        type="button"
-        onClick={(e) => {
-          const group = document.getElementById(groupId);
-          if (!group) return;
-          const collapses = Array.from(group.querySelectorAll<HTMLElement>(".accordion-collapse"));
-          const anyClosed = collapses.some((el) => !el.classList.contains("show"));
-          collapses.forEach((el) => {
-            const instance = Collapse.getOrCreateInstance(el, { toggle: false });
-            if (anyClosed) {
-              instance.show();
-            } else {
-              instance.hide();
-            }
-          });
-          const btn = e.currentTarget;
-          btn.classList.toggle("accordion-toggle-btn--open", anyClosed);
-          btn.classList.toggle("accordion-toggle-btn--closed", !anyClosed);
-          btn.textContent = anyClosed ? "Close all" : "Open all";
-        }}
-      >
-        Open all
-      </button>
-    </div>
-    <div className="accordion" id={groupId}>
-      {sections.map((section, index) => {
-        const headingId = `${section.id}-heading`;
-        const collapseId = section.id;
-        const isFirst = index === 0;
-        return (
-          <div className="accordion-item" key={section.id}>
-            <h2 className="accordion-header" id={headingId}>
-              <button
-                className={`accordion-button ${isFirst ? "" : "collapsed"}`}
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target={`#${collapseId}`}
-                aria-expanded={isFirst}
-                aria-controls={collapseId}
-              >
-                {section.heading}
-              </button>
-            </h2>
-            <div
-              id={collapseId}
-              className={`accordion-collapse collapse ${isFirst ? "show" : ""}`}
-              aria-labelledby={headingId}
-              data-bs-parent={`#${groupId}`}
-              role="region"
-            >
-              <div className="accordion-body">{section.content}</div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  </div>
-);
-
-type FoodNamePageProps = {
-  activeSectionId?: string | null;
-};
-
 export const FoodNamePage = ({ activeSectionId = null }: FoodNamePageProps) => {
-
-  useEffect(() => {
-    if (!activeSectionId) return;
-    const target = document.getElementById(activeSectionId);
-    if (!target) return;
-    const instance = Collapse.getOrCreateInstance(target, { toggle: false });
-    instance.show();
-    target.scrollIntoView({ behavior: "smooth" });
-  }, [activeSectionId]);
-
   return (
     <div className="side-padding vertical-padding">
       <a className="controls btn-print" role="button">
@@ -698,10 +636,10 @@ export const FoodNamePage = ({ activeSectionId = null }: FoodNamePageProps) => {
       </a>
 
       <h3>General requirements</h3>
-      {renderAccordion(generalRequirements, "foodname-general")}
+      <TestAccordion items={generalRequirements} activeItemId={activeSectionId} />
 
       <h3>Food with extra requirements</h3>
-      {renderAccordion(extraRequirements, "foodname-extra")}
+      <TestAccordion items={extraRequirements} activeItemId={activeSectionId} />
     </div>
   );
 };

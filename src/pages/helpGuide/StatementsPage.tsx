@@ -1,23 +1,25 @@
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Accordion, type AccordionSection } from "../../components/Accordion";
-import type { Section } from "./DateMarkPage";
+import {
+  TestAccordion,
+  type AccordionItemConfig,
+} from "../../components/QGDSAccordion";
 
 type StatementsPageProps = {
   activeSectionId?: string | null;
 };
 
-const generalRequirements: Section[] = [
+const generalRequirements: AccordionItemConfig[] = [
   {
     id: "ad-statement",
-    heading: "Advisory statements",
+    title: "Advisory statements",
     content: (
       <>
         <p>
-          Advisory statements let consumers know important information about
-          the safety (e.g. unpasteurised), suitability (e.g. not suitable as a
-          complete milk replacement for children under 5 years) and effect
-          (e.g. laxative) of the food or ingredient.
+          Advisory statements let consumers know important information about the
+          safety (e.g. unpasteurised), suitability (e.g. not suitable as a
+          complete milk replacement for children under 5 years) and effect (e.g.
+          laxative) of the food or ingredient.
         </p>
         <p>
           An advisory statement must provide the same meaning as the statement
@@ -66,7 +68,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "alt-declaration",
-    heading: "Allergen declarations",
+    title: "Allergen declarations",
     content: (
       <>
         <p>
@@ -74,8 +76,8 @@ const generalRequirements: Section[] = [
           stated on the label.
         </p>
         <p>
-          You must state any allergen listed in Standard 1.2.3 when present in
-          a food as:
+          You must state any allergen listed in Standard 1.2.3 when present in a
+          food as:
         </p>
         <ul>
           <li>An ingredient</li>
@@ -166,7 +168,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "warn-statement",
-    heading: "Warning statements",
+    title: "Warning statements",
     content: (
       <>
         <p>
@@ -235,14 +237,6 @@ const generalRequirements: Section[] = [
   },
 ];
 
-const toAccordionSections = (sections: Section[]): AccordionSection[] =>
-  sections.map((section, index) => ({
-    id: section.id,
-    heading: section.heading,
-    content: section.content,
-    defaultOpen: index === 0,
-  }));
-
 export const StatementsPage = ({
   activeSectionId = null,
 }: StatementsPageProps) => {
@@ -254,10 +248,9 @@ export const StatementsPage = ({
       </a>
 
       <h2>General requirements</h2>
-      <Accordion
-        sections={toAccordionSections(generalRequirements)}
-        groupId="statements-general"
-        activeSectionId={activeSectionId}
+      <TestAccordion
+        items={generalRequirements}
+        activeItemId={activeSectionId}
       />
     </div>
   );

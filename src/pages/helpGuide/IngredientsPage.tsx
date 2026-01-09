@@ -1,16 +1,18 @@
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Accordion, type AccordionSection } from "../../components/Accordion";
-import type { Section } from "./DateMarkPage";
+import {
+  TestAccordion,
+  type AccordionItemConfig,
+} from "../../components/QGDSAccordion";
 
 type IngredientsPageProps = {
   activeSectionId?: string | null;
 };
 
-const generalRequirements: Section[] = [
+const generalRequirements: AccordionItemConfig[] = [
   {
     id: "ingredient-list",
-    heading: "What is an ingredient list?",
+    title: "What is an ingredient list?",
     content: (
       <>
         <p>
@@ -303,7 +305,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "alt-ingredient",
-    heading: "Alternative ingredients",
+    title: "Alternative ingredients",
     content: (
       <>
         <p>
@@ -321,7 +323,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "char-ingredient",
-    heading: "Characterising ingredients",
+    title: "Characterising ingredients",
     content: (
       <>
         <p>
@@ -441,7 +443,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "comp-ingredient",
-    heading: "Compound ingredients",
+    title: "Compound ingredients",
     content: (
       <>
         <p>
@@ -478,7 +480,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "exempt-ingredient",
-    heading: "Exempt ingredients",
+    title: "Exempt ingredients",
     content: (
       <>
         <p>The ingredient list does not need to include:</p>
@@ -559,7 +561,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "food-additive",
-    heading: "Food additives and flavours",
+    title: "Food additives and flavours",
     content: (
       <>
         <p>
@@ -737,7 +739,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "generic-name",
-    heading: "Generic names",
+    title: "Generic names",
     content: (
       <>
         <p>Generic names may be used in the ingredient list, instead of:</p>
@@ -837,7 +839,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "order-ingredient",
-    heading: "Order of ingredients",
+    title: "Order of ingredients",
     content: (
       <>
         <p>
@@ -883,7 +885,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "processing-aids",
-    heading: "Processing aids",
+    title: "Processing aids",
     content: (
       <>
         <p>
@@ -965,7 +967,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "required-names",
-    heading: "Required names",
+    title: "Required names",
     content: (
       <>
         <p>
@@ -1086,10 +1088,10 @@ const generalRequirements: Section[] = [
   },
 ];
 
-const extraRequirements: Section[] = [
+const extraRequirements: AccordionItemConfig[] = [
   {
     id: "bcr",
-    heading: "Breads, cereals and grains",
+    title: "Breads, cereals and grains",
     content: (
       <>
         <p>
@@ -1200,7 +1202,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "eggs-egg-products",
-    heading: "Eggs and egg products",
+    title: "Eggs and egg products",
     content: (
       <>
         <p>
@@ -1247,7 +1249,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "fish-seafood",
-    heading: "Fish, crustacea and seafood",
+    title: "Fish, crustacea and seafood",
     content: (
       <>
         <p>
@@ -1349,7 +1351,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "fruit-veg",
-    heading: "Fruit and vegetables",
+    title: "Fruit and vegetables",
     content: (
       <>
         <p>
@@ -1393,7 +1395,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "legumes-pulses",
-    heading: "Legumes and pulses",
+    title: "Legumes and pulses",
     content: (
       <>
         <p>
@@ -1452,7 +1454,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "meat-prod",
-    heading: "Meat and meat products",
+    title: "Meat and meat products",
     content: (
       <>
         <p>
@@ -1523,7 +1525,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "milk-dairy",
-    heading: "Milk, dairy and dairy substitutes",
+    title: "Milk, dairy and dairy substitutes",
     content: (
       <>
         <p>
@@ -1605,7 +1607,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "non-alcoholic",
-    heading: "Non-alcoholic drinks",
+    title: "Non-alcoholic drinks",
     content: (
       <>
         <p>
@@ -1687,7 +1689,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "nuts-seeds",
-    heading: "Nuts and seeds",
+    title: "Nuts and seeds",
     content: (
       <>
         <p>
@@ -1745,7 +1747,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "oils-margarine",
-    heading: "Oils and margarine",
+    title: "Oils and margarine",
     content: (
       <>
         <p>
@@ -1810,7 +1812,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "sugar-alt",
-    heading: "Sugar and sugar alternatives",
+    title: "Sugar and sugar alternatives",
     content: (
       <>
         <p>
@@ -1873,7 +1875,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "food-package",
-    heading: "Food in small packages",
+    title: "Food in small packages",
     content: (
       <>
         <p>
@@ -1915,7 +1917,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "one-ingredient",
-    heading: "Food with one ingredient",
+    title: "Food with one ingredient",
     content: (
       <>
         <p>
@@ -1953,25 +1955,6 @@ const extraRequirements: Section[] = [
   },
 ];
 
-const toAccordionSections = (sections: Section[]): AccordionSection[] =>
-  sections.map((section, index) => ({
-    id: section.id,
-    heading: (
-      <>
-        {section.img && (
-          <img
-            src={section.img}
-            alt=""
-            style={{ width: "40px", marginRight: "8px" }}
-          />
-        )}
-        {section.heading}
-      </>
-    ),
-    content: section.content,
-    defaultOpen: index === 0,
-  }));
-
 export const IngredientsPage = ({
   activeSectionId = null,
 }: IngredientsPageProps) => {
@@ -1983,18 +1966,13 @@ export const IngredientsPage = ({
       </a>
 
       <h2>General requirements</h2>
-      <Accordion
-        sections={toAccordionSections(generalRequirements)}
-        groupId="ingredients-general"
-        activeSectionId={activeSectionId}
+      <TestAccordion
+        items={generalRequirements}
+        activeItemId={activeSectionId}
       />
 
       <h2 style={{ marginTop: "32px" }}>Food with extra requirements</h2>
-      <Accordion
-        sections={toAccordionSections(extraRequirements)}
-        groupId="ingredients-extra"
-        activeSectionId={activeSectionId}
-      />
+      <TestAccordion items={extraRequirements} activeItemId={activeSectionId} />
     </div>
   );
 };

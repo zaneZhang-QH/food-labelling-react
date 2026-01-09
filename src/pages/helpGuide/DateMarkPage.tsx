@@ -1,19 +1,22 @@
 import React from "react";
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Accordion, type AccordionSection } from "../../components/Accordion";
+import {
+  TestAccordion,
+  type AccordionItemConfig,
+} from "../../components/QGDSAccordion";
 
 export type Section = {
   id: string;
-  heading: string;
+  title: string;
   content: React.ReactNode;
   img?: string;
 };
 
-const generalRequirements: Section[] = [
+const generalRequirements: AccordionItemConfig[] = [
   {
     id: "what-date-mark",
-    heading: "What is a date mark?",
+    title: "What is a date mark?",
     content: (
       <>
         <p>
@@ -39,8 +42,8 @@ const generalRequirements: Section[] = [
           <a data-accordion-item="best-before-date" className="accordion-btn">
             best-before date
           </a>
-          , but may not look, smell or taste the same as when it was fresh. Bread with a shelf life of less than 7 days can
-          be date marked with a{" "}
+          , but may not look, smell or taste the same as when it was fresh.
+          Bread with a shelf life of less than 7 days can be date marked with a{" "}
           <a data-accordion-item="baked-for-on-date" className="accordion-btn">
             baked-on or baked-for date.
           </a>
@@ -55,8 +58,9 @@ const generalRequirements: Section[] = [
           <a data-accordion-item="date-format" className="accordion-btn">
             format of the date mark
           </a>{" "}
-          (how it appears on label). The day and month are required for a food with a shelf life of 3 months or less, whereas
-          the month and year are required for a food with a longer shelf life.
+          (how it appears on label). The day and month are required for a food
+          with a shelf life of 3 months or less, whereas the month and year are
+          required for a food with a longer shelf life.
         </p>
         <section>
           <h4>Further reading</h4>
@@ -77,7 +81,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "baked-for-on-date",
-    heading: "Baked-on and baked-for dates",
+    title: "Baked-on and baked-for dates",
     content: (
       <>
         <p>
@@ -133,7 +137,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "best-before-date",
-    heading: "Best-before dates",
+    title: "Best-before dates",
     content: (
       <>
         <p>
@@ -170,7 +174,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "date-format",
-    heading: "Date mark formats",
+    title: "Date mark formats",
     content: (
       <>
         <p>The day, month and year must be written so that it is clear which number refers to the day, the month or the year.</p>
@@ -210,7 +214,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "lot-identification",
-    heading: "Lot identification",
+    title: "Lot identification",
     content: (
       <>
         <p>
@@ -242,7 +246,7 @@ const generalRequirements: Section[] = [
   },
   {
     id: "use-by-date",
-    heading: "Use-by dates",
+    title: "Use-by dates",
     content: (
       <>
         <p>
@@ -275,16 +279,17 @@ const generalRequirements: Section[] = [
   },
 ];
 
-const extraRequirements: Section[] = [
+const extraRequirements: AccordionItemConfig[] = [
   {
     id: "small-package",
-    heading: "Food in small packages",
-    img: "https://www.qld.gov.au/?a=145879",
+    title: "Food in small packages",
     content: (
       <>
         <p>
-          If the food is sold in a small package where the package has a surface area of less than 100 cm
-          <sup>2</sup> only a use-by date needs to be included. For example: A small bar of chocolate.
+          If the food is sold in a small package where the package has a surface
+          area of less than 100 cm
+          <sup>2</sup> only a use-by date needs to be included. For example: A
+          small bar of chocolate.
         </p>
         <section>
           <h4>Further reading</h4>
@@ -305,8 +310,7 @@ const extraRequirements: Section[] = [
   },
   {
     id: "ice-confection",
-    heading: "Ice cream or ice confection",
-    img: "https://www.qld.gov.au/?a=145862",
+    title: "Ice cream or ice confection",
     content: (
       <>
         <p>If the food is a single serve of ice cream or ice confection no date marking information is required.</p>
@@ -334,39 +338,20 @@ type DateMarkPageProps = {
 };
 
 export const DateMarkPage = ({ activeSectionId = null }: DateMarkPageProps) => {
-  const toAccordionSections = (sections: Section[]): AccordionSection[] =>
-    sections.map((section, index) => ({
-      id: section.id,
-      heading: (
-        <>
-          {section.img && <img src={section.img} alt="" style={{ width: "40px", marginRight: "8px" }} />}
-          {section.heading}
-        </>
-      ),
-      content: section.content,
-      defaultOpen: index === 0,
-    }));
-
   return (
     <div className="side-padding vertical-padding">
       <a className="controls btn-print" role="button">
         <FontAwesomeIcon icon={faPrint} />
         Print
       </a>
-
       <h2>General requirements</h2>
-      <Accordion
-        sections={toAccordionSections(generalRequirements)}
-        groupId="datemark-general"
-        activeSectionId={activeSectionId}
+      <TestAccordion
+        items={generalRequirements}
+        activeItemId={activeSectionId}
       />
-
       <h2 style={{ marginTop: "32px" }}>Food with extra requirements</h2>
-      <Accordion
-        sections={toAccordionSections(extraRequirements)}
-        groupId="datemark-extra"
-        activeSectionId={activeSectionId}
-      />
+      <TestAccordion items={extraRequirements} activeItemId={activeSectionId} />
+      \
     </div>
   );
 };
