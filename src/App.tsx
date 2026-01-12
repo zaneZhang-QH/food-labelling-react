@@ -15,6 +15,7 @@ import { Ingredients } from "./pages/Ingredients";
 import { Statements } from "./pages/Statements";
 import { YourLabel } from "./pages/YourLabel";
 import { LabelBusterSideNav } from "./components/LabelBusterSideNav";
+import { ConfirmModal } from "./components/ConfirmModal";
 import {
   FormDataProvider,
   useFormData,
@@ -36,11 +37,21 @@ type Page =
 
 const AppContent = () => {
   const [page, setPage] = useState<Page>("home");
+  const [cancelOpen, setCancelOpen] = useState(false);
   const { completeStep, resetProgress } = useFormData();
 
   const handleCancel = () => {
+    setCancelOpen(true);
+  };
+
+  const handleConfirmCancel = () => {
     resetProgress();
     setPage("home");
+    setCancelOpen(false);
+  };
+
+  const handleDismissCancel = () => {
+    setCancelOpen(false);
   };
 
   const goNext = (step: StepKey, nextPage: Page) => () => {
@@ -54,6 +65,13 @@ const AppContent = () => {
         <LabelBusterSideNav page={page} onNavigate={setPage} />
       </aside>
       <main className="app-content">
+        <ConfirmModal
+          open={cancelOpen}
+          title="Are you sure you want to leave?"
+          message="Your progress will not be saved."
+          onConfirm={handleConfirmCancel}
+          onCancel={handleDismissCancel}
+        />
         <div style={{ display: page === "home" ? "block" : "none" }}>
           <Home onStart={() => setPage("terms")} />
         </div>
