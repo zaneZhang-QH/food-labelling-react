@@ -7,13 +7,16 @@ import {
 type AboutFoodLabelsProps = {
   onBack?: () => void;
   onNext?: () => void;
+  onCancel?: () => void;
 };
 
-export const AboutFoodLabels = ({ onBack, onNext }: AboutFoodLabelsProps) => {
-  const { handleNextClick, handleBackClick } = createNavHandlers(
-    onNext,
-    onBack
-  );
+export const AboutFoodLabels = ({
+  onBack,
+  onNext,
+  onCancel,
+}: AboutFoodLabelsProps) => {
+  const { handleNextClick, handleBackClick, handleCancelClick } =
+    createNavHandlers(onNext, onBack, onCancel);
 
   const aboutFoodAccordionItems: AccordionItemConfig[] = [
     {
@@ -317,6 +320,7 @@ export const AboutFoodLabels = ({ onBack, onNext }: AboutFoodLabelsProps) => {
           className="btn btn-tertiary"
           target="_blank"
           data-progress-label="Loading"
+          onClick={handleCancelClick}
         >
           <span className="btn-label-default">Cancel</span>
         </a>

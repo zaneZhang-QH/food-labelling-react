@@ -8,6 +8,7 @@ import { RadioGroup, type Option } from "../components/RadioGroup";
 type LimitationsProps = {
   onBack?: () => void;
   onNext?: () => void;
+  onCancel?: () => void;
 };
 
 const options: Option[] = [
@@ -15,7 +16,11 @@ const options: Option[] = [
   { label: "No", value: "2" },
 ];
 
-export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
+export const Limitations = ({
+  onBack,
+  onNext,
+  onCancel,
+}: LimitationsProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
   const [serviceChoice, setServiceChoice] = useState<string | null>(null);
@@ -35,10 +40,8 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
     null
   );
 
-  const { handleNextClick, handleBackClick } = createNavHandlers(
-    onNext,
-    onBack
-  );
+  const { handleNextClick, handleBackClick, handleCancelClick } =
+    createNavHandlers(onNext, onBack, onCancel);
 
   const showSpecialBlock = serviceChoice === "2";
   const showNovelBlock = showSpecialBlock && serviceChoiceSpecial === "2";
@@ -389,6 +392,7 @@ export const Limitations = ({ onBack, onNext }: LimitationsProps) => {
           className="btn btn-tertiary"
           target="_blank"
           data-progress-label="Loading"
+          onClick={handleCancelClick}
         >
           <span className="btn-label-default">Cancel</span>
         </a>

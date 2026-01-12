@@ -11,9 +11,10 @@ import { useFormData } from "../context/FormDataContext";
 type DateMarksProps = {
   onBack?: () => void;
   onNext?: () => void;
+  onCancel?: () => void;
 };
 
-export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
+export const DateMarks = ({ onBack, onNext, onCancel }: DateMarksProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
   const { formData, updateDateMarks } = useFormData();
@@ -26,10 +27,8 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
     lotIdentification,
   } = formData.dateMarks;
 
-  const { handleBackClick, handleNextClick } = createNavHandlers(
-    onNext,
-    onBack
-  );
+  const { handleBackClick, handleNextClick, handleCancelClick } =
+    createNavHandlers(onNext, onBack, onCancel);
 
   const toggleInvalidState = (el: HTMLInputElement | HTMLSelectElement) => {
     if (el.value.trim()) {
@@ -303,10 +302,7 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
                 { label: "No", value: "2" },
               ]}
               value={shelfLife7DaysChoice}
-              onChange={(val) =>
-                updateDateMarks({ shelfLife7DaysChoice: val })
-              }
-              inline
+              onChange={(val) => updateDateMarks({ shelfLife7DaysChoice: val })}
             />
 
             {shelfLife7DaysChoice === "1" && (
@@ -397,12 +393,11 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
                 { label: "Yes", value: "1" },
                 { label: "No", value: "2" },
               ]}
-            value={shelfLifeCertainDaysChoice}
-            onChange={(val) =>
-              updateDateMarks({ shelfLifeCertainDaysChoice: val })
-            }
-            inline
-          />
+              value={shelfLifeCertainDaysChoice}
+              onChange={(val) =>
+                updateDateMarks({ shelfLifeCertainDaysChoice: val })
+              }
+            />
 
             {shelfLifeCertainDaysChoice === "1" && (
               <>
@@ -477,6 +472,7 @@ export const DateMarks = ({ onBack, onNext }: DateMarksProps) => {
           className="btn btn-tertiary"
           target="_blank"
           data-progress-label="Loading"
+          onClick={handleCancelClick}
         >
           <span className="btn-label-default">Cancel</span>
         </a>

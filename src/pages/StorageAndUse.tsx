@@ -15,6 +15,7 @@ import type { StorageAndUseData } from "../context/FormDataContext";
 type StorageAndUseProps = {
   onBack?: () => void;
   onNext?: () => void;
+  onCancel?: () => void;
 };
 
 type Rule<T> = {
@@ -151,7 +152,11 @@ const buildMessage = <T,>(data: T, rules: Rule<T>[]) =>
     .filter(Boolean)
     .join(" ");
 
-export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
+export const StorageAndUse = ({
+  onBack,
+  onNext,
+  onCancel,
+}: StorageAndUseProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
   const { formData, updateStorageAndUse } = useFormData();
@@ -163,10 +168,8 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
   const generateDirectionsForUseMessage = () =>
     buildMessage(storageData, directionsRules);
 
-  const { handleBackClick, handleNextClick } = createNavHandlers(
-    onNext,
-    onBack
-  );
+  const { handleBackClick, handleNextClick, handleCancelClick } =
+    createNavHandlers(onNext, onBack, onCancel);
 
   const handleGuideLink = (
     sectionId: string,
@@ -694,6 +697,7 @@ export const StorageAndUse = ({ onBack, onNext }: StorageAndUseProps) => {
           className="btn btn-tertiary"
           target="_blank"
           data-progress-label="Loading"
+          onClick={handleCancelClick}
         >
           <span className="btn-label-default">Cancel</span>
         </a>

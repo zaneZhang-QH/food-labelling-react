@@ -15,6 +15,7 @@ import {
 type IngredientsProps = {
   onBack?: () => void;
   onNext?: () => void;
+  onCancel?: () => void;
 };
 
 const options: Option[] = [
@@ -22,7 +23,7 @@ const options: Option[] = [
   { label: "No", value: "2" },
 ];
 
-export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
+export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
   const { formData, updateIngredients } = useFormData();
@@ -35,10 +36,8 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
         form: { ...form, [key]: value as IngredientsFormState[K] },
       });
 
-  const { handleBackClick, handleNextClick } = createNavHandlers(
-    onNext,
-    onBack
-  );
+  const { handleBackClick, handleNextClick, handleCancelClick } =
+    createNavHandlers(onNext, onBack, onCancel);
 
   const { handleGuideLink } = useGuideNavigation({
     setGuideOpen,
@@ -631,6 +630,7 @@ export const Ingredients = ({ onBack, onNext }: IngredientsProps) => {
           className="btn btn-tertiary"
           target="_blank"
           data-progress-label="Loading"
+          onClick={handleCancelClick}
         >
           <span className="btn-label-default">Cancel</span>
         </a>

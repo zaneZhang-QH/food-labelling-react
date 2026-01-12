@@ -15,7 +15,11 @@ import { Ingredients } from "./pages/Ingredients";
 import { Statements } from "./pages/Statements";
 import { YourLabel } from "./pages/YourLabel";
 import { LabelBusterSideNav } from "./components/LabelBusterSideNav";
-import { FormDataProvider } from "./context/FormDataContext";
+import {
+  FormDataProvider,
+  useFormData,
+  type StepKey,
+} from "./context/FormDataContext";
 
 type Page =
   | "home"
@@ -30,81 +34,104 @@ type Page =
   | "statements"
   | "yourLabel";
 
-const App = () => {
+const AppContent = () => {
   const [page, setPage] = useState<Page>("home");
+  const { completeStep, resetProgress } = useFormData();
+
+  const handleCancel = () => {
+    resetProgress();
+    setPage("home");
+  };
+
+  const goNext = (step: StepKey, nextPage: Page) => () => {
+    completeStep(step);
+    setPage(nextPage);
+  };
+
   return (
-    <FormDataProvider>
-      <div className="app-layout">
-        <aside className="app-sidenav">
-          <LabelBusterSideNav page={page} onNavigate={setPage} />
-        </aside>
-        <main className="app-content">
-          <div style={{ display: page === "home" ? "block" : "none" }}>
-            <Home onStart={() => setPage("terms")} />
-          </div>
-          <div style={{ display: page === "terms" ? "block" : "none" }}>
-            <TermsOfUse
-              onBack={() => setPage("home")}
-              onAccept={() => setPage("about")}
-            />
-          </div>
-          <div style={{ display: page === "about" ? "block" : "none" }}>
-            <AboutFoodLabels
-              onBack={() => setPage("terms")}
-              onNext={() => setPage("limitations")}
-            />
-          </div>
-          <div style={{ display: page === "limitations" ? "block" : "none" }}>
-            <Limitations
-              onBack={() => setPage("about")}
-              onNext={() => setPage("foodName")}
-            />
-          </div>
-          <div style={{ display: page === "foodName" ? "block" : "none" }}>
-            <FoodName
-              onBack={() => setPage("limitations")}
-              onNext={() => setPage("businessDetails")}
-            />
-          </div>
-          <div
-            style={{ display: page === "businessDetails" ? "block" : "none" }}
-          >
-            <BusinessDetails
-              onBack={() => setPage("foodName")}
-              onNext={() => setPage("dateMarks")}
-            />
-          </div>
-          <div style={{ display: page === "dateMarks" ? "block" : "none" }}>
-            <DateMarks
-              onBack={() => setPage("businessDetails")}
-              onNext={() => setPage("storageUse")}
-            />
-          </div>
-          <div style={{ display: page === "storageUse" ? "block" : "none" }}>
-            <StorageAndUse
-              onBack={() => setPage("dateMarks")}
-              onNext={() => setPage("ingredients")}
-            />
-          </div>
-          <div style={{ display: page === "ingredients" ? "block" : "none" }}>
-            <Ingredients
-              onBack={() => setPage("storageUse")}
-              onNext={() => setPage("statements")}
-            />
-          </div>
-          <div style={{ display: page === "statements" ? "block" : "none" }}>
-            <Statements
-              onBack={() => setPage("ingredients")}
-              onNext={() => setPage("yourLabel")}
-            />
-          </div>
-          <div style={{ display: page === "yourLabel" ? "block" : "none" }}>
-            <YourLabel onBack={() => setPage("statements")} />
-          </div>
-        </main>
-      </div>
-    </FormDataProvider>
+    <div className="app-layout">
+      <aside className="app-sidenav">
+        <LabelBusterSideNav page={page} onNavigate={setPage} />
+      </aside>
+      <main className="app-content">
+        <div style={{ display: page === "home" ? "block" : "none" }}>
+          <Home onStart={() => setPage("terms")} />
+        </div>
+        <div style={{ display: page === "terms" ? "block" : "none" }}>
+          <TermsOfUse
+            onBack={() => setPage("home")}
+            onAccept={goNext("terms", "about")}
+            onCancel={handleCancel}
+          />
+        </div>
+        <div style={{ display: page === "about" ? "block" : "none" }}>
+          <AboutFoodLabels
+            onBack={() => setPage("terms")}
+            onNext={goNext("about", "limitations")}
+            onCancel={handleCancel}
+          />
+        </div>
+        <div style={{ display: page === "limitations" ? "block" : "none" }}>
+          <Limitations
+            onBack={() => setPage("about")}
+            onNext={goNext("limitations", "foodName")}
+            onCancel={handleCancel}
+          />
+        </div>
+        <div style={{ display: page === "foodName" ? "block" : "none" }}>
+          <FoodName
+            onBack={() => setPage("limitations")}
+            onNext={goNext("foodName", "businessDetails")}
+            onCancel={handleCancel}
+          />
+        </div>
+        <div style={{ display: page === "businessDetails" ? "block" : "none" }}>
+          <BusinessDetails
+            onBack={() => setPage("foodName")}
+            onNext={goNext("businessDetails", "dateMarks")}
+            onCancel={handleCancel}
+          />
+        </div>
+        <div style={{ display: page === "dateMarks" ? "block" : "none" }}>
+          <DateMarks
+            onBack={() => setPage("businessDetails")}
+            onNext={goNext("dateMarks", "storageUse")}
+            onCancel={handleCancel}
+          />
+        </div>
+        <div style={{ display: page === "storageUse" ? "block" : "none" }}>
+          <StorageAndUse
+            onBack={() => setPage("dateMarks")}
+            onNext={goNext("storageUse", "ingredients")}
+            onCancel={handleCancel}
+          />
+        </div>
+        <div style={{ display: page === "ingredients" ? "block" : "none" }}>
+          <Ingredients
+            onBack={() => setPage("storageUse")}
+            onNext={goNext("ingredients", "statements")}
+            onCancel={handleCancel}
+          />
+        </div>
+        <div style={{ display: page === "statements" ? "block" : "none" }}>
+          <Statements
+            onBack={() => setPage("ingredients")}
+            onNext={goNext("statements", "yourLabel")}
+            onCancel={handleCancel}
+          />
+        </div>
+        <div style={{ display: page === "yourLabel" ? "block" : "none" }}>
+          <YourLabel onBack={() => setPage("statements")} onCancel={handleCancel} />
+        </div>
+      </main>
+    </div>
   );
 };
+
+const App = () => (
+  <FormDataProvider>
+    <AppContent />
+  </FormDataProvider>
+);
 
 export default App;

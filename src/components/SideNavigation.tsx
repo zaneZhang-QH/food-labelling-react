@@ -6,6 +6,7 @@ export type SideNavItem = {
   target?: string;
   active?: boolean;
   onClick?: () => void;
+  disabled?: boolean;
   children?: SideNavItem[];
 };
 
@@ -34,7 +35,12 @@ export const SideNavigation: React.FC<SideNavigationProps> = ({
         {list.map((item, index) => {
           const isActive =
             !!item.active && !(item.children && item.children.length > 0);
-          const content = item.onClick && !isActive ? (
+          const isDisabled = !!item.disabled && !isActive;
+          const content = isDisabled ? (
+            <span className="nav-link disabled" aria-disabled="true">
+              {item.label}
+            </span>
+          ) : item.onClick && !isActive ? (
             <a
               className="nav-link"
               href={item.href ?? "#"}
@@ -58,7 +64,9 @@ export const SideNavigation: React.FC<SideNavigationProps> = ({
 
           return (
             <li
-              className={`nav-item${isActive ? " active" : ""}`}
+              className={`nav-item${isActive ? " active" : ""}${
+                isDisabled ? " disabled" : ""
+              }`}
               key={`${depth}-${index}`}
             >
               {content}

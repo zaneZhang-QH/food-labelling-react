@@ -17,19 +17,18 @@ import {
 type StatementsProps = {
   onBack?: () => void;
   onNext?: () => void;
+  onCancel?: () => void;
 };
 
-export const Statements = ({ onBack, onNext }: StatementsProps) => {
+export const Statements = ({ onBack, onNext, onCancel }: StatementsProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
   const { formData, updateStatements } = useFormData();
   const statementData = formData.statements;
   const form = statementData.form;
 
-  const { handleBackClick, handleNextClick } = createNavHandlers(
-    onNext,
-    onBack
-  );
+  const { handleBackClick, handleNextClick, handleCancelClick } =
+    createNavHandlers(onNext, onBack, onCancel);
 
   const { handleGuideLink } = useGuideNavigation({
     setGuideOpen,
@@ -869,6 +868,7 @@ export const Statements = ({ onBack, onNext }: StatementsProps) => {
           className="btn btn-tertiary"
           target="_blank"
           data-progress-label="Loading"
+          onClick={handleCancelClick}
         >
           <span className="btn-label-default">Cancel</span>
         </a>

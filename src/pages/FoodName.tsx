@@ -9,9 +9,10 @@ import { useFormData } from "../context/FormDataContext";
 type FoodNameProps = {
   onBack?: () => void;
   onNext?: () => void;
+  onCancel?: () => void;
 };
 
-export const FoodName = ({ onBack, onNext }: FoodNameProps) => {
+export const FoodName = ({ onBack, onNext, onCancel }: FoodNameProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
   const { formData, updateFoodName } = useFormData();
@@ -23,7 +24,11 @@ export const FoodName = ({ onBack, onNext }: FoodNameProps) => {
   } = formData.foodName;
   const [touched, setTouched] = useState(false);
 
-  const { handleBackClick } = createNavHandlers(undefined, onBack);
+  const { handleBackClick, handleCancelClick } = createNavHandlers(
+    undefined,
+    onBack,
+    onCancel
+  );
 
   const isValid = foodName.trim().length > 0;
   const showError = touched && !isValid;
@@ -290,6 +295,7 @@ export const FoodName = ({ onBack, onNext }: FoodNameProps) => {
           className="btn btn-tertiary"
           target="_blank"
           data-progress-label="Loading"
+          onClick={handleCancelClick}
         >
           <span className="btn-label-default">Cancel</span>
         </a>

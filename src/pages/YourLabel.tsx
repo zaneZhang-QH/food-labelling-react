@@ -8,9 +8,14 @@ import {
 
 type YourLabelProps = {
   onBack?: () => void;
+  onCancel?: () => void;
 };
-export const YourLabel = ({ onBack }: YourLabelProps) => {
-  const { handleBackClick } = createNavHandlers(undefined, onBack);
+export const YourLabel = ({ onBack, onCancel }: YourLabelProps) => {
+  const { handleBackClick, handleCancelClick } = createNavHandlers(
+    undefined,
+    onBack,
+    onCancel
+  );
   const { formData } = useFormData();
   const {
     foodName,
@@ -214,7 +219,9 @@ export const YourLabel = ({ onBack }: YourLabelProps) => {
       : null,
     statements.statementSelections["guarana-extracts"] ||
     statements.statementSelections["cola-beverage-with-caffeine"] ||
-    statements.statementSelections["food-with-cola-beverage-containing-caffeine"]
+    statements.statementSelections[
+      "food-with-cola-beverage-containing-caffeine"
+    ]
       ? "The product contains caffeine."
       : null,
     statements.statementSelections["bee-pollen"]
@@ -342,228 +349,101 @@ export const YourLabel = ({ onBack }: YourLabelProps) => {
           </ul>
         </div>
 
-        <div className="product-sheet">
-          <h2>Product Sheet</h2>
-          <p>
-            You can take this information to a printer or graphic designer to
-            create a label or use your own tools/templates. When creating your
-            food label, you must ensure you meet the
-            <a href="#legibility-requirements">
-              <span className="title">legibility requirements</span>
-            </a>
-            , such as minimum type size.
-          </p>
-          <table className="table">
-            <tbody>
-              <tr>
-                <td>Food name and description</td>
-                <td>
-                  {foodName.foodName || "no name provided"}
-                  <br />
-                  {foodName.productDescription || "no description provided"}
-                </td>
-              </tr>
-              <tr>
-                <td>Business details</td>
-                <td>
-                  <b>{businessDetails.businessName || "no name provided"}</b>
-                  <br />
-                  {businessDetails.addressLine1 || "no address provided"}
-                  {businessAddressLine2 ? <br /> : null}
-                  {businessAddressLine2 || null}
-                  {businessSuburb ? (
-                    <>
-                      <br />
-                      <span className="suburb">{businessSuburb}</span>
-                    </>
-                  ) : null}
-                  {(businessState || businessPostcode) && (
-                    <>
-                      <br />
-                      {[businessState, businessPostcode].filter(Boolean).join(", ")}
-                    </>
-                  )}
-                </td>
-              </tr>
-              <tr>
-                <td>Ingredients</td>
-                <td>{ingredientList || "no data provided"}</td>
-              </tr>
-              <tr>
-                <td>Weight</td>
-                <td>
-                  For information on how to comply with weights and measures
-                  laws visit the
-                  <a
-                    href="https://www.measurement.gov.au"
-                    rel="noopener"
-                    target="_blank"
-                  >
-                    National Measurement Institute website{" "}
-                  </a>
-                  .
-                </td>
-              </tr>
-              <tr>
-                <td>Nutrition information panel</td>
-                <td>
-                  <p>
-                    A Nutrition Information Panel must be added to your food
-                    label. The Food Standards Australia New Zealand
+        <div style={{display:"flex", flexDirection:"column", gap:"20px"}}>
+          <div className="product-sheet">
+            <h2>Product Sheet</h2>
+            <p>
+              You can take this information to a printer or graphic designer to
+              create a label or use your own tools/templates. When creating your
+              food label, you must ensure you meet the
+              <a href="#legibility-requirements">
+                <span className="title">legibility requirements</span>
+              </a>
+              , such as minimum type size.
+            </p>
+            <table className="table">
+              <tbody>
+                <tr>
+                  <td>Food name and description</td>
+                  <td>
+                    {foodName.foodName || "no name provided"}
+                    <br />
+                    {foodName.productDescription || "no description provided"}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Business details</td>
+                  <td>
+                    <b>{businessDetails.businessName || "no name provided"}</b>
+                    <br />
+                    {businessDetails.addressLine1 || "no address provided"}
+                    {businessAddressLine2 ? <br /> : null}
+                    {businessAddressLine2 || null}
+                    {businessSuburb ? (
+                      <>
+                        <br />
+                        <span className="suburb">{businessSuburb}</span>
+                      </>
+                    ) : null}
+                    {(businessState || businessPostcode) && (
+                      <>
+                        <br />
+                        {[businessState, businessPostcode]
+                          .filter(Boolean)
+                          .join(", ")}
+                      </>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Ingredients</td>
+                  <td>{ingredientList || "no data provided"}</td>
+                </tr>
+                <tr>
+                  <td>Weight</td>
+                  <td>
+                    For information on how to comply with weights and measures
+                    laws visit the
                     <a
-                      href="https://www.foodstandards.gov.au/industry/npc/Pages/Nutrition-Panel-Calculator-introduction.aspx"
+                      href="https://www.measurement.gov.au"
                       rel="noopener"
                       target="_blank"
                     >
-                      nutrition panel calculator
+                      National Measurement Institute website{" "}
                     </a>
-                    can help you prepare your nutrition information panel.
-                  </p>
-                  <img
-                    src="https://www.qld.gov.au/?a=148984"
-                    alt="example food label"
-                    className="img-fluid src"
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>Statements and declarations</td>
-                <td>
-                  <p>
-                    <b>{containsList.length ? "Contains:" : ""}</b>
-                    {containsList.length ? ` ${containsList.join(", ")}.` : ""}
-                    <br />
-                  </p>
-                  <p className="wrap">
-                    {statementMessages.length ? statementMessages.join(" ") : ""}
-                  </p>
-                  <p>
-                    {containsList.length
-                      ? "Note: Warning statements must be a minimum size of type of 3 mm. In the case of small packages, a minimum size of type of 1.5 mm is required."
-                      : "No data provided"}
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>Date marks</td>
-                <td>
-                  <strong>{dateMarkLabel}</strong>
-                  {dateMarkValue ? `: ${dateMarkValue}` : ""}
-                </td>
-              </tr>
-              <tr>
-                <td>Lot identification</td>
-                <td>{lotIdentification || "no data provided"}</td>
-              </tr>
-              <tr>
-                <td>Storage conditions and directions for use</td>
-                <td>
-                  <b>{hasStorageConditions ? "Storage conditions:" : ""}</b>
-                  {hasStorageConditions ? ` ${storageConditionsText}` : ""}
-                  <br />
-                  <b>{hasDirections ? "Directions for use:" : ""}</b>
-                  <p>{hasDirections ? directionsText : ""}</p>
-                  {!hasStorageConditions && !hasDirections
-                    ? "no data provided"
-                    : ""}
-                </td>
-              </tr>
-              <tr>
-                <td>Claims</td>
-                <td>
-                  <p>
-                    Making voluntary claims about your food is very complex and
-                    you are recommended to seek professional advice. <br />
-                    Please note, that making a claim on your food has other
-                    requirements not addressed in Label Buster such as
-                    additional sections in your nutritional information panel
-                    and requirements under Australian Consumer Law.
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>Country of origin</td>
-                <td>
-                  Information on how to calculate and display mandatory
-                  <a
-                    href="https://www.accc.gov.au/business/advertising-promoting-your-business/country-of-origin-claims/country-of-origin-food-labelling"
-                    rel="noopener"
-                    target="_blank"
-                  >
-                    country of origin
-                  </a>
-                  can be found on the Australian Competition and Consumer
-                  Commission website.
-                </td>
-              </tr>
-              <tr>
-                <td>Health star rating</td>
-                <td>
-                  Information on how to calculate and display a voluntary
-                  <a
-                    href="https://www.healthstarrating.gov.au/internet/healthstarrating/publishing.nsf/Content/guide-for-industry-document"
-                    rel="noopener"
-                    target="_blank"
-                  >
-                    health star rating
-                  </a>
-                  can be found at the health star rating system website.
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div className="example-food-label">
-          <h2>Example of food label</h2>
-          <p>
-            Below is an example of what your label could look like, using the
-            information you provided in Label Buster. Label components can be
-            placed anywhere on the label you create. They do not need to be in
-            the specific layout shown here. They may be displayed in any order
-            or arrangement
-          </p>
-          <div className="example-label-wrapper">
-            <div className="example-label">
-              <div className="eg-col">
-                <h3>{foodName.foodName || "no name provided"}</h3>
-                <p>{foodName.productDescription}</p>
-                {hasStorageConditions && (
-                  <>
-                    <strong>Storage conditions:</strong>{" "}
-                    {storageConditionsText}
-                  </>
-                )}
-                {hasStorageConditions && hasDirections && <br />}
-                {hasDirections && (
-                  <>
-                    <strong>Directions for use:</strong> {directionsText}
-                  </>
-                )}
-                <div>
-                  {hasDateMark && (
+                    .
+                  </td>
+                </tr>
+                <tr>
+                  <td>Nutrition information panel</td>
+                  <td>
                     <p>
-                      <strong>{dateMarkLabel}</strong>
-                      {dateMarkValue ? `: ${dateMarkValue}` : ""}
+                      A Nutrition Information Panel must be added to your food
+                      label. The Food Standards Australia New Zealand
+                      <a
+                        href="https://www.foodstandards.gov.au/industry/npc/Pages/Nutrition-Panel-Calculator-introduction.aspx"
+                        rel="noopener"
+                        target="_blank"
+                      >
+                        nutrition panel calculator
+                      </a>
+                      can help you prepare your nutrition information panel.
                     </p>
-                  )}
-                  {lotIdentification && (
-                    <p>
-                      <strong>Lot identification:</strong> {lotIdentification}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="eg-col">
-                <div>
-                  <p>
-                    <strong>Ingredients:</strong>{" "}
-                    {ingredientList || "no data provided"}
-                  </p>
-                  <div>
+                    <img
+                      src="https://www.qld.gov.au/?a=148984"
+                      alt="example food label"
+                      className="img-fluid src"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Statements and declarations</td>
+                  <td>
                     <p>
                       <b>{containsList.length ? "Contains:" : ""}</b>
-                      {containsList.length ? ` ${containsList.join(", ")}.` : ""}
+                      {containsList.length
+                        ? ` ${containsList.join(", ")}.`
+                        : ""}
                       <br />
                     </p>
                     <p className="wrap">
@@ -571,132 +451,272 @@ export const YourLabel = ({ onBack }: YourLabelProps) => {
                         ? statementMessages.join(" ")
                         : ""}
                     </p>
-                  </div>
-                  <br />
-                </div>
-                <div className="address-block">
-                  <b>{businessDetails.businessName || "no name provided"}</b>
-                  <br />
-                  {businessDetails.addressLine1 || "no address provided"}
-                  {businessAddressLine2 ? <br /> : null}
-                  {businessAddressLine2 || null}
-                  {businessSuburb ? (
-                    <>
+                    <p>
+                      {containsList.length
+                        ? "Note: Warning statements must be a minimum size of type of 3 mm. In the case of small packages, a minimum size of type of 1.5 mm is required."
+                        : "No data provided"}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Date marks</td>
+                  <td>
+                    <strong>{dateMarkLabel}</strong>
+                    {dateMarkValue ? `: ${dateMarkValue}` : ""}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Lot identification</td>
+                  <td>{lotIdentification || "no data provided"}</td>
+                </tr>
+                <tr>
+                  <td>Storage conditions and directions for use</td>
+                  <td>
+                    <b>{hasStorageConditions ? "Storage conditions:" : ""}</b>
+                    {hasStorageConditions ? ` ${storageConditionsText}` : ""}
+                    <br />
+                    <b>{hasDirections ? "Directions for use:" : ""}</b>
+                    <p>{hasDirections ? directionsText : ""}</p>
+                    {!hasStorageConditions && !hasDirections
+                      ? "no data provided"
+                      : ""}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Claims</td>
+                  <td>
+                    <p>
+                      Making voluntary claims about your food is very complex
+                      and you are recommended to seek professional advice.{" "}
                       <br />
-                      <span className="suburb">{businessSuburb}</span>
-                    </>
-                  ) : null}
-                  {(businessState || businessPostcode) && (
+                      Please note, that making a claim on your food has other
+                      requirements not addressed in Label Buster such as
+                      additional sections in your nutritional information panel
+                      and requirements under Australian Consumer Law.
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Country of origin</td>
+                  <td>
+                    Information on how to calculate and display mandatory
+                    <a
+                      href="https://www.accc.gov.au/business/advertising-promoting-your-business/country-of-origin-claims/country-of-origin-food-labelling"
+                      rel="noopener"
+                      target="_blank"
+                    >
+                      country of origin
+                    </a>
+                    can be found on the Australian Competition and Consumer
+                    Commission website.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Health star rating</td>
+                  <td>
+                    Information on how to calculate and display a voluntary
+                    <a
+                      href="https://www.healthstarrating.gov.au/internet/healthstarrating/publishing.nsf/Content/guide-for-industry-document"
+                      rel="noopener"
+                      target="_blank"
+                    >
+                      health star rating
+                    </a>
+                    can be found at the health star rating system website.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="example-food-label">
+            <h2>Example of food label</h2>
+            <p>
+              Below is an example of what your label could look like, using the
+              information you provided in Label Buster. Label components can be
+              placed anywhere on the label you create. They do not need to be in
+              the specific layout shown here. They may be displayed in any order
+              or arrangement
+            </p>
+            <div className="example-label-wrapper">
+              <div className="example-label">
+                <div className="eg-col">
+                  <h3>{foodName.foodName || "no name provided"}</h3>
+                  <p>{foodName.productDescription}</p>
+                  {hasStorageConditions && (
                     <>
-                      <br />
-                      {[businessState, businessPostcode].filter(Boolean).join(", ")}
+                      <strong>Storage conditions:</strong>{" "}
+                      {storageConditionsText}
                     </>
                   )}
+                  {hasStorageConditions && hasDirections && <br />}
+                  {hasDirections && (
+                    <>
+                      <strong>Directions for use:</strong> {directionsText}
+                    </>
+                  )}
+                  <div>
+                    {hasDateMark && (
+                      <p>
+                        <strong>{dateMarkLabel}</strong>
+                        {dateMarkValue ? `: ${dateMarkValue}` : ""}
+                      </p>
+                    )}
+                    {lotIdentification && (
+                      <p>
+                        <strong>Lot identification:</strong> {lotIdentification}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="eg-col">
-                <img
-                  src="https://www.qld.gov.au/?a=148984"
-                  alt="example food label"
-                  className="src"
-                />
+                <div className="eg-col">
+                  <div>
+                    <p>
+                      <strong>Ingredients:</strong>{" "}
+                      {ingredientList || "no data provided"}
+                    </p>
+                    <div>
+                      <p>
+                        <b>{containsList.length ? "Contains:" : ""}</b>
+                        {containsList.length
+                          ? ` ${containsList.join(", ")}.`
+                          : ""}
+                        <br />
+                      </p>
+                      <p className="wrap">
+                        {statementMessages.length
+                          ? statementMessages.join(" ")
+                          : ""}
+                      </p>
+                    </div>
+                    <br />
+                  </div>
+                  <div className="address-block">
+                    <b>{businessDetails.businessName || "no name provided"}</b>
+                    <br />
+                    {businessDetails.addressLine1 || "no address provided"}
+                    {businessAddressLine2 ? <br /> : null}
+                    {businessAddressLine2 || null}
+                    {businessSuburb ? (
+                      <>
+                        <br />
+                        <span className="suburb">{businessSuburb}</span>
+                      </>
+                    ) : null}
+                    {(businessState || businessPostcode) && (
+                      <>
+                        <br />
+                        {[businessState, businessPostcode]
+                          .filter(Boolean)
+                          .join(", ")}
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className="eg-col">
+                  <img
+                    src="https://www.qld.gov.au/?a=148984"
+                    alt="example food label"
+                    className="src"
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="legibility-requirements">
-          <h2>Legibility requirements</h2>
-          <p>
-            All required words, statements, expressions or designs provided on a
-            food label must be in English, be legible, and be prominent so as to
-            contrast distinctly with the background of the label.
-          </p>
-          <p>
-            Information in other languages is permitted, provided it does not
-            negate or contradict the English information.
-          </p>
-          <p>
-            No specific print type or size is defined for general labelling
-            requirements, however:
-          </p>
-          <ul>
-            <li>
-              warning statements must be in a type size of at least 3mm (or
-              1.5mm on small packages)
-            </li>
-            <li>
-              a print size is prescribed in the Food Standards Code for some
-              foods where a required statement must be shown (e.g. infant
-              formula).
-            </li>
-          </ul>
-        </div>
+          <div className="legibility-requirements">
+            <h2>Legibility requirements</h2>
+            <p>
+              All required words, statements, expressions or designs provided on
+              a food label must be in English, be legible, and be prominent so
+              as to contrast distinctly with the background of the label.
+            </p>
+            <p>
+              Information in other languages is permitted, provided it does not
+              negate or contradict the English information.
+            </p>
+            <p>
+              No specific print type or size is defined for general labelling
+              requirements, however:
+            </p>
+            <ul>
+              <li>
+                warning statements must be in a type size of at least 3mm (or
+                1.5mm on small packages)
+              </li>
+              <li>
+                a print size is prescribed in the Food Standards Code for some
+                foods where a required statement must be shown (e.g. infant
+                formula).
+              </li>
+            </ul>
+          </div>
 
-        <div className="exmptions">
-          <h2>Exemptions</h2>
-          <p>
-            All of the food label information needs to be included on your food
-            label, except for:
-          </p>
-          <ul>
-            <li>
-              <a
-                href="https://www.qld.gov.au/health/staying-healthy/food-pantry/food-labelling/food-labelling-exemptions-and-extra-requirements"
-                target="_blank"
-                rel="noopener"
-              >
-                Food sold in small packages
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.qld.gov.au/health/staying-healthy/food-pantry/food-labelling/food-labelling-exemptions-and-extra-requirements"
-                target="_blank"
-                rel="noopener"
-              >
-                Food with one ingredient
-              </a>
-            </li>
-          </ul>
-        </div>
+          <div className="exmptions">
+            <h2>Exemptions</h2>
+            <p>
+              All of the food label information needs to be included on your
+              food label, except for:
+            </p>
+            <ul>
+              <li>
+                <a
+                  href="https://www.qld.gov.au/health/staying-healthy/food-pantry/food-labelling/food-labelling-exemptions-and-extra-requirements"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Food sold in small packages
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.qld.gov.au/health/staying-healthy/food-pantry/food-labelling/food-labelling-exemptions-and-extra-requirements"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Food with one ingredient
+                </a>
+              </li>
+            </ul>
+          </div>
 
-        <div className="food-with-extra-req">
-          <h2>Food with extra requirements</h2>
-          <p>There are extra requirements for:</p>
-          <ul>
-            <li>
-              <a
-                href="https://www.qld.gov.au/health/staying-healthy/food-pantry/food-labelling/food-labelling-exemptions-and-extra-requirements"
-                target="_blank"
-                rel="noopener"
-              >
-                Food sold from a vending machine
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.qld.gov.au/health/staying-healthy/food-pantry/food-labelling/food-labelling-exemptions-and-extra-requirements"
-                target="_blank"
-                rel="noopener"
-              >
-                Food sold in a hamper
-              </a>
-            </li>
-          </ul>
-        </div>
+          <div className="food-with-extra-req">
+            <h2>Food with extra requirements</h2>
+            <p>There are extra requirements for:</p>
+            <ul>
+              <li>
+                <a
+                  href="https://www.qld.gov.au/health/staying-healthy/food-pantry/food-labelling/food-labelling-exemptions-and-extra-requirements"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Food sold from a vending machine
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.qld.gov.au/health/staying-healthy/food-pantry/food-labelling/food-labelling-exemptions-and-extra-requirements"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Food sold in a hamper
+                </a>
+              </li>
+            </ul>
+          </div>
 
-        <div className="email-label-info-summary">
-          <h2>Email your label information summary</h2>
-          <p>
-            <b>
-              If you prefer, we can send you your label information summary by
-              providing an email address below. Depending on your email
-              provider, personal information may be transferred outside of
-              Australia. By providing your email address, you voluntarily agree
-              to this transfer.
-            </b>
-          </p>
+          <div className="email-label-info-summary">
+            <h2>Email your label information summary</h2>
+            <p>
+              <b>
+                If you prefer, we can send you your label information summary by
+                providing an email address below. Depending on your email
+                provider, personal information may be transferred outside of
+                Australia. By providing your email address, you voluntarily
+                agree to this transfer.
+              </b>
+            </p>
+          </div>
         </div>
       </div>
 
@@ -712,6 +732,7 @@ export const YourLabel = ({ onBack }: YourLabelProps) => {
           className="btn btn-tertiary"
           target="_blank"
           data-progress-label="Loading"
+          onClick={handleCancelClick}
         >
           <span className="btn-label-default">Cancel</span>
         </a>

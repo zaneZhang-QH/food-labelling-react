@@ -5,12 +5,21 @@ import { Alert } from "../components/GlobalWarnings";
 type TermsOfUseProps = {
   onBack?: () => void;
   onAccept?: () => void;
+  onCancel?: () => void;
 };
 
-export const TermsOfUse = ({ onBack, onAccept }: TermsOfUseProps) => {
+export const TermsOfUse = ({
+  onBack,
+  onAccept,
+  onCancel,
+}: TermsOfUseProps) => {
   const [accepted, setAccepted] = useState(false);
   const [touched, setTouched] = useState(false);
-  const { handleBackClick } = createNavHandlers(undefined, onBack);
+  const { handleBackClick, handleCancelClick } = createNavHandlers(
+    undefined,
+    onBack,
+    onCancel
+  );
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAccepted(event.target.checked);
@@ -188,6 +197,7 @@ export const TermsOfUse = ({ onBack, onAccept }: TermsOfUseProps) => {
           className="btn btn-tertiary"
           target="_blank"
           data-progress-label="Loading"
+          onClick={handleCancelClick}
         >
           <span className="btn-label-default">Cancel</span>
         </a>

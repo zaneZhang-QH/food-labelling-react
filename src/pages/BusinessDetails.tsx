@@ -7,9 +7,14 @@ import { useFormData } from "../context/FormDataContext";
 type BusinessDetailsProps = {
   onBack?: () => void;
   onNext?: () => void;
+  onCancel?: () => void;
 };
 
-export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
+export const BusinessDetails = ({
+  onBack,
+  onNext,
+  onCancel,
+}: BusinessDetailsProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
   const { formData, updateBusinessDetails } = useFormData();
@@ -32,7 +37,11 @@ export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
     stateValue.trim() &&
     postcode.trim();
 
-  const { handleBackClick } = createNavHandlers(undefined, onBack);
+  const { handleBackClick, handleCancelClick } = createNavHandlers(
+    undefined,
+    onBack,
+    onCancel
+  );
 
   const handleGuideLink = (
     sectionId: string,
@@ -291,6 +300,7 @@ export const BusinessDetails = ({ onBack, onNext }: BusinessDetailsProps) => {
             className="btn btn-tertiary"
             target="_blank"
             data-progress-label="Loading"
+            onClick={handleCancelClick}
           >
             <span className="btn-label-default">Cancel</span>
           </a>

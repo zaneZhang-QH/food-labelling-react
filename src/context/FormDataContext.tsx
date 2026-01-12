@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 export type FoodNameData = {
   foodName: string;
@@ -127,6 +127,20 @@ export type StatementsData = {
   sodiumPotassiumContent: string;
 };
 
+export type StepKey =
+  | "terms"
+  | "about"
+  | "limitations"
+  | "foodName"
+  | "businessDetails"
+  | "dateMarks"
+  | "storageUse"
+  | "ingredients"
+  | "statements"
+  | "yourLabel";
+
+export type ProgressData = Record<StepKey, boolean>;
+
 export type FormData = {
   foodName: FoodNameData;
   businessDetails: BusinessDetailsData;
@@ -138,15 +152,32 @@ export type FormData = {
 
 type FormDataContextValue = {
   formData: FormData;
+  progress: ProgressData;
   updateFoodName: (updates: Partial<FoodNameData>) => void;
   updateBusinessDetails: (updates: Partial<BusinessDetailsData>) => void;
   updateIngredients: (updates: Partial<IngredientsData>) => void;
   updateDateMarks: (updates: Partial<DateMarksData>) => void;
   updateStorageAndUse: (updates: Partial<StorageAndUseData>) => void;
   updateStatements: (updates: Partial<StatementsData>) => void;
+  completeStep: (step: StepKey) => void;
+  resetProgress: () => void;
 };
 
 const FormDataContext = createContext<FormDataContextValue | null>(null);
+const PROGRESS_STORAGE_KEY = "label-buster-progress";
+
+const getDefaultProgress = (): ProgressData => ({
+  terms: false,
+  about: false,
+  limitations: false,
+  foodName: false,
+  businessDetails: false,
+  dateMarks: false,
+  storageUse: false,
+  ingredients: false,
+  statements: false,
+  yourLabel: false,
+});
 
 const initialFormData: FormData = {
   foodName: {
@@ -272,6 +303,23 @@ export const FormDataProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [progress, setProgress] = useState<ProgressData>(() => {
+    const fallback = getDefaultProgress();
+    try {
+      const stored = localStorage.getItem(PROGRESS_STORAGE_KEY);
+      if (!stored) {
+        return fallback;
+      }
+      const parsed = JSON.parse(stored) as Partial<ProgressData>;
+      return { ...fallback, ...parsed };
+    } catch {
+      return fallback;
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progress));
+  }, [progress]);
 
   const updateFoodName = (updates: Partial<FoodNameData>) => {
     setFormData((prev) => ({
@@ -315,14 +363,30 @@ export const FormDataProvider: React.FC<{ children: React.ReactNode }> = ({
     }));
   };
 
+  const completeStep = (step: StepKey) => {
+    setProgress((prev) => {
+      if (prev[step]) {
+        return prev;
+      }
+      return { ...prev, [step]: true };
+    });
+  };
+
+  const resetProgress = () => {
+    setProgress(getDefaultProgress());
+  };
+
   const value: FormDataContextValue = {
     formData,
+    progress,
     updateFoodName,
     updateBusinessDetails,
     updateIngredients,
     updateDateMarks,
     updateStorageAndUse,
     updateStatements,
+    completeStep,
+    resetProgress,
   };
 
   return (
