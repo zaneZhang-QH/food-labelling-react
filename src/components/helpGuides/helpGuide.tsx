@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./helpGuide.css";
 import { faBook,faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { PrintButton } from "../PrintButton";
 
 type HelpGuideProps = {
   content: React.ReactNode;
@@ -55,6 +56,7 @@ export const HelpGuide: React.FC<HelpGuideProps> = ({
                 Hide <FontAwesomeIcon icon={faArrowRight} />
               </button>
             </div>
+            <PrintButton/>
             {content}
           </div>
       )}

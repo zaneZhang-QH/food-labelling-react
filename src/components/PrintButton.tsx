@@ -64,11 +64,14 @@ export const PrintButton = ({ contentSelector }: PrintButtonProps = {}) => {
   }, [contentSelector, isPrinting]);
 
   return (
-    <button
-      onClick={handlePrint}
-      disabled={isPrinting}
-      className="controls btn btn-print"
-      type="button"
+    <a
+      role="button"
+      onClick={(event) => {
+        event.preventDefault();
+
+        handlePrint();
+      }}
+      className="controls btn-print"
       aria-label="Print this help guide"
     >
       {isPrinting ? (
@@ -82,6 +85,6 @@ export const PrintButton = ({ contentSelector }: PrintButtonProps = {}) => {
           <span>Print</span>
         </>
       )}
-    </button>
+    </a>
   );
 };

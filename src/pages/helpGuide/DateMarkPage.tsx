@@ -351,7 +351,6 @@ export const DateMarkPage = ({ activeSectionId = null }: DateMarkPageProps) => {
       />
       <h2 style={{ marginTop: "32px" }}>Food with extra requirements</h2>
       <Accordion items={extraRequirements} activeItemId={activeSectionId} />
-      \
     </div>
   );
 };

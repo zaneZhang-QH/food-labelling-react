@@ -1,9 +1,8 @@
-import { faPrint } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Accordion,
   type AccordionItemConfig,
 } from "../../components/Accordion";
+import { PrintButton } from "../../components/PrintButton";
 
 const generalRequirements: AccordionItemConfig[] = [
   {
@@ -143,10 +142,11 @@ export const BusinessDetailsPage = ({
 }: BusinessDetailsPageProps) => {
   return (
     <div className="side-padding vertical-padding">
-      <a className="controls btn-print" role="button">
+      {/* <a className="controls btn-print" role="button">
         <FontAwesomeIcon icon={faPrint} />
         Print
-      </a>
+      </a> */}
+      <PrintButton/>
 
       <h2>General requirements</h2>
       <Accordion
