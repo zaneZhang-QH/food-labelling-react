@@ -33,12 +33,10 @@ export const Home = ({ onStart }: HomeProps) => {
           The
           <a
             href="https://www.foodstandards.gov.au/code/Pages/default.aspx"
-            rel="nofollow"
+            rel="noopener"
             target="_blank"
           >
-            <span className="title">
               <i> Australia New Zealand Food Standards Code</i>{" "}
-            </span>
           </a>
           (the Food Standards Code) sets the standards for food labelling in
           Australia. Significant penalties apply in Queensland under the{" "}
@@ -72,9 +70,9 @@ export const Home = ({ onStart }: HomeProps) => {
             <>
               <p>To use Label Buster, you will need:</p>
               <div className="flex-row">
-                <FontAwesomeIcon icon={faClock} />
                 <div>
                   <p>
+                <FontAwesomeIcon icon={faClock} /> 
                     Up to 1 hour - if you are familiar with food labelling
                     requirements.
                   </p>
