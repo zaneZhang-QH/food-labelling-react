@@ -38,7 +38,7 @@ export const Home = ({ onStart }: HomeProps) => {
           >
               <i> Australia New Zealand Food Standards Code</i>{" "}
           </a>
-          (the Food Standards Code) sets the standards for food labelling in
+          {" "}(the Food Standards Code) sets the standards for food labelling in
           Australia. Significant penalties apply in Queensland under the{" "}
           <i>Food Act 2006</i> (the Act), for non-compliance with the Food
           Standards Code.

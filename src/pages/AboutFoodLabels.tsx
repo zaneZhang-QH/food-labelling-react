@@ -92,7 +92,7 @@ export const AboutFoodLabels = ({
             litres (L), etc.
           </p>
           <p>
-            Visit the
+            Visit the{" "}
             <a
               href="https://www.industry.gov.au/regulations-and-standards/buying-and-selling-goods-and-services-by-weights-and-other-measures"
               target="_blank"
@@ -100,7 +100,7 @@ export const AboutFoodLabels = ({
             >
               NMI website
             </a>
-            for more information on how to comply with the laws around weights
+            {" "}for more information on how to comply with the laws around weights
             and other measures.
           </p>
           <figure>

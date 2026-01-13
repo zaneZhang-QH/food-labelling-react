@@ -113,7 +113,7 @@ export const TermsOfUse = ({
           No personal information is stored when you use Label Buster. For
           information about how Queensland Government protects your personal
           information, or to learn about your right to access your personal
-          information, please see our website at
+          information, please see our website at{" "}
           <a
             href="https://www.qld.gov.au/legal/privacy"
             target="_blank"
@@ -121,13 +121,14 @@ export const TermsOfUse = ({
           >
             www.qld.gov.au/legal/privacy
           </a>
+          .
         </p>
 
         <p>Please note that our terms of use may change over time.</p>
 
         <p>
           Label Buster is current as of December 2020 and shows information up
-          to and including amendment number 196 of the
+          to and including amendment number 196 of the{" "}
           <a
             href="https://www.foodstandards.gov.au/code/Pages/default.aspx"
             target="_blank"
@@ -135,7 +136,7 @@ export const TermsOfUse = ({
           >
             Food Standards Code
           </a>
-          . We recommend that you refer to the most current version of the
+          . We recommend that you refer to the most current version of the{" "}
           <a
             href="https://www.foodstandards.gov.au/code/Pages/default.aspx"
             target="_blank"
@@ -143,7 +144,7 @@ export const TermsOfUse = ({
           >
             Food Standards Code
           </a>
-          for full details and note any changes.
+          {" "}for full details and note any changes.
         </p>
 
         <p>

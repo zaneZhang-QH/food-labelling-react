@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { HelpGuide } from "../components/helpGuides/HelpGuide";
 import { LimitationPage } from "./helpGuide/InitialPage";
 import { SeekProAdvice } from "../components/GlobalAlert";
@@ -16,11 +16,7 @@ const options: Option[] = [
   { label: "No", value: "2" },
 ];
 
-export const Limitations = ({
-  onBack,
-  onNext,
-  onCancel,
-}: LimitationsProps) => {
+export const Limitations = ({ onBack, onNext, onCancel }: LimitationsProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
   const [serviceChoice, setServiceChoice] = useState<string | null>(null);
@@ -48,16 +44,7 @@ export const Limitations = ({
   const showGeneticBlock = showNovelBlock && serviceChoiceNovel === "2";
   const showIrradiatedBlock = showGeneticBlock && serviceChoiceGenetic === "2";
   const showClaimBlock = showIrradiatedBlock && serviceChoiceIrradiated === "2";
-
   const allowNext = serviceChoiceClaim === "2";
-
-  const handlePrint = useCallback(
-    (event: React.MouseEvent<HTMLAnchorElement>) => {
-      event.preventDefault();
-      window.print();
-    },
-    []
-  );
 
   const handleLinkClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -164,8 +151,8 @@ export const Limitations = ({
       {serviceChoice === "2" && (
         <div className="special-food">
           <div>
-            <p style={{ display: "flex", fontWeight: "bold" }}>
-              Is your food a{" "}
+            <div style={{ display: "flex", fontWeight: "bold", gap: "4px" }}>
+              Is your food a
               <a
                 className="link"
                 href="#special-food"
@@ -181,7 +168,7 @@ export const Limitations = ({
               >
                 *
               </abbr>
-            </p>
+            </div>
             <p>
               <small className="hint">Special purpose foods include:</small>
             </p>
@@ -220,7 +207,7 @@ export const Limitations = ({
       {showNovelBlock && (
         <div className="novel-food">
           <div>
-            <div style={{ display: "flex", fontWeight: "bold" }}>
+            <div style={{ display: "flex", fontWeight: "bold", gap: "4px" }}>
               Is your food a
               <a
                 className="link"
@@ -260,7 +247,9 @@ export const Limitations = ({
 
       {showGeneticBlock && (
         <div className="genetically-modified-food">
-          <p style={{ fontWeight: "bold" }}>
+          <div
+            style={{ display: "flex", fontWeight: "bold", flexWrap: "wrap",}}
+          >
             Does your food contain ingredients that are produced from gene
             technology, or is your food a
             <a
@@ -268,17 +257,16 @@ export const Limitations = ({
               href="#modified-food"
               onClick={(e) => handleLinkClick(e, "modified-food")}
             >
-              genetically modified food
+              genetically modified food?
             </a>
-            ?
             <abbr
               className="required"
               title="(required)"
               style={{ color: "red" }}
             >
               *
-            </abbr>{" "}
-          </p>
+            </abbr>
+          </div>
           <RadioGroup
             name="serviceChoiceGenetic"
             options={options}
@@ -332,7 +320,7 @@ export const Limitations = ({
       {showClaimBlock && (
         <div className="claim-food">
           <div>
-            <p style={{ fontWeight: "bold", display: "flex" }}>
+            <p style={{ fontWeight: "bold", display: "flex", gap:"4px" }}>
               Do you make a{" "}
               <a
                 className="link"

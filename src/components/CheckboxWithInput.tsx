@@ -56,7 +56,7 @@ export const CheckboxWithInput: React.FC<CheckboxWithInputProps> = ({
   };
 
   return (
-    <div className="mb-3">
+    <div className="mb-3 mt-3">
       <div className="form-check">
         <input
           type="checkbox"

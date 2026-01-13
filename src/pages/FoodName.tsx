@@ -161,7 +161,7 @@ export const FoodName = ({ onBack, onNext, onCancel }: FoodNameProps) => {
                     >
                       Fermented manufactured meat
                     </a>
-                    (For example: salami, chorizo, pepperoni)
+                    {" "}(For example: salami, chorizo, pepperoni)
                   </li>
                 </ul>
               </small>
@@ -213,7 +213,7 @@ export const FoodName = ({ onBack, onNext, onCancel }: FoodNameProps) => {
                     >
                       Help guide
                     </a>
-                    to find out what they are.
+                    {" "}to find out what they are.
                   </p>
                   <p>
                     For example: Ice cream must be made from milk to call it ice
