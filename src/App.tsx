@@ -39,6 +39,7 @@ type Page =
 const AppContent = () => {
   const [page, setPage] = useState<Page>("home");
   const [cancelOpen, setCancelOpen] = useState(false);
+  const [sessionKey, setSessionKey] = useState(0);
   const { completeStep, resetProgress, startSession } = useFormData();
 
   const handleCancel = () => {
@@ -49,6 +50,7 @@ const AppContent = () => {
     resetProgress();
     setPage("home");
     setCancelOpen(false);
+    setSessionKey((prev) => prev + 1);
   };
 
   const handleDismissCancel = () => {
@@ -65,7 +67,7 @@ const AppContent = () => {
       <aside className="app-sidenav">
         <LabelBusterSideNav page={page} onNavigate={setPage} />
       </aside>
-      <main className="app-content">
+      <main className="app-content" key={sessionKey}>
         <div className="page-print-button">
           <PagePrintButton />
         </div>

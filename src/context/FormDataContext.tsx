@@ -382,6 +382,8 @@ export const FormDataProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const resetProgress = () => {
     setProgress(getDefaultProgress());
+    setFormData(initialFormData);
+    localStorage.removeItem(PROGRESS_STORAGE_KEY);
   };
 
   const value: FormDataContextValue = {
