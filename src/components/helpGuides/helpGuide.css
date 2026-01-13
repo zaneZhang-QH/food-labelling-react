@@ -166,3 +166,22 @@
     bottom: -100vh;
   }
 }
+
+@media print {
+  body.print-help-guide .app-layout {
+    display: none !important;
+  }
+
+  body.print-help-guide #print-help-guide {
+    display: block !important;
+  }
+
+  body.print-help-guide #print-help-guide .help-guide-content {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    animation: none !important;
+  }
+}
