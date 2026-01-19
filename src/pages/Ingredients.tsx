@@ -70,8 +70,8 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
           </figure>
         </div>
 
-        <div className="">
-          <div className="">
+        <div>
+          <div>
             <div>
               <p className="fw-bold">
                 Do you mention an ingredient, category of ingredients or a part
@@ -122,11 +122,10 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                       </a>
                       should be calculated and shown.
                     </p>
-
                     <p>
                       For example: The ingredient list would show the
                       strawberries in strawberry jam as:
-                      <b>Strawberries (23%).</b>
+                      <b> Strawberries (23%).</b>
                     </p>
                   </>
                 }
@@ -134,7 +133,7 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
             )}
 
             {form.ingredientInName && (
-              <div>
+              <div className="mt-4">
                 <p className="fw-bold">
                   Do you use any
                   <a
@@ -192,6 +191,7 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                       For example: The ingredient list would show the dark
                       chocolate chips in a muffin as:
                       <b>
+                        {" "}
                         dark chocolate chips [sugar, cocoa mass, cocoa butter,
                         emulsifier (soy lecithin), natural vanilla flavour].
                       </b>
@@ -202,7 +202,7 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
             )}
 
             {form.ingredientMakeFood && (
-              <div>
+              <div className="mt-4">
                 <p className="fw-bold">
                   Do you sometimes replace an ingredient with an
                   <a
@@ -253,7 +253,7 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                     </p>
                     <p>
                       For example: The ingredient list would show:{" "}
-                      <b>dsultanas or raisins.</b>
+                      <b>sultanas or raisins.</b>
                     </p>
                   </>
                 }
@@ -261,7 +261,7 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
             )}
 
             {form.ingredientAlternative && (
-              <>
+              <div className="mt-4">
                 <p className="fw-bold">
                   Do you want to list an ingredient with a{" "}
                   <a
@@ -279,14 +279,17 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                 </p>
                 <p>
                   <small>
-                    <p>Generic names may be used to describe the ingredient.</p>
-                    <p>
+                    <span>
+                      Generic names may be used to describe the ingredient.{" "}
+                    </span>
+                    <span>
                       Cheese, cocoa butter, crystallised fruit, fruit, gum
                       bases, herbs, meat, milk protein, poultry meat, spices and
                       vegetables can be used as a generic name without any
                       conditions.
-                    </p>
-                    <p>
+                    </span>
+                    <span>
+                      {" "}
                       <a href="#bcr" onClick={handleGuideLink("bcr")}>
                         Cereals
                       </a>
@@ -337,11 +340,12 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                         sugar
                       </a>{" "}
                       have other requirements.
-                    </p>
-                    <p>
+                    </span>
+                    <span>
+                      {" "}
                       For example: Apple, pear and peach listed as “fruit” in a
                       fruit pie.
-                    </p>
+                    </span>
                   </small>
                 </p>
 
@@ -352,7 +356,7 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                   onChange={setField("ingredientGenericName")}
                   inline
                 />
-              </>
+              </div>
             )}
 
             {form.ingredientGenericName === "1" && (
@@ -369,21 +373,23 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                       </a>
                       are specified in the Food Standards Code.
                     </p>
-                    <p>
-                      For example: The ingredient list could show the
-                      ingredients apple, pear and peach as either:
+                    <div>
+                      <p>
+                        For example: The ingredient list could show the
+                        ingredients apple, pear and peach as either:
+                      </p>
                       <ul>
                         <li>Fruit, or</li>
                         <li>Fruit (apple, pear, peach)</li>
                       </ul>
-                    </p>
+                    </div>
                   </>
                 }
               />
             )}
 
             {form.ingredientGenericName && (
-              <>
+              <div className="mt-4">
                 <p className="fw-bold">
                   Does your food contain any{" "}
                   <a
@@ -413,7 +419,7 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                   onChange={setField("foodAdditives")}
                   inline
                 />
-              </>
+              </div>
             )}
 
             {form.foodAdditives === "1" && (
@@ -437,21 +443,23 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                       in the ingredient list. This includes a list of class
                       names and codes to use for specific food additives.{" "}
                     </p>
-                    <p>
-                      For example: The ingredient list would show the yellow
-                      food colouring tartrazine as either:
+                    <div>
+                      <p>
+                        For example: The ingredient list would show the yellow
+                        food colouring tartrazine as either:
+                      </p>
                       <ul>
                         <li>Colour (tartrazine), or</li>
                         <li>Colour (102)</li>
                       </ul>
-                    </p>
+                    </div>
                   </>
                 }
               />
             )}
 
             {form.foodAdditives && (
-              <>
+              <div className="mt-4">
                 <p className="fw-bold">
                   Does your food contain any{" "}
                   <a
@@ -467,7 +475,7 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                     *
                   </abbr>
                 </p>
-                <small>
+                <div className="small mb-3">
                   For example:
                   <ul>
                     <li>
@@ -482,7 +490,7 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                       Added water that forms part of broth, brine or syrup.
                     </li>
                   </ul>
-                </small>
+                </div>
 
                 <RadioGroup
                   name="exemptIngredients"
@@ -491,7 +499,7 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                   onChange={setField("exemptIngredients")}
                   inline
                 />
-              </>
+              </div>
             )}
 
             {form.exemptIngredients === "1" && (
@@ -512,14 +520,14 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
             )}
 
             {form.exemptIngredients && (
-              <>
+              <div className="mt-4">
                 <p className="d-flex align-items-center gap-1 fw-bold">
                   Ingredients
                   <abbr className="required text-danger" title="(required)">
                     *
                   </abbr>
                 </p>
-                <small>
+                <small className="small mb-3">
                   To change the order of your ingredients:
                   <ul>
                     <li>Drag and drop your ingredient</li>
@@ -530,12 +538,12 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                   headers={["Ingredients"]}
                   rows={[]}
                   editableRows={ingredientRows}
-                  onRowsChange={(rows) => updateIngredients({ ingredientRows: rows })}
+                  onRowsChange={(rows) =>
+                    updateIngredients({ ingredientRows: rows })
+                  }
                   allowReorder
                   addRowLabel={
-                    <div
-                      className="d-inline-flex align-items-center gap-1"
-                    >
+                    <div className="d-inline-flex align-items-center gap-1">
                       <FontAwesomeIcon icon={faPlus} />
                       <span>
                         <b>Add</b>
@@ -543,9 +551,7 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                     </div>
                   }
                   deleteRowLabel={
-                    <div
-                      className="d-inline-flex align-items-center gap-1"
-                    >
+                    <div className="d-inline-flex align-items-center gap-1">
                       <FontAwesomeIcon icon={faXmark} />
                       <span>
                         <b>Delete</b>
@@ -563,7 +569,7 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
                     </p>
                   }
                 />
-              </>
+              </div>
             )}
           </div>
         </div>
@@ -575,7 +581,9 @@ export const Ingredients = ({ onBack, onNext, onCancel }: IngredientsProps) => {
         </a>
 
         <a
-          className={`btn btn-primary${nextDisabled ? " disabled pe-none" : ""}`}
+          className={`btn btn-primary${
+            nextDisabled ? " disabled pe-none" : ""
+          }`}
           role="button"
           onClick={(event) => {
             if (nextDisabled) {
