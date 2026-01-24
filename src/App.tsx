@@ -68,7 +68,10 @@ const AppContent = () => {
         <aside className="app-sidenav col-12 col-lg-3 col-xl-2">
           <LabelBusterSideNav page={page} onNavigate={setPage} />
         </aside>
-        <main className="app-content col-12 col-lg-9 col-xl-10" key={sessionKey}>
+        <main
+          className="app-content col-12 col-lg-9 col-xl-10"
+          key={sessionKey}
+        >
           <div className="page-print-button">
             <PagePrintButton />
           </div>
@@ -87,70 +90,90 @@ const AppContent = () => {
               }}
             />
           </div>
-          <div className={`page-section ${page === "terms" ? "is-active" : ""}`}>
+          <div
+            className={`page-section ${page === "terms" ? "is-active" : ""}`}
+          >
             <TermsOfUse
               onBack={() => setPage("home")}
               onAccept={goNext("terms", "about")}
               onCancel={handleCancel}
             />
           </div>
-          <div className={`page-section ${page === "about" ? "is-active" : ""}`}>
+          <div
+            className={`page-section ${page === "about" ? "is-active" : ""}`}
+          >
             <AboutFoodLabels
               onBack={() => setPage("terms")}
               onNext={goNext("about", "limitations")}
               onCancel={handleCancel}
             />
           </div>
-          <div className={`page-section ${page === "limitations" ? "is-active" : ""}`}>
+          <div
+            className={`page-section ${page === "limitations" ? "is-active" : ""}`}
+          >
             <Limitations
               onBack={() => setPage("about")}
               onNext={goNext("limitations", "foodName")}
               onCancel={handleCancel}
             />
           </div>
-          <div className={`page-section ${page === "foodName" ? "is-active" : ""}`}>
+          <div
+            className={`page-section ${page === "foodName" ? "is-active" : ""}`}
+          >
             <FoodName
               onBack={() => setPage("limitations")}
               onNext={goNext("foodName", "businessDetails")}
               onCancel={handleCancel}
             />
           </div>
-          <div className={`page-section ${page === "businessDetails" ? "is-active" : ""}`}>
+          <div
+            className={`page-section ${page === "businessDetails" ? "is-active" : ""}`}
+          >
             <BusinessDetails
               onBack={() => setPage("foodName")}
               onNext={goNext("businessDetails", "dateMarks")}
               onCancel={handleCancel}
             />
           </div>
-          <div className={`page-section ${page === "dateMarks" ? "is-active" : ""}`}>
+          <div
+            className={`page-section ${page === "dateMarks" ? "is-active" : ""}`}
+          >
             <DateMarks
               onBack={() => setPage("businessDetails")}
               onNext={goNext("dateMarks", "storageUse")}
               onCancel={handleCancel}
             />
           </div>
-          <div className={`page-section ${page === "storageUse" ? "is-active" : ""}`}>
+          <div
+            className={`page-section ${page === "storageUse" ? "is-active" : ""}`}
+          >
             <StorageAndUse
               onBack={() => setPage("dateMarks")}
               onNext={goNext("storageUse", "ingredients")}
               onCancel={handleCancel}
             />
           </div>
-          <div className={`page-section ${page === "ingredients" ? "is-active" : ""}`}>
+          <div
+            className={`page-section ${page === "ingredients" ? "is-active" : ""}`}
+          >
             <Ingredients
               onBack={() => setPage("storageUse")}
               onNext={goNext("ingredients", "statements")}
               onCancel={handleCancel}
             />
           </div>
-          <div className={`page-section ${page === "statements" ? "is-active" : ""}`}>
+          <div
+            className={`page-section ${page === "statements" ? "is-active" : ""}`}
+          >
             <Statements
               onBack={() => setPage("ingredients")}
               onNext={goNext("statements", "yourLabel")}
               onCancel={handleCancel}
             />
           </div>
-          <div className={`page-section ${page === "yourLabel" ? "is-active" : ""}`}>
+          <div
+            className={`page-section ${page === "yourLabel" ? "is-active" : ""}`}
+          >
             <YourLabel
               onBack={() => setPage("statements")}
               onCancel={handleCancel}

@@ -15,7 +15,7 @@ export const YourLabel = ({ onBack, onCancel }: YourLabelProps) => {
   const { handleBackClick, handleCancelClick } = createNavHandlers(
     undefined,
     onBack,
-    onCancel
+    onCancel,
   );
   const { formData } = useFormData();
   const {
@@ -327,7 +327,7 @@ export const YourLabel = ({ onBack, onCancel }: YourLabelProps) => {
         doc.setFont("helvetica", "normal");
         const lines = doc.splitTextToSize(
           content || "No data provided",
-          pageWidth - margin * 2
+          pageWidth - margin * 2,
         );
         doc.text(lines, margin, yPos);
         yPos += lines.length * 5 + 5;
@@ -338,7 +338,7 @@ export const YourLabel = ({ onBack, onCancel }: YourLabelProps) => {
         "Food Name and Description",
         `${foodName.foodName || "No name provided"}\n${
           foodName.productDescription || "No description provided"
-        }`
+        }`,
       );
 
       // Business details
@@ -371,7 +371,7 @@ export const YourLabel = ({ onBack, onCancel }: YourLabelProps) => {
       }
       addSection(
         "Statements and Declarations",
-        statementsText || "No data provided"
+        statementsText || "No data provided",
       );
 
       // Date marks
@@ -393,7 +393,7 @@ export const YourLabel = ({ onBack, onCancel }: YourLabelProps) => {
       }
       addSection(
         "Storage Conditions and Directions for Use",
-        storageText || "No data provided"
+        storageText || "No data provided",
       );
 
       // Additional requirements
@@ -429,7 +429,7 @@ export const YourLabel = ({ onBack, onCancel }: YourLabelProps) => {
       doc.setTextColor(214, 0, 0);
       const warningLines = doc.splitTextToSize(
         "IMPORTANT: Refer to the Allergen labelling fact sheet to ensure full compliance with Food Standards Code requirements.",
-        pageWidth - margin * 2
+        pageWidth - margin * 2,
       );
       doc.text(warningLines, margin, yPos);
 
@@ -437,7 +437,7 @@ export const YourLabel = ({ onBack, onCancel }: YourLabelProps) => {
       doc.save(
         `Label-Buster-${foodName.foodName || "Product"}-${
           new Date().toISOString().split("T")[0]
-        }.pdf`
+        }.pdf`,
       );
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -464,8 +464,8 @@ export const YourLabel = ({ onBack, onCancel }: YourLabelProps) => {
             }
           />
           <p>
-            <strong className="text-danger">**Don't forget</strong> to
-            refer to the
+            <strong className="text-danger">**Don't forget</strong> to refer to
+            the
             <a href="https://www.health.qld.gov.au/__data/assets/pdf_file/0030/1126947/allergen-labelling.pdf">
               Allergen labelling
             </a>
@@ -547,172 +547,176 @@ export const YourLabel = ({ onBack, onCancel }: YourLabelProps) => {
               </a>
               , such as minimum type size.
             </p>
-            <table className="table">
-              <tbody>
-                <tr>
-                  <td>Food name and description</td>
-                  <td>
-                    {foodName.foodName || "no name provided"}
-                    <br />
-                    {foodName.productDescription || "no description provided"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Business details</td>
-                  <td>
-                    <b>{businessDetails.businessName || "no name provided"}</b>
-                    <br />
-                    {businessDetails.addressLine1 || "no address provided"}
-                    {businessAddressLine2 ? <br /> : null}
-                    {businessAddressLine2 || null}
-                    {businessSuburb ? (
-                      <>
-                        <br />
-                        <span className="suburb">{businessSuburb}</span>
-                      </>
-                    ) : null}
-                    {(businessState || businessPostcode) && (
-                      <>
-                        <br />
-                        {[businessState, businessPostcode]
-                          .filter(Boolean)
-                          .join(", ")}
-                      </>
-                    )}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Ingredients</td>
-                  <td>{ingredientList || "no data provided"}</td>
-                </tr>
-                <tr>
-                  <td>Weight</td>
-                  <td>
-                    For information on how to comply with weights and measures
-                    laws visit the
-                    <a
-                      href="https://www.measurement.gov.au"
-                      rel="noopener"
-                      target="_blank"
-                    >
-                      National Measurement Institute website{" "}
-                    </a>
-                    .
-                  </td>
-                </tr>
-                <tr>
-                  <td>Nutrition information panel</td>
-                  <td>
-                    <p>
-                      A Nutrition Information Panel must be added to your food
-                      label. The Food Standards Australia New Zealand
+            <div className="table-responsive">
+              <table className="table">
+                <tbody>
+                  <tr>
+                    <td>Food name and description</td>
+                    <td>
+                      {foodName.foodName || "no name provided"}
+                      <br />
+                      {foodName.productDescription || "no description provided"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Business details</td>
+                    <td>
+                      <b>
+                        {businessDetails.businessName || "no name provided"}
+                      </b>
+                      <br />
+                      {businessDetails.addressLine1 || "no address provided"}
+                      {businessAddressLine2 ? <br /> : null}
+                      {businessAddressLine2 || null}
+                      {businessSuburb ? (
+                        <>
+                          <br />
+                          <span className="suburb">{businessSuburb}</span>
+                        </>
+                      ) : null}
+                      {(businessState || businessPostcode) && (
+                        <>
+                          <br />
+                          {[businessState, businessPostcode]
+                            .filter(Boolean)
+                            .join(", ")}
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ingredients</td>
+                    <td>{ingredientList || "no data provided"}</td>
+                  </tr>
+                  <tr>
+                    <td>Weight</td>
+                    <td>
+                      For information on how to comply with weights and measures
+                      laws visit the
                       <a
-                        href="https://www.foodstandards.gov.au/industry/npc/Pages/Nutrition-Panel-Calculator-introduction.aspx"
+                        href="https://www.measurement.gov.au"
                         rel="noopener"
                         target="_blank"
                       >
-                        nutrition panel calculator
+                        National Measurement Institute website{" "}
                       </a>
-                      can help you prepare your nutrition information panel.
-                    </p>
-                    <img
-                      src="https://www.qld.gov.au/?a=148984"
-                      alt="example food label"
-                      className="img-fluid src"
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Statements and declarations</td>
-                  <td>
-                    <p>
-                      <b>{containsList.length ? "Contains:" : ""}</b>
-                      {containsList.length
-                        ? ` ${containsList.join(", ")}.`
-                        : ""}
+                      .
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nutrition information panel</td>
+                    <td>
+                      <p>
+                        A Nutrition Information Panel must be added to your food
+                        label. The Food Standards Australia New Zealand
+                        <a
+                          href="https://www.foodstandards.gov.au/industry/npc/Pages/Nutrition-Panel-Calculator-introduction.aspx"
+                          rel="noopener"
+                          target="_blank"
+                        >
+                          nutrition panel calculator
+                        </a>
+                        can help you prepare your nutrition information panel.
+                      </p>
+                      <img
+                        src="https://www.qld.gov.au/?a=148984"
+                        alt="example food label"
+                        className="img-fluid src"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Statements and declarations</td>
+                    <td>
+                      <p>
+                        <b>{containsList.length ? "Contains:" : ""}</b>
+                        {containsList.length
+                          ? ` ${containsList.join(", ")}.`
+                          : ""}
+                        <br />
+                      </p>
+                      <p className="wrap">
+                        {statementMessages.length
+                          ? statementMessages.join(" ")
+                          : ""}
+                      </p>
+                      <p>
+                        {containsList.length
+                          ? "Note: Warning statements must be a minimum size of type of 3 mm. In the case of small packages, a minimum size of type of 1.5 mm is required."
+                          : "No data provided"}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Date marks</td>
+                    <td>
+                      <strong>{dateMarkLabel}</strong>
+                      {dateMarkValue ? `: ${dateMarkValue}` : ""}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Lot identification</td>
+                    <td>{lotIdentification || "no data provided"}</td>
+                  </tr>
+                  <tr>
+                    <td>Storage conditions and directions for use</td>
+                    <td>
+                      <b>{hasStorageConditions ? "Storage conditions:" : ""}</b>
+                      {hasStorageConditions ? ` ${storageConditionsText}` : ""}
                       <br />
-                    </p>
-                    <p className="wrap">
-                      {statementMessages.length
-                        ? statementMessages.join(" ")
+                      <b>{hasDirections ? "Directions for use:" : ""}</b>
+                      <p>{hasDirections ? directionsText : ""}</p>
+                      {!hasStorageConditions && !hasDirections
+                        ? "no data provided"
                         : ""}
-                    </p>
-                    <p>
-                      {containsList.length
-                        ? "Note: Warning statements must be a minimum size of type of 3 mm. In the case of small packages, a minimum size of type of 1.5 mm is required."
-                        : "No data provided"}
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Date marks</td>
-                  <td>
-                    <strong>{dateMarkLabel}</strong>
-                    {dateMarkValue ? `: ${dateMarkValue}` : ""}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Lot identification</td>
-                  <td>{lotIdentification || "no data provided"}</td>
-                </tr>
-                <tr>
-                  <td>Storage conditions and directions for use</td>
-                  <td>
-                    <b>{hasStorageConditions ? "Storage conditions:" : ""}</b>
-                    {hasStorageConditions ? ` ${storageConditionsText}` : ""}
-                    <br />
-                    <b>{hasDirections ? "Directions for use:" : ""}</b>
-                    <p>{hasDirections ? directionsText : ""}</p>
-                    {!hasStorageConditions && !hasDirections
-                      ? "no data provided"
-                      : ""}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Claims</td>
-                  <td>
-                    <p>
-                      Making voluntary claims about your food is very complex
-                      and you are recommended to seek professional advice.{" "}
-                      <br />
-                      Please note, that making a claim on your food has other
-                      requirements not addressed in Label Buster such as
-                      additional sections in your nutritional information panel
-                      and requirements under Australian Consumer Law.
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Country of origin</td>
-                  <td>
-                    Information on how to calculate and display mandatory
-                    <a
-                      href="https://www.accc.gov.au/business/advertising-promoting-your-business/country-of-origin-claims/country-of-origin-food-labelling"
-                      rel="noopener"
-                      target="_blank"
-                    >
-                      country of origin
-                    </a>
-                    can be found on the Australian Competition and Consumer
-                    Commission website.
-                  </td>
-                </tr>
-                <tr>
-                  <td>Health star rating</td>
-                  <td>
-                    Information on how to calculate and display a voluntary
-                    <a
-                      href="https://www.healthstarrating.gov.au/internet/healthstarrating/publishing.nsf/Content/guide-for-industry-document"
-                      rel="noopener"
-                      target="_blank"
-                    >
-                      health star rating
-                    </a>
-                    can be found at the health star rating system website.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Claims</td>
+                    <td>
+                      <p>
+                        Making voluntary claims about your food is very complex
+                        and you are recommended to seek professional advice.{" "}
+                        <br />
+                        Please note, that making a claim on your food has other
+                        requirements not addressed in Label Buster such as
+                        additional sections in your nutritional information
+                        panel and requirements under Australian Consumer Law.
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Country of origin</td>
+                    <td>
+                      Information on how to calculate and display mandatory
+                      <a
+                        href="https://www.accc.gov.au/business/advertising-promoting-your-business/country-of-origin-claims/country-of-origin-food-labelling"
+                        rel="noopener"
+                        target="_blank"
+                      >
+                        country of origin
+                      </a>
+                      can be found on the Australian Competition and Consumer
+                      Commission website.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Health star rating</td>
+                    <td>
+                      Information on how to calculate and display a voluntary
+                      <a
+                        href="https://www.healthstarrating.gov.au/internet/healthstarrating/publishing.nsf/Content/guide-for-industry-document"
+                        rel="noopener"
+                        target="_blank"
+                      >
+                        health star rating
+                      </a>
+                      can be found at the health star rating system website.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="example-food-label">
