@@ -63,7 +63,7 @@ const AppContent = () => {
   };
 
   return (
-    <div className="container-xxl py-4">
+    <div className="container-xxl py-4 app-shell">
       <div className="app-layout row g-4">
         <aside className="app-sidenav col-12 col-lg-3 col-xl-2">
           <LabelBusterSideNav page={page} onNavigate={setPage} />

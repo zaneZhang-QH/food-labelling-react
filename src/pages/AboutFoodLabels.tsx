@@ -10,14 +10,6 @@ type AboutFoodLabelsProps = {
   onCancel?: () => void;
 };
 
-export const AboutFoodLabels = ({
-  onBack,
-  onNext,
-  onCancel,
-}: AboutFoodLabelsProps) => {
-  const { handleNextClick, handleBackClick, handleCancelClick } =
-    createNavHandlers(onNext, onBack, onCancel);
-
   const aboutFoodAccordionItems: AccordionItemConfig[] = [
     {
       id: "one",
@@ -298,6 +290,15 @@ export const AboutFoodLabels = ({
       ),
     },
   ];
+
+export const AboutFoodLabels = ({
+  onBack,
+  onNext,
+  onCancel,
+}: AboutFoodLabelsProps) => {
+  const { handleNextClick, handleBackClick, handleCancelClick } =
+    createNavHandlers(onNext, onBack, onCancel);
+
 
   return (
     <>

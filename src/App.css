@@ -5,6 +5,10 @@
   text-align: left;
 }
 
+.app-shell {
+  max-width: 1600px;
+}
+
 .app-sidenav {
   position: sticky;
   top: 2rem;

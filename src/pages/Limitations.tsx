@@ -306,7 +306,7 @@ export const Limitations = ({ onBack, onNext, onCancel }: LimitationsProps) => {
       {showClaimBlock && (
         <div className="claim-food">
           <div>
-            <p className="fw-bold">
+            <p className="fw-bold flex-wrap d-flex align-items-center gap-1">
               Do you make a{" "}
               <a
                 className="link"
